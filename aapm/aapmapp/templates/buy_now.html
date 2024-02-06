@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Your HTML content for the Buy Now page goes here -->
+  <center>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h2>Buy Now</h2>
+          <p>Product: {{ item.name }}</p>
+          <p>Price: Rs{{ item.price }}</p>
+          <p>Quantity: 1</p>
+          <!-- Add more details as needed -->
+
+          <!-- Add a form for Buy Now and style the button -->
+          <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="category" value="{{ category }}">
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <button type="submit" style="background-color: red; color: white;">Proceed to Checkout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </center>
+  <!-- Add more details as needed -->
+{% endblock %}

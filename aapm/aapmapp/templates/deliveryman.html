@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Top-level CSS for table formatting */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ADD8E6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS for Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        /* CSS for Content Area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* CSS for Header */
+        .header {
+            background-color: #555;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .header #logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+
+        .header #logout-link:hover {
+            background-color: #0056b3;
+        }
+
+        /* CSS for Cards (Sample Content) */
+
+        /* CSS for Footer */
+        .footer {
+            background-color: #555;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        form input[type="text"], form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            width: 200px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Add more styles as needed */
+    </style>
+    <title>Delivery Man Accounts</title>
+    <!-- Your CSS styles here -->
+</head>
+<body>
+    <div class="sidebar">
+        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
+        <a href="users.html">User Accounts</a>
+        <a href="customers.html">Customers</a>
+        <a href="dealers.html">Dealers</a>
+        <a href="deliveryman.html">Delivery Man</a>
+        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
+    </div>
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <!-- Header content -->
+            <h1>Delivery Man Accounts</h1>
+            <!-- Logout Button -->
+            <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a>
+        </div>
+        <!-- Filter form -->
+        <form method="GET">
+            <!-- Add your filter fields here -->
+            <input type="text" name="username_filter" placeholder="Filter by Username">
+            <button type="submit">Filter</button>
+        </form>
+        <!-- Deliveryman accounts table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deliveryman in deliverymans %}
+                <tr>
+                    <td>{{ deliveryman.username }}</td>
+                    <td>{{ deliveryman.fullname }}</td>
+                    <td>{{ deliveryman.email }}</td>
+                    <td>{{ deliveryman.role }}</td>
+                    <td>
+                        <!-- Add Delete button with a form -->
+                        <form method="POST" action="{% url 'toggle_activation' deliveryman.id %}">
+                            {% csrf_token %}
+                            {% if deliveryman.is_active %}
+                                <button type="submit" name="action" value="deactivate" style="background-color: red; color: white;">Deactivate</button>
+                            {% else %}
+                                <button type="submit" name="action" value="activate" style="background-color: green; color: white;">Activate</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No deliveryman available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pet or Aquarium</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #000;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form method="post" action="{% url 'edit_data' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Edit Pet or Aquarium</h1>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="aquarium">Aquarium</option>
+                <option value="pets">Pets</option>
+            </select>
+        </div>
+
+        <div id="aquariumFields" style="display: none;">
+            <div class="form-group">
+                <label for="aquariumName">Name of the Aquarium:</label>
+                <input type="text" id="aquariumName" name="aquarium_name">
+            </div>
+            <div class="form-group">
+                <label for="aquariumPrice">Price:</label>
+                <input type="number" id="aquariumPrice" name="aquarium_price">
+            </div>
+            <div class="form-group">
+                <label for "aquariumLocation">Location:</label>
+                <input type="text" id="aquariumLocation" name="aquarium_location">
+            </div>
+            <div class="form-group">
+                <label for="aquariumImage">Image:</label>
+                <input type="file" id="aquariumImage" name="aquarium_image">
+            </div>
+            <!-- Add more fields for aquarium editing as needed -->
+        </div>
+
+        <div id="petsFields" style="display: none;">
+            <div class="form-group">
+                <label for="petCategory">Category of Pet:</label>
+                <select id="petCategory" name="pet_category">
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                    <option value="fish">Fish</option>
+                    <option value="birds">Birds</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="petAge">Pet Age:</label>
+                <input type="text" id="petAge" name="pet_age">
+            </div>
+            <div class="form-group">
+                <label for="petPrice">Price:</label>
+                <input type="number" id="petPrice" name="pet_price">
+            </div>
+            <div class="form-group">
+                <label for="petLocation">Location:</label>
+                <input type="text" id="petLocation" name="pet_location">
+            </div>
+            <div class="form-group">
+                <label for="petImage">Image:</label>
+                <input type="file" id="petImage" name="pet_image">
+            </div>
+            <!-- Add more fields for pet editing as needed -->
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+<!-- Include Bootstrap JS scripts if needed -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Function to show the relevant fields based on the selected category
+    function showCategoryFields() {
+        const category = document.getElementById("category").value;
+        const aquariumFields = document.getElementById("aquariumFields");
+        const petsFields = document.getElementById("petsFields");
+
+        if (category === "aquarium") {
+            aquariumFields.style.display = "block";
+            petsFields.style.display = "none";
+        } else if (category === "pets") {
+            aquariumFields.style.display = "none";
+            petsFields.style display = "block";
+        }
+    }
+
+    // Initialize the category fields
+    showCategoryFields();
+
+    // Add an event listener to the category dropdown to update the fields
+    document.getElementById("category").addEventListener("change", showCategoryFields);
+</script>
+</body>
+</html>

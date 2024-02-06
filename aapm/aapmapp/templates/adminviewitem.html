@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            max-width: 100px;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        .approve-btn {
+            background-color: #28a745; /* Green for Approve */
+        }
+
+        .reject-btn {
+            background-color: #dc3545; /* Red for Reject */
+        }
+
+        /* Header styles */
+        header {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: black; /* Change to white */
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .sidebar li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black; /* Black text color */
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        #search {
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                filterTable(value);
+            });
+        });
+
+        function filterTable(value) {
+            $("table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
+        <a href="{% url 'users' %}">User Accounts</a>
+        <a href="{% url 'customers' %}">Customers</a>
+        <a href="{% url 'dealers' %}">Dealers</a>
+        <a href="{% url 'deliveryman' %}">Delivery Man</a>
+        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="content">
+        <!-- Header section with "Admin View Item" and logout button -->
+        <header>
+            <h1>Admin Dashboard</h1>
+            {% comment %} <a href="/logout" class="logout-btn">Logout</a> {% endcomment %}
+        </header>
+
+        <!-- Search box -->
+        <div class="search-box">
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="search">
+        </div>
+
+        <center><h2>Pet Data</h2></center>
+        <table>
+            <tr>
+                <th>Category</th>
+                {% comment %} <th>Sub Category</th> {% endcomment %}
+                <th>Breed</th>
+                <th>Pet Age</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Image</th>
+            </tr>
+            <!-- ... Your existing table content for pets ... -->
+            {% for pet in pets %}
+            <tr>
+                <td>{{ pet.category }}</td>
+                {% comment %} <td>{{ pet.pet_subcategory }}</td> {% endcomment %}
+                <td>{{ pet.pet_breed }}</td>
+                <td>{{ pet.pet_age}}</td>
+                <td>Rs{{ pet.price }}</td>
+                <td>{{ pet.location }}</td>
+                <td><img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <center><h2>Aquarium Data</h2></center>
+        <table>
+            <tr>
+                <th>Name Of The Aquarium</th>
+                <th>Aquarium Description</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Image</th>
+            </tr>
+            <!-- ... Your existing table content for aquariums ... -->
+            {% for aquarium in aquariums %}
+            <tr>
+                <td>{{ aquarium.name }}</td>
+                <td>{{ aquarium.description}}</td>
+                <td>Rs{{ aquarium.price }}</td>
+                <td>{{ aquarium.location }}</td>
+                <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <footer>
+            <div class="col-lg-12">
+                <div class="under-footer">
+                    <center><p>Copyright © Pet Paradise Cart.</p></center>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

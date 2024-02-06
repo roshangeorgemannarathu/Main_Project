@@ -1,0 +1,377 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pet or Aquarium</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "/aapmapp/images/dog1.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #000;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #FF9900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #FF8000;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form method="post"  action="{% url "addpets" %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Add Pet or Aquarium</h1>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category" onchange="showCategoryFields()">
+                <option value="aquarium">Aquarium</option>
+                <option value="pets">Pets</option>
+            </select>
+        </div>
+
+        <div id="aquariumFields" style="display: none;">
+            <div class="form-group">
+                <label for="aquariumName">Name of the Aquarium:</label>
+                <input type="text" id="aquariumName" name="aquarium_name" >
+            </div>
+
+            <div class="form-group">
+                <label for="aquariumDescription">Aquarium Description:</label>
+                <input type="text" id="aquariumDescription" name="aquarium_description" >
+            </div>
+
+            <div class="form-group">
+                <label for="aquariumPrice">Price (Rs):</label>
+                <input type="text" id="aquariumPrice" name="aquarium_price" oninput="validateAquariumPrice()">
+                <span id="aquariumPriceError" style="color: red;"></span>
+            </div>
+            
+            <script>
+                function validateAquariumPrice() {
+                    var aquariumPriceInput = document.getElementById('aquariumPrice');
+                    var priceErrorSpan = document.getElementById('aquariumPriceError');
+                    var aquariumPrice = aquariumPriceInput.value.trim();
+            
+                    // Remove non-digit characters from the input
+                    var numericValue = aquariumPrice.replace(/\D/g, '');
+            
+                    // Validate if the numeric value contains only digits
+                    if (/^\d+$/.test(numericValue)) {
+                        // Check if the value is within the allowed range
+                        var priceValue = parseInt(numericValue, 10);
+                        if (priceValue >= 0 && priceValue <= 10000000) {
+                            priceErrorSpan.textContent = ''; // Clear any previous error message
+                        } else {
+                            priceErrorSpan.textContent = 'Price must be between 0 and 10,000,000 Rs.';
+                            aquariumPriceInput.value = ''; // Clear the input value if it exceeds the maximum
+                        }
+                    } else {
+                        priceErrorSpan.textContent = 'Price must be a positive number.';
+                        aquariumPriceInput.value = ''; // Clear the input value if it's not a positive number
+                    }
+                }
+            </script>
+
+            <div class="form-group">
+                <label for="aquariumQuantity">Quantity:</label>
+                <input type="number" id="aquariumQuantity" name="aquarium_quantity"min="1" max="5" >
+            </div>
+        
+
+            <div class="form-group">
+                <label for="aquariumLocation">Location:</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" id="aquariumLocation" name="aquarium_location" placeholder="Enter Location" oninput="validateAquariumLocation()">
+                        <span id="aquariumLocationError" style="color: red;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="aquariumDistrict" name="aquarium_district">
+                            <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                            <option value="Kollam">Kollam</option>
+                            <option value="Pathanamthitta">Pathanamthitta</option>
+                            <option value="Alappuzha">Alappuzha</option>
+                            <option value="Kottayam">Kottayam</option>
+                            <option value="Idukki">Idukki</option>
+                            <option value="Ernakulam">Ernakulam</option>
+                            <option value="Thrissur">Thrissur</option>
+                            <option value="Palakkad">Palakkad</option>
+                            <option value="Malappuram">Malappuram</option>
+                            <option value="Kozhikode">Kozhikode</option>
+                            <option value="Wayanad">Wayanad</option>
+                            <option value="Kannur">Kannur</option>
+                            <option value="Kasaragod">Kasaragod</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                function validateAquariumLocation() {
+                    var aquariumLocationInput = document.getElementById('aquariumLocation');
+                    var locationErrorSpan = document.getElementById('aquariumLocationError');
+                    var aquariumLocation = aquariumLocationInput.value.trim();
+            
+                    // Validate if the input contains only alphabets and no special characters or numbers
+                    if (/^[A-Za-z ]+$/.test(aquariumLocation)) {
+                        locationErrorSpan.textContent = ''; // Clear any previous error message
+                    } else {
+                        locationErrorSpan.textContent = 'Location should contain only alphabets and no special characters or numbers.';
+                        aquariumLocationInput.value = ''; // Clear the input value if it's not valid
+                    }
+                }
+            </script>
+            
+
+            <div class="form-group">
+                <label for="aquariumImage">Image:</label>
+                <input type="file" id="aquariumImage" name="aquarium_image" > 
+            </div>
+        </div>
+
+        <div id="petsFields" style="display: none;">
+            <div class="form-group">
+                <label for="petCategory">Sub Category of Pets:</label>
+                <select id="petCategory" name="pet_category" onchange="showBreedOptions()">
+                    <option value="cat">Cat</option>
+                    <option value="dog">Dog</option>
+                    <option value="fish">Fish</option>
+                    <option value="birds">Birds</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="petBreed">Breed:</label>
+                <select id="petBreed" name="pet_breed">
+                    <!-- Options will be added dynamically using JavaScript -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="petAge">Pet Age:</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="number" id="petAgeNumber" name="pet_age_number" min="1" max="31">
+                    </div>
+                    <div class="col-md-6">
+                        <select id="petAgeUnit" name="pet_age_unit">
+                            <option value="days">Days</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="petPrice">Price (Rs):</label>
+                <input type="text" id="petPrice" name="pet_price" oninput="validatePetPrice()">
+                <span id="priceError" style="color: red;"></span>
+            </div>
+            
+            <script>
+                function validatePetPrice() {
+                    var petPriceInput = document.getElementById('petPrice');
+                    var priceErrorSpan = document.getElementById('priceError');
+                    var petPrice = petPriceInput.value.trim();
+            
+                    // Remove non-digit characters from the input
+                    var numericValue = petPrice.replace(/\D/g, '');
+            
+                    // Validate if the numeric value contains only digits
+                    if (/^\d+$/.test(numericValue)) {
+                        // Check if the value is within the allowed range
+                        var priceValue = parseInt(numericValue, 10);
+                        if (priceValue >= 0 && priceValue <= 10000000) {
+                            priceErrorSpan.textContent = ''; // Clear any previous error message
+                        } else {
+                            priceErrorSpan.textContent = 'Price must be between 0 and 10,000,000 Rs.';
+                            petPriceInput.value = ''; // Clear the input value if it exceeds the maximum
+                        }
+                    } else {
+                        priceErrorSpan.textContent = 'Price must be a positive number.';
+                        petPriceInput.value = ''; // Clear the input value if it's not a positive number
+                    }
+                }
+            </script>
+
+            <div class="form-group">
+                <label for="petQuantity">Quantity:</label>
+                <input type="number" id="petQuantity" name="pet_quantity"min="1" max="5" >
+            </div>
+        
+            
+    
+
+            <div class="form-group">
+                <label for="petDescription">Pet Description:</label>
+                <input type="text" id="petDescription" name="pet_description" >
+            </div>
+            <div class="form-group">
+                <label for="petLocation">Location:</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" id="petCity" name="pet_city" placeholder="Enter City" oninput="validateCity()">
+                        <span id="cityError" style="color: red;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="petDistrict" name="pet_district">
+                        
+                            <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                            <option value="Kollam">Kollam</option>
+                            <option value="Pathanamthitta">Pathanamthitta</option>
+                            <option value="Alappuzha">Alappuzha</option>
+                            <option value="Kottayam">Kottayam</option>
+                            <option value="Idukki">Idukki</option>
+                            <option value="Ernakulam">Ernakulam</option>
+                            <option value="Thrissur">Thrissur</option>
+                            <option value="Palakkad">Palakkad</option>
+                            <option value="Malappuram">Malappuram</option>
+                            <option value="Kozhikode">Kozhikode</option>
+                            <option value="Wayanad">Wayanad</option>
+                            <option value="Kannur">Kannur</option>
+                            <option value="Kasaragod">Kasaragod</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                function validateCity() {
+                    var petCityInput = document.getElementById('petCity');
+                    var cityErrorSpan = document.getElementById('cityError');
+                    var petCity = petCityInput.value.trim();
+            
+                    // Validate if the input contains only alphabets and no special characters or numbers
+                    if (/^[A-Za-z ]+$/.test(petCity)) {
+                        cityErrorSpan.textContent = ''; // Clear any previous error message
+                    } else {
+                        cityErrorSpan.textContent = 'City should contain only alphabets and no special characters or numbers.';
+                        petCityInput.value = ''; // Clear the input value if it's not valid
+                    }
+                }
+            </script>
+            <div class="form-group">
+                <label for="petImage">Image:</label>
+                <input type="file" id="petImage" name="pet_image" >
+            </div>
+        </div>
+
+        
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    function showCategoryFields() {
+        const category = document.getElementById("category").value;
+        const aquariumFields = document.getElementById("aquariumFields");
+        const petsFields = document.getElementById("petsFields");
+
+        if (category === "aquarium") {
+            aquariumFields.style.display = "block";
+            petsFields.style.display = "none";
+        } else if (category === "pets") {
+            aquariumFields.style.display = "none";
+            petsFields.style.display = "block";
+        }
+    }
+
+    function showBreedOptions() {
+        const petCategory = document.getElementById("petCategory").value;
+        const petBreedSelect = document.getElementById("petBreed");
+        petBreedSelect.innerHTML = ""; // Clear existing options
+
+        const breedOptions = {
+            cat: ["Common Cat", "Persian Cat", "Siamese Cat", "American Bobtail Cat", "Bengal Cat", "Maine Coon Cat"],
+            dog: ["Common Dog ", "Labrador Retriever ", "Indian Splitz", "Pug ", "Beagle ", "German Shepherd", "Golden Retriever ", "Dachshund"],
+            fish: [" Guppy", "Betta", "Golden Fish ", " Molly", "Angel Fish", " Platies"],
+            birds: ["Budgerigars", "Cockatiles", "Love Birds", "African grey parrots", "Macaws"],
+        };
+
+        const breeds = breedOptions[petCategory] || [];
+        breeds.forEach((breed) => {
+            const option = document.createElement("option");
+            option.value = breed;
+            option.textContent = breed;
+            petBreedSelect.appendChild(option);
+        });
+    }
+
+    // Initialize breed options and category fields on page load
+    showCategoryFields();
+    showBreedOptions();
+</script>
+<!-- Include Bootstrap JS scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

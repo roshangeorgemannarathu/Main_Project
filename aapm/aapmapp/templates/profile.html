@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View User Data</title>
+    <style>
+        /* Add your CSS styles for viewing data here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #e2d9cf;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center items vertically */
+        }
+
+        header h1 {
+            margin: 0;
+            flex-grow: 1; /* Allow the title to grow and take available space */
+        }
+
+        .logout-btn {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        footer {
+            background-color: #ebf171
+
+            color: #ebf171;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Profile</h1>
+        {% comment %} <a href="{% url 'logout' %}" class="logout-btn">Logout</a> {% endcomment %}
+        
+    </header>
+
+    <table>
+        <tr>
+            <td>Full Name</td>
+            <td>{{ fullname }}</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>{{ dateofbirth }}</td>
+        </tr>
+        {% comment %} <tr>
+            <td>Gender</td>
+            <td>{{ gender }}</td>
+        </tr> {% endcomment %}
+        <tr>
+            <td>Phone Number</td>
+            <td>{{ phone }}</td>
+        </tr>
+        <tr>
+            <td>House Name</td>
+            <td>{{ housename }}</td>
+        </tr>
+        <tr>
+            <td>PIN Code</td>
+            <td>{{ pincode }}</td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>{{ district }}</td>
+        </tr>
+        <tr>
+            <td>Photo ID</td>
+            <td><a href="{{ photoid }}" target="_blank">View Photo ID</a></td>
+        </tr>
+        <tr>
+            <td>Photo</td>
+            <td style=""><img src="{{ photo }}" alt="User Photo" width="200"></td>
+        </tr>
+    </table>
+
+    <footer>
+        &copy; Pet Paradise Cart
+    </footer>
+</body>
+</html>

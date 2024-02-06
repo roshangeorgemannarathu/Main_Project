@@ -1,0 +1,494 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Page</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, p, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS for Header */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "/aapmapp/images/cover1.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        header {
+            background-color: #009688; /* Header background color */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        a {
+            text-decoration: none;
+            color: #d8d7d6;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        header nav li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            background-color: #00796B; /* Button background color */
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        header nav a:hover {
+            background-color: #005550;
+        }
+
+        /* CSS for Main Content */
+        main {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+            
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+        }
+
+        /* CSS for User Info */
+        .user-info {
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .user-name {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .user-description {
+            font-size: 16px;
+            color: #777;
+        }
+
+        /* CSS for Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        /* CSS for Get Started Button */
+.get-started-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #00796B; /* Button background color */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.get-started-button:hover {
+    background-color: #005550; /* Change color on hover */
+}
+#registration-form {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto; /* Center the form horizontally */
+    max-width: 400px; /* Set a maximum width for the form */
+    
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+}
+
+#registration-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #00796B; /* Label text color */
+}
+
+#registration-form input[type="text"],
+#registration-form input[type="date"],
+#registration-form input[type="tel"],
+#registration-form select,
+#registration-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f4f4f4; /* Input background color */
+}
+
+#registration-form input[type="text"]:focus,
+#registration-form input[type="date"]:focus,
+#registration-form input[type="tel"]:focus,
+#registration-form select:focus,
+#registration-form input[type="file"]:focus {
+    outline: none;
+    border-color: #00796B; /* Input border color on focus */
+}
+
+#registration-form button {
+    background-color: #00796B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#registration-form button:hover {
+    background-color: #005550; /* Change color on hover */
+}
+#validation-messages {
+    color: red;
+    margin-top: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="#">Pet Paradise Cart</a></h1>
+        
+        <nav>
+            <ul>
+                <!-- Add the logout button here -->
+                <li style="float: right;"><a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a></li>
+            </ul>
+        </nav><br>
+    </header>
+    
+    
+    
+    <main>
+        <!-- User Info Section -->
+        <div class="user-info">
+            <div class="user-name">Welcome, {{ request.session.username }}</div>
+            <div class="user-description">Role {{ request.session.role }}</div>
+            
+            <a href="#" class="get-started-button" id="show-form-button">Edit Profile</a>
+            
+            {% if request.session.role == "dealer" %}
+                <a href="{% url 'dealer_account' %}" class="get-started-button">Get Started</a>
+            {% elif request.session.role == "customer" %}
+                <a href="{% url 'customer_account' %}" class="get-started-button">Get Started</a>
+            {% elif request.session.role == "deliveryman" %}
+                <a href="{% url 'deliveryman_account' %}" class="get-started-button">Get Started</a>
+            {% endif %}
+        </div>
+        
+        <!-- End of User Info Section -->
+        <div class="form-container" id="registration-form">
+            <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                <div id="validation-messages"></div>
+
+                <!-- ID Field -->
+                
+
+
+                <!-- Full Name Field -->
+            
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="fullname" placeholder="Full Name" required>
+                <p id="full-name-error" style="color: red;"></p>
+                
+                <script>
+                    document.getElementById('full-name').addEventListener('input', function () {
+                        var fullNameInput = this.value;
+                        var fullNameError = document.getElementById('full-name-error');
+                        var namePattern = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
+                    
+                        if (!namePattern.test(fullNameInput)) {
+                            fullNameError.textContent = 'Full Name can only contain alphabetic characters and spaces.';
+                            this.setCustomValidity('Full Name can only contain alphabetic characters and spaces.');
+                        } else {
+                            fullNameError.textContent = '';
+                            this.setCustomValidity('');
+                        }
+                    });
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var logoutButton = document.getElementById("logout-link");
+                        logoutButton.addEventListener("click", function () {
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        });
+                    });
+                </script>
+                
+                
+
+                <!-- Date of Birth Field -->
+                <label for="dateofbirth">Date of Birth (must be 18 years or older):</label>
+                <input type="date" id="dateofbirth" name="dateofbirth" max="2004-12-31" required>
+                
+                <div id="validation-messages"></div>
+
+                <!-- Gender Field -->
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <!-- Phone Number Field -->
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                <p id="phone-error" style="color: red;"></p>
+            
+            <script>
+                // Get the input element
+                const phoneInput = document.getElementById("phone");
+                // Get the error message element
+                const phoneError = document.getElementById("phone-error");
+            
+                // Add an event listener to the input field to validate on input change
+                phoneInput.addEventListener("input", function () {
+                    const phoneValue = phoneInput.value;
+                    const pattern = /^[0-9]{10}$/;
+            
+                    if (!pattern.test(phoneValue)) {
+                        phoneError.textContent = "Phone Number must contain 10 numeric digits.";
+                        phoneInput.setCustomValidity("Invalid Phone Number.");
+                    } else {
+                        phoneError.textContent = "";
+                        phoneInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            <!-- Current housename Field -->
+            <label for="housename">House Name</label>
+            <input type="text" id="housename" name="housename" placeholder="House Name" required>
+            <p id="housename-error" style="color: red;"></p>
+    
+        
+        <script>
+            // Get the input element
+            const housenameInput = document.getElementById("housename");
+            // Get the error message element
+            const housenameError = document.getElementById("housename-error");
+        
+            // Add an event listener to the input field to validate on input change
+            housenameInput.addEventListener("input", function () {
+                const housenameValue = housenameInput.value;
+                const pattern = /^[A-Za-z]+$/; // Alphabetic characters only
+        
+                if (!pattern.test(housenameValue)) {
+                    housenameError.textContent = "House Name should contain alphabetic characters only.";
+                    housenameInput.setCustomValidity("Invalid characters in House Name.");
+                } else {
+                    housenameError.textContent = "";
+                    housenameInput.setCustomValidity("");
+                }
+            });
+        </script>
+        <!-- Current pincode Field -->
+        <label for="pincode">PIN Code</label>
+                <input type="text" id="pincode" name="pincode" placeholder="Pin Code" required>
+                <p id="pincode-error" style="color: red;"></p>
+           
+            
+            <script>
+                // Get the input element
+                const pincodeInput = document.getElementById("pincode");
+                // Get the error message element
+                const pincodeError = document.getElementById("pincode-error");
+            
+                // Add an event listener to the input field to validate on input change
+                pincodeInput.addEventListener("input", function () {
+                    const pincodeValue = pincodeInput.value;
+                    const pattern = /^\d{6}$/; // Should contain exactly 6 digits
+            
+                    if (!pattern.test(pincodeValue)) {
+                        pincodeError.textContent = "PIN Code must be 6 digits and contain only numbers.";
+                        pincodeInput.setCustomValidity("Invalid PIN Code.");
+                    } else {
+                        pincodeError.textContent = "";
+                        pincodeInput.setCustomValidity("");
+                    }
+                });
+            </script>
+
+            <!-- Current district Field -->
+
+            <label for="district">District</label>
+                <select id="district" name="district" required>
+                    <option value="" disabled selected>Select District</option>
+                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                    <option value="Kollam">Kollam</option>
+                    <option value="Pathanamthitta">Pathanamthitta</option>
+                    <option value="Alappuzha">Alappuzha</option>
+                    <option value="Kottayam">Kottayam</option>
+                    <option value="Idukki">Idukki</option>
+                    <option value="Ernakulam">Ernakulam</option>
+                    <option value="Thrissur">Thrissur</option>
+                    <option value="Palakkad">Palakkad</option>
+                    <option value="Malappuram">Malappuram</option>
+                    <option value="Kozhikode">Kozhikode</option>
+                    <option value="Wayanad">Wayanad</option>
+                    <option value="Kannur">Kannur</option>
+                    <option value="Kasaragod">Kasaragod</option>
+                </select>
+        
+                
+            
+
+                <!-- Photo ID Field (PDF only) -->
+                <label for="photoid">Photo ID (PDF only):</label>
+                <input type="file" id="photoid" name="photoid" accept=".pdf" required>
+                <!-- Photo Field -->
+                     <label for="photo">Upload Photo:</label>
+                    <input type="file" id="photo" name="photo" accept="image/*" required>
+                    <p id="photo-error" style="color: red;"></p>
+
+                    <script>
+                        // Get the input element for the photo
+                        const photoInput = document.getElementById("photo");
+                        // Get the error message element for the photo
+                        const photoError = document.getElementById("photo-error");
+                    
+                        // Add an event listener to the photo input field to validate on file selection
+                        photoInput.addEventListener("change", validatePhoto);
+                    
+                        function validatePhoto() {
+                            const photoFile = photoInput.files[0];
+                    
+                            if (!photoFile) {
+                                photoError.textContent = "Please select a photo.";
+                                photoInput.setCustomValidity("No photo selected.");
+                            } else {
+                                const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+                                const fileExtension = photoFile.name.split(".").pop().toLowerCase();
+                    
+                                if (!allowedExtensions.includes(fileExtension)) {
+                                    photoError.textContent = "Invalid file format. Allowed formats: JPG, JPEG, PNG, GIF.";
+                                    photoInput.setCustomValidity("Invalid file format.");
+                                } else {
+                                    photoError.textContent = "";
+                                    photoInput.setCustomValidity("");
+                                }
+                            }
+                        }
+                    </script>
+                    
+
+                <button type="submit">Submit</button>
+            </form>        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 User Profile</p>
+    </footer>
+    <script>
+        // JavaScript to show the registration form on button click
+        const showFormButton = document.getElementById('show-form-button');
+        const registrationForm = document.getElementById('registration-form');
+        const validationMessages = document.getElementById('validation-messages');
+
+
+        showFormButton.addEventListener('click', function() {
+            registrationForm.style.display = 'block';
+        });
+         // Event listeners for real-time validation
+        const fullnameInput = document.getElementById('fullname');
+        const dateofbirthInput = document.getElementById('dateofbirth');
+        const phonenoInput = document.getElementById('phoneno');
+        const currentaddressInput = document.getElementById('currentaddress');
+        const photoidInput = document.getElementById('photoid');
+
+        fullnameInput.addEventListener('input', validateFullname);
+        dateofbirthInput.addEventListener('input', validateDateOfBirth);
+        phonenoInput.addEventListener('input', validatePhoneNo);
+        currentaddressInput.addEventListener('input', validateCurrentAddress);
+
+        
+
+        function validateFullname() {
+            // Example validation: Full Name must not be empty
+            const fullnameValue = fullnameInput.value;
+            if (fullnameValue.trim() === '') {
+                displayValidationMessage('Full Name is required.');
+            } else {
+                clearValidationMessage();
+            }
+        }
+
+        function validateDateOfBirth() {
+            // Example validation: Date of Birth must be 18 years or older
+            const dateOfBirthValue = dateofbirthInput.value;
+            const birthDate = new Date(dateOfBirthValue);
+            const eighteenYearsAgo = new Date();
+            eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+            if (birthDate > eighteenYearsAgo) {
+                displayValidationMessage('You must be 18 years or older.');
+            } else {
+                clearValidationMessage();
+            }
+        }
+
+        function validatePhoneNo() {
+            // Example validation: Phone Number must contain only numeric characters
+            const phoneNoValue = phonenoInput.value;
+            if (!/^\d+$/.test(phoneNoValue)) {
+                displayValidationMessage('Phone Number must contain only numeric characters.');
+            } else {
+                clearValidationMessage();
+            }
+        }
+
+        function validateCurrentAddress() {
+            // Example validation: Current Address must not be empty
+            const currentAddressValue = currentaddressInput.value;
+            if (currentAddressValue.trim() === '') {
+                displayValidationMessage('Current Address is required.');
+            } else {
+                clearValidationMessage();
+            }
+        }
+
+        function displayValidationMessage(message) {
+            validationMessages.textContent = message;
+        }
+
+        function clearValidationMessage() {
+            validationMessages.textContent = '';
+        }
+    </script>
+</body>
+</html>

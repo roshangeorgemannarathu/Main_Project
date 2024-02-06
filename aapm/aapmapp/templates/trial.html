@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <title>{{ product.product_name }} - Your Website</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <!-- Font Awesome styles -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <!-- jQuery UI CSS for the date picker -->
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {% load static %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+        <title>{{ product.product_name }} - Your Website</title>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+        <!-- Font Awesome styles -->
+        <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+        <!-- jQuery UI CSS for the date picker -->
+        <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+        <!-- Responsive style -->
+        <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    
+        <style>
+            /* Add CSS to increase the size of the product image */
+            .product-image img {
+                width: 500px; /* Adjust the width to your desired size */
+                height: auto; /* This maintains the image's aspect ratio */
+            }
+    
+            body, h1, h2, h3, p, ul, li,  {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-family: "Times New Roman", Times, serif;
+            }
+            
+            button {
+                background-color: #2b5c32; /* Red color */
+                color: #fff; /* Text color */
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+    
+            nav ul {
+                list-style: none;
+            }
+    
+            nav li {
+                display: inline;
+                margin-right: 20px;
+            }
+    
+            nav a {
+                color: #fff;
+                text-decoration: none;
+            }
+    
+            .product-details {
+                display: flex;
+                margin: 20px;
+            }
+    
+            .product-image {
+                flex: 1;
+                position: relative; /* Add position relative to the container */
+            }
+            .product-image img {
+                width: 500px; /* Adjust the width to your desired size */
+                height: auto; /* This maintains the image's aspect ratio */
+                transition: transform 0.3s; /* Add a smooth transition for the zoom effect */
+            }
+            .product-image:hover img {
+                transform: scale(1.2); /* Increase the scale for the zoom effect on hover */
+            }
+    
+            .wishlist-button {
+                position: absolute;
+                top: 10px; /* Adjust the top position as needed */
+                right: 10px; /* Adjust the right position as needed */
+                display: flex;
+                align-items: center;
+            }
+    
+            .wishlist-button button {
+                border: none;
+                background: none;
+                cursor: pointer;
+                position: relative;
+            }
+    
+            .heart-icon {
+                font-size: 24px;
+                margin-right: 5px;
+            }
+    
+            .heart-icon i {
+                color: #e74c3c; /* Red color */
+                background-color: transparent; /* Transparent background */
+                border-radius: 50%; /* Round background */
+                padding: 5px; /* Adjust padding as needed */
+            }
+            .product-info {
+                flex: 2;
+                padding: 20px;
+            }
+    
+            .header {
+                background-color: #003300;
+                color: #fff;
+                text-align: left;
+                padding: 9px;
+                position: relative; /* Needed for absolute positioning of the logo */
+            }
+    
+            .fa-heart {
+                color: #e74c3c; /* Change the color to your desired color */
+                font-size: 24px; /* Change the size to your desired size */
+                margin-right: 5px; /* Optional: Add some spacing to the right */
+            }
+    
+            .fas.fa-heart, .far.fa-heart {
+                color: #e74c3c; /* Change the color to your desired color */
+                font-size: 24px; /* Change the size to your desired size */
+                margin-right: 5px; /* Optional: Add some spacing to the right */
+                background-color: #FFFFFF;
+            }
+            .product-info h1, .product-price, .product-discount, .product-description {
+                color: #333; /* Darker text color */
+            }
+            body, h1, h2, h3, p, ul, li {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-family: "Times New Roman", Times, serif;
+            }
+            
+            /* Additional styles for better specificity */
+            .product-info h1,
+            .product-price,
+            .product-discount,
+            .product-description {
+             font-family: "Times New Roman", Times, serif;
+            }
+            
+            /* ... (rest of your styles) */
+            
+        </style>
+    </head>
+    <body class="sub_page">
+        <div class="header">
+            <h1><center> Product Details</center></h1>
+            <a href="{% url 'home' %}"><img src="{% static 'images/log4.png' %}" alt="Cart" class="Cart-icon" style="margin-left: 1460px;"></a>
+        </div>
+        <div class="hero_area">
+            <header class="header_section">
+                <div class="container">
+                    <nav class="navbar navbar-expand-lg custom_nav-container ">
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav">
+                                <li class="nav-item active">
+                                    <a class=" nav-link" href="{% url 'home' %}">Home </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'logout' %}">logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </header>
+        </div>
+        <section class="inner_page_head">
+            <div class="container_fuild">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="full">
+                            <h4 class="left-corner-heading"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <main>
+            <section class="product-details">
+                <div class="product-image">
+                    <img class="product-image" src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                    <div class="wishlist-button">
+                        <form method="post" action="{% url 'add_to_wishlist' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="heart-icon">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h1><strong>{{ product.product_name }}</strong></h1><br>
+                    <p class="product-price">
+                        <!-- Display the sale price -->
+                        <span class="sale-price">Rs.{{ product.sale_price }}</span>
+                        <!-- Display the original price with strikethrough -->
+                        <del class="original-price">Rs.{{ product.price }}</del>
+                    </p>
+                    <p class="product-discount">Discount :{{product.discount}}% Off</p><br>
+                    <p class="product-description">Product Description:{{ product.description }}</p>
+                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <footer>
+     <!-- Your website footer with links, contact info, etc. -->
+    </footer>
+</body>
+</html>                            

@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Include your custom CSS for additional styling -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Custom styles for the registration form */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "/aapmapp/images/cus.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2; /* Set an off-white background for the form container */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+            background-color: #fff; /* Set a white background for form inputs */
+            color: #000; /* Set text color to black for form inputs */
+        }
+
+        button[type="submit"] {
+            background-color: #FF9900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #FF8000;
+        }
+
+        .login-link {
+            text-align: center;
+        }
+
+        .login-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Account</h2>
+        
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="fullname" placeholder="Full Name" required>
+                <p id="full-name-error" style="color: red;"></p>
+            </div>
+            <script>
+                document.getElementById('full-name').addEventListener('input', function () {
+                    var fullNameInput = this.value;
+                    var fullNameError = document.getElementById('full-name-error');
+                    var namePattern = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
+                
+                    if (!namePattern.test(fullNameInput)) {
+                        fullNameError.textContent = 'Full Name can only contain alphabetic characters and spaces.';
+                        this.setCustomValidity('Full Name can only contain alphabetic characters and spaces.');
+                    } else {
+                        fullNameError.textContent = '';
+                        this.setCustomValidity('');
+                    }
+                });
+                </script>
+            
+           
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <p id="username-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const usernameInput = document.getElementById("username");
+                // Get the error message element
+                const usernameError = document.getElementById("username-error");
+            
+                // Add an event listener to the input field to validate on input change
+                usernameInput.addEventListener("input", function () {
+                    const usernameValue = usernameInput.value;
+            
+                    if (usernameValue.includes(" ")) {
+                        usernameError.textContent = "Username should not contain spaces.";
+                        usernameInput.setCustomValidity("Username should not contain spaces.");
+                    } else {
+                        usernameError.textContent = "";
+                        usernameInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+           
+            
+            
+            
+            
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="customer">Customer</option>
+                    <option value="dealer">Dealer</option>
+                    <option value="deliveryman">Delivery Man</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <p id="email-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const emailInput = document.getElementById("email");
+                // Get the error message element
+                const emailError = document.getElementById("email-error");
+            
+                // Add an event listener to the input field to validate on input change
+                emailInput.addEventListener("input", function () {
+                    const emailValue = emailInput.value;
+                    const lowercaseEmail = emailValue.toLowerCase(); // Convert email to lowercase for comparison
+            
+                    if (emailValue !== lowercaseEmail || !emailValue.includes("@")) {
+                        emailError.textContent = "Email should be in lowercase and contain the @ symbol.";
+                        emailInput.setCustomValidity("Invalid email address.");
+                    } else {
+                        emailError.textContent = "";
+                        emailInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a Password" required>
+                <p id="password-error" style="color: red;"></p>
+            </div>
+            <script>
+                // Get the input element
+                const passwordInput = document.getElementById("password");
+                // Get the error message element
+                const passwordError = document.getElementById("password-error");
+            
+                // Add an event listener to the input field to validate on input change
+                passwordInput.addEventListener("input", function () {
+                    const passwordValue = passwordInput.value;
+                    const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&!*_])[A-Za-z\d@#$%^&!*_]{6,}$/;
+            
+                    if (!pattern.test(passwordValue)) {
+                        passwordError.textContent = "Password must meet the criteria: at least 6 characters, one uppercase letter, one lowercase letter, one digit, and one special character.";
+                        passwordInput.setCustomValidity("Invalid password.");
+                    } else {
+                        passwordError.textContent = "";
+                        passwordInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+                <p id="confirm-password-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input elements
+                const passwordInput = document.getElementById("password");
+                const confirmPasswordInput = document.getElementById("confirm-password");
+            
+                // Get the error message elements
+                const passwordError = document.getElementById("password-error");
+                const confirmPasswordError = document.getElementById("confirm-password-error");
+            
+                // Add an event listener to the confirm password input field to validate in real-time
+                confirmPasswordInput.addEventListener("input", function () {
+                    const confirmPasswordValue = confirmPasswordInput.value;
+                    const passwordValue = passwordInput.value;
+            
+                    if (confirmPasswordValue !== passwordValue) {
+                        confirmPasswordError.textContent = "Passwords do not match.";
+                        confirmPasswordInput.setCustomValidity("Passwords do not match.");
+                    } else {
+                        confirmPasswordError.textContent = "";
+                        confirmPasswordInput.setCustomValidity("");
+                    }
+                });
+            </script>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </div>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'aapmapp/validation.js' %}"> </script>
+</body>
+</html>

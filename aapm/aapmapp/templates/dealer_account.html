@@ -1,0 +1,152 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+<!--
+
+TemplateMo 571 Hexashop
+
+https://templatemo.com/tm-571-hexashop
+
+
+-->
+<style>
+    h1{
+        color:black;
+
+
+    }
+
+    h4{
+        color:black; 
+    }
+</style>
+
+
+<style>
+    .product-img {
+        width: 100%; /* Set the width as needed */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 200px; /* Set the maximum height if needed */
+        object-fit: cover; /* Ensure the image covers the container */
+    }
+</style>
+    </head>
+    
+    <body>
+    
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>  
+    <!-- ***** Preloader End ***** -->
+    
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="" class="logo">
+                            
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="{% url 'addpets' %}">Add Aquarium / Pets</a></li>
+                            
+                            <li class="scroll-to-section"><a href="{% url 'viewdatabase' request.user.id %}">View Your Databse</a></li>
+                           
+                                <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            </li>
+                           
+                            </li>
+                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    
+
+    
+    
+    <!-- ***** Footer Start ***** -->
+    <footer>
+     
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved. 
+                        
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script> 
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script> 
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script> 
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script> 
+    
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    
+    
+  </body>
+</html>

@@ -1,0 +1,226 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Customer Dashboard</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic styling for the body and background */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styles */
+header {
+    background-color: #009688;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Header styles for h1 element */
+header h1 {
+    font-size: 36px;
+}
+
+/* Navigation styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #009688;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Section styles */
+section {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+section h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Footer styles */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Styles for the large message box */
+.large-message-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 9999;
+}
+
+/* Existing styles... */
+
+/* Top-level CSS for the form */
+#add-property-form {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#add-property-form h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #009688;
+}
+
+#add-property-form label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+}
+
+#add-property-form input[type="text"],
+#add-property-form input[type="number"],
+#add-property-form select,
+#add-property-form button {
+    margin-top: 5px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#add-property-form button[type="submit"] {
+    background-color: #009688;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+header nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        background-color: #00796B; /* Button background color */
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+/* Additional styles... */
+
+
+.large-message-box .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.card {
+            position: relative;
+            width: 80%;
+            margin: 20px auto;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Updated CSS styles for the form inside the card */
+        #add-property-form {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        /* ... (Your existing CSS styles) ... */
+    </style>
+        <link rel="shortcut icon" href="{% static 'aapmapp/images/logo1.png' %}" type="">
+
+</head>
+
+<body>
+    {% if messages %}
+    <div class="large-message-box">
+        <span class="close-button" onclick="closeMessageBox()">&times;</span>
+        <div class="message-content">
+            {% for message in messages %}
+                {{ message|safe }}<br>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <header>
+        
+        <h1>Dealer Dashboard</h1>
+        <div class="user-name">Welcome!, {{ request.session.username }}</div>
+        <div class="profile-picture">
+            <!-- Add the code to display the user's profile picture here -->
+            <img src="{{ user_profile.photo.url }}" alt="Profile Picture" style="max-width: 100px; border-radius: 50%;">
+        </div>
+        <nav>
+            <ul>
+                <li style="float: right; margin-left: 10px;"><a href="{% url 'logout' %}" style="color: black;">Log out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<nav>
+    <ul>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+        <li><a href="{% url 'addpets' %}">Add Pets</a></li>
+        <li><a href="{% url 'viewdatabase' request.user.id %}">View Database</a></li>
+
+
+    </ul>
+</nav>
+
+
+<!-- More sections... -->
+
+<footer>
+<p>&copy; 2023 Dealer Dashboard</p>
+</footer>
+
+
+</body>
+
+</html>
