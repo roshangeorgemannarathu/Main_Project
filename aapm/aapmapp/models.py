@@ -14,7 +14,7 @@ class dealer(AbstractUser):
 class UserProfile(models.Model):
     user = models.ForeignKey("Dealer", on_delete=models.CASCADE)  # Assuming you have a ForeignKey relationship with the Dealer model
     fullname = models.CharField(max_length=100)
-    dateofbirth = models.DateField()
+    dateofbirth = models.DateField(null=True)
     phone = models.CharField(max_length=10)
     housename = models.CharField(max_length=100)
     pincode = models.CharField(max_length=6)
@@ -92,12 +92,54 @@ class CartItem(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE, null=True, blank=True)
     aquarium = models.ForeignKey(Aquarium, on_delete=models.CASCADE, null=True, blank=True)
 
+
+
+ #payment table
+        
+class Userpayment(models.Model):
+    user      =     models.ForeignKey(dealer, on_delete=models.CASCADE,null=True,blank=True)
+    cart = models.IntegerField(blank=True, null=True)
+    amount = models.IntegerField(default=0)
+    datetime = models.TextField(default="empty")
+    order_id_data = models.TextField(default="empty")
+    payment_id_data = models.TextField(default="empty")
+    item = models.ForeignKey(Pet,on_delete=models.CASCADE, null=False) 
+    status = models.TextField(default="active")
+
     def __str__(self):
-        return f"{self.user.user.username}'s Cart Item - {self.item_category} {self.item_id}"
+        return f"Payment {self.id} - {self.user_profile.fullname}"  # Assuming UserProfile has a 'fullname' field
+       
 
+class Userpayment_aquarium(models.Model):
+    user      =     models.ForeignKey(dealer, on_delete=models.CASCADE,null=True,blank=True)
+    cart = models.IntegerField(blank=True, null=True)
+    amount = models.IntegerField(default=0)
+    datetime = models.TextField(default="empty")
+    order_id_data = models.TextField(default="empty")
+    payment_id_data = models.TextField(default="empty")
+    item = models.ForeignKey(Aquarium,on_delete=models.CASCADE, null=False) 
 
+    def __str__(self):
+        return f"Payment {self.id} - {self.user_profile.fullname}"  # Assuming UserProfile has a 'fullname' field
+       
 
     
 
 
-   
+class Review(models.Model):
+    RATING_CHOICES = [
+        (1, '1 Star'),
+        (2, '2 Stars'),
+        (3, '3 Stars'),
+        (4, '4 Stars'),
+        (5, '5 Stars'),
+    ]
+
+    dealer = models.ForeignKey(dealer, on_delete=models.CASCADE, related_name='reviews')
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(choices=RATING_CHOICES,null=True)
+    review_text = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review for {self.product_name} by {self.dealer.username}'

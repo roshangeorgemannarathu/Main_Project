@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Sales</title>
+    <style>
+        /* Header styles */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .go-back-home {
+            float: right;
+            margin-right: 10px;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="{% url 'dealer_account' %}" class="go-back-home">Go Back Home</a>
+        <h1>Sales Data for Dealer: {{ dealer.fullname }}</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Product ID</th>
+                    <!-- <th>Product Name</th> -->
+                    <th>Image</th>
+                    <th>Payment ID</th>
+                    <th>Order ID</th>
+                    <th>Date Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.user.fullname }}</td>
+                    <td>{{ payment.item.id }}</td>
+                    <!-- <td>{{ payment.item.name }}</td> -->
+                    <td><img src="{{ payment.item.image.url }}" alt="{{ payment.item.name }}" height="100"></td>
+                    <td>{{ payment.payment_id_data }}</td>
+                    <td>{{ payment.order_id_data }}</td>
+                    <td>{{ payment.datetime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Footer Content
+    </footer>
+</body>
+</html>

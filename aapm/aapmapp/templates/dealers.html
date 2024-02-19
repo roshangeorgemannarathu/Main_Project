@@ -10,31 +10,8 @@
             padding: 0;
         }
 
-        /* CSS for Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: #fff;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #fff;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #555;
-        }
-
         /* CSS for Content Area */
         .content {
-            margin-left: 250px;
             padding: 20px;
         }
 
@@ -51,39 +28,25 @@
             margin: 0;
         }
 
-        #logout-link {
+        #go-back {
             position: absolute;
             top: 20px;
             right: 20px;
+            background-color: #000;
             color: #fff;
-            text-decoration: none;
-            padding: 8px 16px;
-            background-color: #007BFF;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        #logout-link:hover {
-            background-color: #0056b3;
+        #go-back:hover {
+            background-color: #333;
         }
 
         /* CSS for Cards (Sample Content) */
-
         /* CSS for Footer */
-        .footer {
-            background-color: #555;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: #333;
-        }
 
         form {
             text-align: center;
@@ -138,26 +101,20 @@
         tr:hover {
             background-color: #ddd;
         }
-
         /* Add more styles as needed */
     </style>
     <title>Dealer Accounts</title>
     <!-- Your CSS styles here -->
 </head>
 <body>
-    <div class="sidebar">
-        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
-        <a href="users.html">User Accounts</a>
-        <a href="customers.html">Customers</a>
-        <a href="dealers.html">Dealers</a>
-        <a href="deliveryman.html">Delivery Man</a>
-        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
-    </div>
+   
     <div class="content">
         <!-- Header -->
         <div class="header">
             <!-- Centered Header -->
             <h1>Dealer Accounts</h1>
+            <!-- Go Back Button -->
+            <button id="go-back" onclick="goBack()">Go Back</button>
             <!-- Logout Button -->
             {% comment %} <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a> {% endcomment %}
         </div>
@@ -178,7 +135,6 @@
                     <th>Username</th>
                     <th>Fullname</th>
                     <th>Email</th>
-
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -188,7 +144,6 @@
                     <td>{{ dealer.username }}</td>
                     <td>{{ dealer.fullname }}</td>
                     <td>{{ dealer.email }}</td>
-
                     <td>
                         {% if dealer.is_active %}
                         <form method="post" action="{% url 'deactivate_user' dealer.id %}">
@@ -205,7 +160,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5">No dealers available.</td>
+                    <td colspan="4">No dealers available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -225,6 +180,11 @@
                     }
                 });
             });
+
+            // JavaScript function for going back
+            function goBack() {
+                window.history.back();
+            }
         </script>
     </div>
 </body>

@@ -12,69 +12,79 @@
             padding: 0;
         }
 
-        /* CSS for Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: #fff;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #fff;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #555;
-        }
-
         /* CSS for Content Area */
         .content {
-            margin-left: 250px;
             padding: 20px;
+            font-family: Arial, sans-serif;
         }
 
         /* CSS for Header */
         .header {
-            background-color: #555;
+            background-color: #000; /* Change header color to black */
             color: #fff;
             padding: 20px;
-            position: relative;
+            position: fixed;
+            width: 100%;
+            z-index: 1;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0 auto; /* Center the text */
         }
 
         #logout-link {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             color: #fff;
             text-decoration: none;
-            padding: 8px 16px;
-            background-color: #007BFF;
-            border-radius: 5px;
+            padding: 8px 15px; /* Adjust padding to reduce spacing */
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            background-color: #dc3545; /* Change logout button color to red */
+        }
+        #logout-link:hover {
+            background-color: #c82333; /* Darker red on hover */
         }
 
-        #logout-link:hover {
-            background-color: #0056b3;
+        /* CSS for Buttons */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
+
+        .button {
+            width: calc(33.3333% - 20px);
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #28a745; /* Change button color */
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #218838; /* Change button hover color */
         }
 
         /* CSS for Cards (Sample Content) */
         .card {
-            background-color: #ed8a8a;
+            background-color: #fff;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(228, 218, 218, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* CSS for Footer */
         .footer {
-            background-color: #555;
+            background-color: #007bff;
             color: #ffffff;
             text-align: center;
             padding: 10px;
@@ -85,37 +95,27 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
-        <a href="users.html">User Accounts</a>
-        <a href="customers.html">Customers</a>
-        <a href="dealers.html">Dealers</a>
-        <a href="deliveryman.html">Delivery Man</a>
-        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
-    </div>
-
     <!-- Content Area -->
     <div class="content">
         <!-- Header -->
         <div class="header">
+            <!-- Admin Dashboard in the center -->
             <center><h1>Admin Dashboard</h1></center>
-            <!-- Logout Button -->
-            <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a>
+            <!-- Logout Button on the right -->
+            <a href="{% url 'logout' %}" id='logout-link'>Logout</a>
         </div>
 
-        <!-- Sample Content -->
-        <div class="card">
-            <h2>Overview</h2>
-            <p></p>
+        <!-- Button Container -->
+        <br><br><br>
+        <div class="button-container">
+            <button class="button"><a href="users.html">User Accounts</a></button>
+            <button class="button"><a href="customers.html">Customers</a></button>
+            <button class="button"><a href="dealers.html">Dealers</a></button>
+            <button class="button"><a href="deliveryman.html">Delivery Man</a></button>
+            <button class="button"><a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a></button>
+            <button class="button"><a href="{% url 'payment_details' %}">Payment Managemrnt</a></button>
+            <button class="button"><a href="{% url 'Dealer_feedback' %}">Dealer Feedback</a></button>
         </div>
-
-        <div class="card">
-            <h2></h2>
-            <p></p>
-        </div>
-
-        <!-- Add more cards and content as needed -->
 
         <!-- Footer -->
         <div class="footer">

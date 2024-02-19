@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f3f6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            list-style-type: none;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        /* Styling for headings inside list items */
+        li h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Styling for paragraph inside list items */
+        li p {
+            margin: 5px 0;
+        }
+
+        /* Styling for container headers */
+        .header {
+            background-color: #2874f0;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Styling for go back button */
+        .go-back-button {
+            background-color: #ff3d00;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .go-back-button:hover {
+            background-color: #d32f00;
+        }
+    </style>
+</head>
+<body>
+
+    
+            <div class="container">
+                <div class="header">
+                    <h1>Payment Details</h1>
+                    <button class="go-back-button" onclick="goBack()">Go Back</button>
+                </div>
+
+        <div class="payment-section">
+            <center> <h2>Pet Payments</h2></center>
+            <ul>
+                {% for payment in pet_payments %}
+                <li>
+                    <h3>{{ payment.item_name }}</h3>
+                    <img src="{{ payment.item_image }}" alt="{{ payment.item_name }}">
+                    <p><strong>Payment ID:</strong> {{ payment.payment_id }}</p>
+                    <p><strong>Customer ID:</strong> {{ payment.customer_id }}</p>
+                    <p><strong>Customer Name:</strong> {{ payment.customer_name }}</p>
+                    <p><strong>Dealer ID:</strong> {{ payment.dealer_id }}</p>
+                    <p><strong>Dealer Name:</strong> {{ payment.dealer_name }}</p>
+                    <p><strong>Order ID:</strong> {{ payment.order_id }}</p>
+                    <p><strong>Payment Details:</strong> {{ payment.payment_details }}</p>
+                    <p><strong>Amount:</strong> {{ payment.amount }}</p>
+                    <p><strong>Datetime:</strong> {{ payment.datetime }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="payment-section">
+            <center> <h2>Aquarium Payments</h2></center>
+            <ul>
+                {% for payment in aquarium_payments %}
+                <li>
+                    <h3>{{ payment.item_name }}</h3>
+                    <img src="{{ payment.item_image }}" alt="{{ payment.item_name }}">
+                    <p><strong>Payment ID:</strong> {{ payment.payment_id }}</p>
+                    <p><strong>Customer ID:</strong> {{ payment.customer_id }}</p>
+                    <p><strong>Customer Name:</strong> {{ payment.customer_name }}</p>
+                    <p><strong>Dealer ID:</strong> {{ payment.dealer_id }}</p>
+                    <p><strong>Dealer Name:</strong> {{ payment.dealer_name }}</p>
+                    <p><strong>Order ID:</strong> {{ payment.order_id }}</p>
+                    <p><strong>Payment Details:</strong> {{ payment.payment_details }}</p>
+                    <p><strong>Amount:</strong> {{ payment.amount }}</p>
+                    <p><strong>Datetime:</strong> {{ payment.datetime }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

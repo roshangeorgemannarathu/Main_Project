@@ -125,8 +125,7 @@
                 <th>Price</th>
                 <th>Location</th>
                 <th>Image</th>
-                <th>Edit</th>
-                <th>Actions</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -138,15 +137,7 @@
                     <td>Rs{{ aquarium.price }}</td>
                     <td>{{ aquarium.location }}</td>
                     <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.image.url }}" style="width: 100px; height: 100px;"></td>
-                    <td>
-                        <a href="">Edit</a></td>
-                        <td>
-                            {% if aquarium.is_enabled %}
-                                <a href="" class="disable-button">Disable</a>
-                            {% else %}
-                                <a href="" class="enable-button">Enable</a>
-                            {% endif %}
-                        </td>
+                    
                 </tr>
             {% endfor %}
         </tbody>
@@ -157,15 +148,14 @@
         <thead>
             <tr>
                 <th>Category</th>
-                <th>Sub Category</th>
+                
                 <th>Breed</th>
                 <th>Pet Age</th>
                 <th>Price</th>
                 <th>Pet Description</th>
                 <th>Location</th>
                 <th>Image</th>
-                <th>Edit</th>
-                <th>Actions</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -173,22 +163,14 @@
                 <tr>
                     
                     <td>{{ pet.category }}</td>
-                    <td>{{ pet.subcategory }}</td>
+                    
                     <td>{{ pet.pet_breed }}</td>
                     <td>{{ pet.pet_age}}</td>
                     <td>Rs{{ pet.price }}</td>
                     <td>{{ pet.pet_description}}</td>
                     <td>{{ pet.location }}</td>
                     <td><img src="{{ pet.image.url }}" alt="{{ pet.category }} - {{ pet.id }}" width="100"></td>
-                    <td>
-                        <a href="">Edit</a>
-                    </td>
-                    <td>
-                        {% if pet.is_enabled %}
-                            <a href="" class="disable-button">Disable</a>
-                        {% else %}
-                            <a href="" class="enable-button">Enable</a>
-                        {% endif %}
+                    
                     </td>
                   
                 </tr>

@@ -10,31 +10,8 @@
             padding: 0;
         }
 
-        /* CSS for Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: #fff;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #fff;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #555;
-        }
-
         /* CSS for Content Area */
         .content {
-            margin-left: 250px;
             padding: 20px;
         }
 
@@ -48,50 +25,36 @@
         }
 
         .header h1 {
-            color: #333;
-            margin: 20px 0;
+            margin: 0;
         }
 
-        .header #logout-link {
+        #go-back {
             position: absolute;
             top: 20px;
             right: 20px;
+            background-color: #000;
             color: #fff;
-            text-decoration: none;
-            padding: 8px 16px;
-            background-color: #007BFF;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .header #logout-link:hover {
-            background-color: #0056b3;
+        #go-back:hover {
+            background-color: #333;
         }
 
         /* CSS for Cards (Sample Content) */
-
         /* CSS for Footer */
-        .footer {
-            background-color: #555;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: #333;
-        }
 
         form {
             text-align: center;
             margin: 20px 0;
         }
 
-        form input[type="text"], form select {
+        form input[type="text"],
+        form select {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -119,7 +82,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: left;
@@ -137,28 +101,20 @@
         tr:hover {
             background-color: #ddd;
         }
-
         /* Add more styles as needed */
     </style>
     <title>Delivery Man Accounts</title>
     <!-- Your CSS styles here -->
 </head>
 <body>
-    <div class="sidebar">
-        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
-        <a href="users.html">User Accounts</a>
-        <a href="customers.html">Customers</a>
-        <a href="dealers.html">Dealers</a>
-        <a href="deliveryman.html">Delivery Man</a>
-        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
-    </div>
+    
     <div class="content">
         <!-- Header -->
         <div class="header">
             <!-- Header content -->
             <h1>Delivery Man Accounts</h1>
-            <!-- Logout Button -->
-            <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a>
+            <!-- Go Back Button -->
+            <button id="go-back" onclick="goBack()">Go Back</button>
         </div>
         <!-- Filter form -->
         <form method="GET">
@@ -178,7 +134,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for deliveryman in deliverymans %}
+                {% for deliveryman in deliveryman %}
                 <tr>
                     <td>{{ deliveryman.username }}</td>
                     <td>{{ deliveryman.fullname }}</td>
@@ -186,14 +142,14 @@
                     <td>{{ deliveryman.role }}</td>
                     <td>
                         <!-- Add Delete button with a form -->
-                        <form method="POST" action="{% url 'toggle_activation' deliveryman.id %}">
+                        {% comment %} <form method="POST" action="{% url 'toggle_activation' deliveryman.id %}">
                             {% csrf_token %}
                             {% if deliveryman.is_active %}
                                 <button type="submit" name="action" value="deactivate" style="background-color: red; color: white;">Deactivate</button>
                             {% else %}
                                 <button type="submit" name="action" value="activate" style="background-color: green; color: white;">Activate</button>
                             {% endif %}
-                        </form>
+                        </form> {% endcomment %}
                     </td>
                 </tr>
                 {% empty %}
@@ -202,7 +158,14 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            
         </table>
     </div>
+    <script>
+        // JavaScript function for going back
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

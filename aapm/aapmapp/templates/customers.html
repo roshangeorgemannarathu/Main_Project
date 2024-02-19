@@ -10,81 +10,42 @@
             padding: 0;
         }
 
-        /* CSS for Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: #E6E6FA;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #E6E6FA;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #555;
-        }
-
         /* CSS for Content Area */
         .content {
-            margin-left: 250px;
             padding: 20px;
         }
 
         /* CSS for Header */
         .header {
             background-color: #E6E6FA;
-            color: #fff;
+            color: #333;
             padding: 20px;
             text-align: center;
             position: relative;
         }
 
         .header h1 {
-            color: #333;
             margin: 20px 0;
         }
 
-        .header #logout-link {
+        .header #go-back {
             position: absolute;
             top: 20px;
             right: 20px;
+            background-color: #333;
             color: #fff;
-            text-decoration: none;
-            padding: 8px 16px;
-            background-color: #007BFF;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .header #logout-link:hover {
-            background-color: #0056b3;
+        .header #go-back:hover {
+            background-color: #555;
         }
 
         /* CSS for Cards (Sample Content) */
-
-        /* CSS for Footer */
-        .footer {
-            background-color: #555;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: #333;
-        }
 
         form {
             text-align: center;
@@ -144,19 +105,14 @@
     <!-- Your CSS styles here -->
 </head>
 <body>
-    <div class="sidebar">
-        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
-        <a href="users.html">User Accounts</a>
-        <a href="customers.html">Customers</a>
-        <a href="dealers.html">Dealers</a>
-        <a href="deliveryman.html">Delivery Man</a>
-        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
-    </div>
+    
     <div class="content">
         <!-- Header -->
         <div class="header">
             <!-- Header content -->
             <h1>Customers Account</h1>
+            <!-- Go Back Button -->
+            <button id="go-back" onclick="goBack()">Go Back</button>
             <!-- Logout Button -->
             {% comment %} <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a> {% endcomment %}
         </div>
@@ -218,6 +174,11 @@
                     }
                 });
             });
+
+            // JavaScript function for going back
+            function goBack() {
+                window.history.back();
+            }
         </script>
     </div>
 </body>

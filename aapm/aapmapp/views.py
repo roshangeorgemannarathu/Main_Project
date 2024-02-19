@@ -1,3 +1,5 @@
+from datetime import timezone
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .models import dealer
@@ -18,9 +20,11 @@ from .urls import *
 from django.views.decorators.csrf import csrf_exempt
 
 
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+from .models import Review
 
 
 import razorpay
@@ -40,11 +44,13 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 
 
-from .models import Pet, Aquarium
+from .models import *
+
 
 #threading
 import threading
-
+import math
+from .models import Userpayment, Userpayment_aquarium
 #reset passwor generater
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 # Create your views here.
@@ -175,11 +181,11 @@ def dealers(request):
 
 def deliveryman(request):
     # Query the database to get the data you want to display on the admin dashboard
-    deliveryman = dealer.objects.filter(role='deliveryman')  # Filter by role 'deliveryman'
+    deliverymen = dealer.objects.filter(role='deliveryman')  # Filter by role 'deliveryman'
 
     # Pass the data to the template context
     context = {
-        'deliveryman': deliveryman,  # Update the variable name to 'deliverymen'
+        'deliverymen': deliverymen,  # Update the variable name to 'deliverymen'
         # Add other data you want to pass to the template
     }
     return render(request, 'deliveryman.html', context)
@@ -224,25 +230,25 @@ def deliveryman(request):
 #     # Redirect back to the dealer list page
 #     return redirect('dealers')
 
-def toggle_deliveryman_activation(request, deliveryman_id):
-    deliveryman= get_object_or_404(dealers, id=deliveryman_id)
+# def toggle_deliveryman_activation(request, deliveryman_id):
+#     deliveryman= get_object_or_404(dealers, id=deliveryman_id)
 
-    if request.method == 'POST':
-        action = request.POST.get('action')  # Get the value of the clicked button
+#     if request.method == 'POST':
+#         action = request.POST.get('action')  # Get the value of the clicked button
 
-        if action == 'activate':
-            deliveryman.is_active = True
-        elif action == 'deactivate':
-            deliveryman.is_active = False
+#         if action == 'activate':
+#             deliveryman.is_active = True
+#         elif action == 'deactivate':
+#             deliveryman.is_active = False
 
-        dealer.save()
+#         dealer.save()
 
-        # Send a JSON response to update the button text on the page
-        response_data = {'message': 'Activation status toggled successfully.'}
-        return JsonResponse(response_data)
+#         # Send a JSON response to update the button text on the page
+#         response_data = {'message': 'Activation status toggled successfully.'}
+#         return JsonResponse(response_data)
 
-    # Redirect back to the dealer list page
-    return redirect('deliveryman')
+#     # Redirect back to the dealer list page
+#     return redirect('deliveryman')
 def a(request):
     if requdd_pet_or_aquariumest.method == 'POST':
         category = request.POST.get('category')
@@ -318,43 +324,28 @@ def userloginhome(request):
 
    
 
-def edit_profile(request):
-    if request.method == 'POST':
-        # Assuming you have a UserProfile model
-        user_profile = UserProfile.objects.get(user=request.user)
-
-        user_profile.full_name = request.POST.get('fullname')
-        user_profile.date_of_birth = request.POST.get('dateofbirth')
-        user_profile.gender = request.POST.get('gender')
-        user_profile.phone_number = request.POST.get('phoneno')
-        user_profile.current_address = request.POST.get('currentaddress')
-
-            # Handle the photo upload
-        if 'photoid' in request.FILES:
-                user_profile.photo_id = request.FILES['photoid']
-
-        user_profile.save()
-        
-        # Redirect to a success page or the user profile page return redirect('user_profile')  # Replace with the actual URL name of the user profile page
-
-    return render(request, 'edit_profile.html')  # Replace with the actual template name
-
-# Add any additional view functions as needed
 
 def deactivate_user(request, user_id):
     user = get_object_or_404(dealer, id=user_id)
     if user.is_active:
         user.is_active = False
         user.save()
-         # Send deactivation email
-        subject = 'Account Deactivation'
-        message = 'Your account has been deactivated by the admin.'
-        from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
-        recipient_list = [user.email]
-        html_message = render_to_string('deactivation_email.html', {'user': user})
+        
+        # Attempt to send deactivation email
+        try:
+            subject = 'Account Deactivation'
+            message = 'Your account has been deactivated by the admin.'
+            from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
+            recipient_list = [user.email]
+            html_message = render_to_string('deactivation_email.html', {'user': user})
 
-        send_mail(subject, message, from_email, recipient_list, html_message=html_message)
-
+            send_mail(subject, message, from_email, recipient_list, html_message=html_message)
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        except Exception as e:
+            # Handle other potential errors
+            return HttpResponse(f'Error: {str(e)}')
+        
         messages.success(request, f"User '{user.username}' has been deactivated, and an email has been sent.")
     else:
         messages.warning(request, f"User '{user.username}' is already deactivated.")
@@ -366,14 +357,20 @@ def activate_user(request, user_id):
         user.is_active = True
         user.save()
 
-        # Send activation email
-        subject = 'Account Activation'
-        message = 'Your account has been activated by the admin.'
-        from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
-        recipient_list = [user.email]
-        html_message = render_to_string('activation_email.html', {'user': user})
+        # Attempt to send activation email
+        try:
+            subject = 'Account Activation'
+            message = 'Your account has been activated by the admin.'
+            from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
+            recipient_list = [user.email]
+            html_message = render_to_string('activation_email.html', {'user': user})
 
-        send_mail(subject, message, from_email, recipient_list, html_message=html_message)
+            send_mail(subject, message, from_email, recipient_list, html_message=html_message)
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        except Exception as e:
+            # Handle other potential errors
+            return HttpResponse(f'Error: {str(e)}')
 
         messages.success(request, f"User '{user.username}' has been activated, and an email has been sent.")
     else:
@@ -422,7 +419,7 @@ def deactivate_customer(request, user_id):
          # Send deactivation email
         subject = 'Account Deactivation'
         message = 'Your account has been deactivated by the admin.'
-        from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
+        from_email = 'roshangeorge2k66@gmail.com'  # Replace with your email
         recipient_list = [user.email]
         html_message = render_to_string('deactivation_email.html', {'customer': user})
 
@@ -442,7 +439,7 @@ def activate_customer(request, user_id):
         # Send activation email
         subject = 'Account Activation'
         message = 'Your account has been activated by the admin.'
-        from_email = 'roshangeorge2024b@mca.ajce.in'  # Replace with your email
+        from_email = 'roshangeorge2k66@gmail.com'  # Replace with your email
         recipient_list = [user.email]
         html_message = render_to_string('activation_email.html', {'customer': user})
 
@@ -453,31 +450,7 @@ def activate_customer(request, user_id):
         messages.warning(request, f"User '{user.username}' is already active.")
     return redirect(request, 'admin_dashboard.html')
 
-# @login_required
-# def profile(request):
-#     try:
-#         # Attempt to retrieve the user's profile
-#         user_profile = UserProfile.objects.get(user=request.user)
-#     except UserProfile.DoesNotExist:
-#         # Handle the case when the profile does not exist
-#         raise Http404("UserProfile does not exist for this user")
 
-#     # Access the user's current address, adjust this based on your model structure
-#     current_address = user_profile.current_address
-
-#     context = {
-#         'fullname': user_profile.fullname,
-#         'dateofbirth': user_profile.dateofbirth,
-#         'gender': user_profile.gender,
-#         'phone': user_profile.phone,
-#         'housename': user_.housename,
-#         'pincode': current_address.pincode,
-#         'district': current_address.district,
-#         'photoid': user_profile.photo_id,
-#         'photo': user_profile.photo,
-#     }
-
-#     return render(request, 'profile.html', context)
 
 def viewid(request):
     # Your view logic for the addpets page
@@ -556,7 +529,7 @@ def addpets(request):
             price = request.POST.get('pet_price')
             quantity = request.POST.get('pet_quantity')
             pet_description = request.POST.get('pet_description')
-            location = request.POST.get('pet_location')
+            location = request.POST.get('pet_city')
             image = request.FILES.get('pet_image')
 
             # Create the Pet object and associate it with the current user
@@ -679,10 +652,42 @@ def usercustomer(request):
 
 @never_cache
 def customer_account(request):
+    if request.method == 'POST':
+        # Assuming you have a form submission to process the payment
+        # Retrieve form data and process the payment
+        # Once payment is successful, remove the item from the cart
+
+        # Example code for processing payment and removing item from the cart
+        # For simplicity, let's assume the payment is processed successfully
+        item_id = request.POST.get('item_id')  # Assuming you have a hidden input field in your form with the item ID
+        item_type = request.POST.get('item_type')  # Assuming you have a hidden input field in your form with the item type (e.g., 'pet' or 'aquarium')
+
+        print("Item ID:", item_id)
+        print("Item Type:", item_type)
+
+        if item_type == 'pet':
+            payment_item = Userpayment.objects.filter(item_id=item_id).first()
+        elif item_type == 'aquarium':
+            payment_item = Userpayment_aquarium.objects.filter(item_id=item_id).first()
+
+        print("Payment Item:", payment_item)
+
+        # Remove the item from the cart after payment
+        if payment_item:
+            payment_item.delete()
+            print("Item deleted successfully.")
+        else:
+            print("Item not found in the cart.")
+
+        # Redirect to the customer account page after processing payment and removing item from the cart
+        return redirect('customer_account')
+
+    # If the request method is not POST or if the payment is not processed, render the customer account page as usual
     aquariums = Aquarium.objects.all()
     pets = Pet.objects.all()
     
     return render(request, 'customer_account.html', {'aquariums': aquariums, 'pets': pets})
+
 @never_cache
 def dealer_account(request):
         return render(request, 'dealer_account.html')
@@ -711,100 +716,13 @@ def disable_pet(request, pet_id):
     pet.save()
     return redirect('viewdatabase', user_id=request.user.id)
 
-# def add_to_cart(request, category, item_id):
-#     cart = Cart(request)
-
-#     if category == 'aquarium':
-#         item = get_object_or_404(Aquarium, pk=item_id)
-#         context = {
-#             'category': 'Aquarium',
-#             'name': item.name,
-#             'description': item.description,
-#             'price': item.price,
-#             'quantity': item.quantity,
-#             'location': item.location,
-#             'image': item.image.url,
-#         }
-#     elif category == 'pet':
-#         item = get_object_or_404(Pet, pk=item_id)
-#         context = {
-#             'category': 'Pet',
-#             'sub_category': item.get_category_display(),
-#             'breed': item.pet_breed,
-#             'pet_age': item.pet_age,
-#             'price': item.price,
-#             'quantity': item.quantity,
-#             'location': item.location,
-#             'image': item.image.url,
-#         }
-#     else:
-#         # Handle other categories if needed
-#         return redirect('home')  # Redirect to home if category is not recognized
-
-#     cart.add(item=item)
-#     return render(request, 'your_template/add_to_cart.html', context)
 
 
 
-# @login_required
-# def add_to_cart(request, category, item_id):
-#     print(category)
-#     print(item_id)
-#     uid=request.user
-#     user_profile = get_object_or_404(UserProfile, user_id=uid)
-#     CartItem.objects.create(
-#                         user=user_profile,
-#                         item_category="aquarium",
-#                         item_id=item_id,
-#                         quantity=1
-#                     )
-#     return redirect('add_to_cart')
+
     
   
-# def add_to_cart(request, category, item_id):
-#     try:
-#         # Retrieve the item based on the category
-#         if category == 'pet':
-#             item = get_object_or_404(Pet, id=item_id)
-#         elif category == 'aquarium':
-#             item = get_object_or_404(Aquarium, id=item_id)
-#         else:
-#             # Handle other categories if needed
-#             item = None
-
-#         if item:
-#             if request.user.is_authenticated:
-#                 user_profile = get_object_or_404(UserProfile, user=request.user)
-
-#                 # Check if the item is already in the cart
-#                 cart_item = CartItem.objects.filter(
-#                     user=user_profile,
-#                     item_category=category,
-#                     item_id=item_id
-#                 ).first()
-
-#                 # If the item is already in the cart, update the quantity
-#                 if cart_item:
-#                     cart_item.quantity += 1
-#                     cart_item.save()
-#                 else:
-#                     # If the item is not in the cart, create a new entry
-#                     CartItem.objects.create(
-#                         user=user_profile,
-#                         item_category=category,
-#                         item_id=item_id,
-#                         quantity=1
-#                     )
-
-#                 messages.success(request, f"{item.name} added to the cart successfully.")
-#             else:
-#                 messages.warning(request, "Please log in to add items to your cart.")
-#     except Exception as e:
-#         # Log the exception or handle it appropriately
-#         messages.error(request, f"An error occurred while adding the item to the cart: {str(e)}")
-
-#     return redirect('customer_account')
-
+# 
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
@@ -888,110 +806,222 @@ def item_detail(request, category, item_id):
 
     return render(request, 'item_detail.html', {'item': item, 'category': category})
 
-# def pet_details(request, pet_id):
-#     pet = get_object_or_404(Pet, id=pet_id)
-
-    
-#     client = razorpay.Client(auth=("YOUR_ID", "YOUR_SECRET"))
-
-#     DATA = {
-#     "amount": 100,
-#     "currency": "INR",
-#     "receipt": "receipt#1",
-#     "notes": {
-#         "key1": "value3",
-#         "key2": "value2"
-#      }
-#     }
-#     payment =client.order.create(data=DATA)
-#     return render(request, 'pet_details.html', {'pet': pet})
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 import razorpay
 
+
+# authorize razorpay client with API Keys.
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
 def pet_details(request, pet_id):
+    request.session['pet_id'] = pet_id
     pet = get_object_or_404(Pet, id=pet_id)
+    currency = 'INR'
 
-    amount_in_paise = pet.price * 100  # Assuming pet.price is the price of the pet
-
-    if request.method == 'POST':
-        # Assuming you have your Razorpay API credentials stored in your Django settings
-        razorpay_key_id = "rzp_test_KPliOP7waiGNR8"
-        razorpay_key_secret = "ehsJBVnmAmuDFkFbXIsi2Gm3"
-
-        client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
-
-        DATA = {
-            "amount": amount_in_paise,
-            "currency": "INR",
-            "receipt": "receipt#1",
-            "notes": {
-                "key1": "value3",
-                "key2": "value2"
-             }
-        }
-        payment = client.order.create(data=DATA)
-
-        context = {
-            'pet': pet,
-            'payment': payment,
-            'amount_in_paise': amount_in_paise,  # Add the multiplied amount to the context
-        }
-
-        return render(request, 'pet_details.html', context)
-
-    return render(request, 'pet_details.html', {'pet': pet, 'amount_in_paise': amount_in_paise})
+    amount = int(pet.price * 100)  # Convert to integer
+    razorpay_order = razorpay_client.order.create(dict(amount=amount,
+                                                       currency=currency,
+                                                       payment_capture='0'))
+ 
+    # order id of newly created order.
+    razorpay_order_id = razorpay_order['id']
+    callback_url = '/paymenthandler/'
+ 
+    # we need to pass these details to frontend.
+    context = {}
+    context['razorpay_order_id'] = razorpay_order_id
+    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+    context['razorpay_amount'] = amount
+    context['currency'] = currency
+    context['callback_url'] = callback_url
+    context['pet'] = pet
+    return render(request, 'pet_details.html', context=context)
 
 
-# def aquarium_details(request, aquarium_id):
-#     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
-#     context = {'aquarium': aquarium}
-#     return render(request, 'aquarium_details.html', context)
+
+
+from django.shortcuts import render
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+ 
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from .models import Pet
+from django.utils import timezone
+
+
+@csrf_exempt
+@csrf_exempt
+def paymenthandler(request):
+    if request.method == "POST":
+        try:
+            # get the required parameters from post request.
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+
+            # verify the payment signature.
+            result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+            pet_id = request.session.pop('pet_id', None)
+            pet = get_object_or_404(Pet, id=pet_id)
+            pet.status = "inactive"  # Set the status to "inactive"
+            pet.save()
+
+            if result is not None:
+                try:
+                    # Save payment details to Userpayment table
+                    current_datetime = timezone.now()
+                    user_payment_instance = Userpayment.objects.create(
+                        user=request.user,  # Adjust as per your user model
+                        cart=1,  # Adjust as per your requirement
+                        amount=pet.price,
+                        datetime=current_datetime,
+                        order_id_data=razorpay_order_id,
+                        payment_id_data=payment_id,
+                        item=pet 
+                    )
+                    # render success page on successful capture of payment
+                    return render(request, 'payment_success.html')
+                except Exception as e:
+                    # Log the exception or handle it as appropriate
+                    print(e)  # Print the exception for debugging
+                    return HttpResponse("fail: {}".format(str(e)))
+            else:
+                # if signature verification fails.
+                return HttpResponse("signature fail")
+        except Exception as e:
+            # if we don't find the required parameters in POST data
+            print(e)  # Print the exception for debugging
+            return HttpResponseBadRequest()
+    else:
+        # if other than POST request is made.
+        return HttpResponseBadRequest()
+# 
+
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+import razorpay
+
 
 def aquarium_details(request, aquarium_id):
+    request.session['item_id'] = aquarium_id
+    request.session['item_type'] = 'aquarium'
+
     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+    currency = 'INR'
 
-    amount_in_paise = aquarium.price * 100  # Assuming pet.price is the price of the pet
+    # Ensure amount is at least 100 paise (1 INR)
+    amount = max(int(math.ceil(aquarium.price * 100)), 100)
 
-    if request.method == 'POST':
-        # Assuming you have your Razorpay API credentials stored in your Django settings
-        razorpay_key_id = "rzp_test_KPliOP7waiGNR8"
-        razorpay_key_secret = "ehsJBVnmAmuDFkFbXIsi2Gm3"
+    # Ensure amount is a multiple of 100 paise
+    amount = (amount // 100) * 100
 
-        client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
-
-        DATA = {
-            "amount": amount_in_paise,
-            "currency": "INR",
-            "receipt": "receipt#1",
-            "notes": {
-                "key1": "value3",
-                "key2": "value2"
-             }
-        }
-        payment = client.order.create(data=DATA)
-
-        context = {
-            'pet': aquarium,
-            'payment': payment,
-            'amount_in_paise': amount_in_paise,  # Add the multiplied amount to the context
-        }
-
-        return render(request, 'aquarium_details.html', context)
-
-    return render(request, 'aquarium_details.html', {'aquarium': aquarium, 'amount_in_paise': amount_in_paise})
+    razorpay_order = razorpay_client.order.create(dict(amount=amount,
+                                                       currency=currency,
+                                                       payment_capture='0'))
+ 
+    # order id of newly created order.
+    razorpay_order_id = razorpay_order['id']
+    callback_url = '/paymenthandler1/'
+ 
+    # we need to pass these details to frontend.
+    context = {}
+    context['razorpay_order_id'] = razorpay_order_id
+    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+    context['razorpay_amount'] = amount
+    context['currency'] = currency
+    context['callback_url'] = callback_url
+    context['aquarium'] = aquarium
+    return render(request, 'aquarium_details.html', context=context)
 
 
+@csrf_exempt
+def paymenthandler1(request):
+    if request.method == "POST":
+        try:
+            # get the required parameters from post request.
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+
+            # verify the payment signature.
+            result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+            item_id = request.session.pop('item_id', None)
+            item_type = request.session.pop('item_type', None)
+
+            if result is not None:
+                try:
+                    current_datetime = timezone.now()
+                    if item_type == 'pet':
+                        item = get_object_or_404(Pet, id=item_id)
+                    elif item_type == 'aquarium':
+                        item = get_object_or_404(Aquarium, id=item_id)
+                    else:
+                        # Handle invalid item type
+                        return HttpResponseBadRequest("Invalid item type")
+
+                    # Save payment details to Userpayment_aquarium table
+                    user_payment_instance = Userpayment_aquarium.objects.create(
+                        user=request.user,
+                        cart=1,
+                        amount=item.price,
+                        datetime=current_datetime,
+                        order_id_data=razorpay_order_id,
+                        payment_id_data=payment_id,
+                        item=item  # Associate the payment with the correct item
+                    )
+                    # render success page on successful capture of payment
+                    return render(request, 'payment_success.html')
+                except Exception as e:
+                    # Log the exception or handle it as appropriate
+                    print(e)
+                    return HttpResponse("fail: {}".format(str(e)))
+            else:
+                # if signature verification fails.
+                return HttpResponse("signature fail")
+        except Exception as e:
+            # if we don't find the required parameters in POST data
+            print(e)
+            return HttpResponseBadRequest()
+    else:
+        # if other than POST request is made.
+        return HttpResponseBadRequest()
 
 
-# def buy_now(request, category, item_id):
-#     # Your 'buy_now' view logic goes here
-#     return render(request, 'customer_account.html')
+
+
+
+
+
+
+
+
+
+
+
 
 def buy_now(request, category, item_id):
 
-    return render(request, 'pet_details.html', {'pet': pet, 'order': order})
+    return render(request, 'customer_account.html', {'pet': pet, 'order': order})
 
 @csrf_exempt
 def razorpay_payment(request):
@@ -1018,7 +1048,120 @@ def razorpay_payment(request):
     
     
     
+@csrf_exempt
+def handle_payment(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        razorpay_order_id = data.get('order_id')
+        payment_id = data.get('payment_id')
+
+        try:
+            order = Order.objects.get(payment_id=razorpay_order_id)
+
+            client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+            payment = client.payment.fetch(payment_id)
+
+            if payment['status'] == 'captured':
+                order.payment_status = True
+                order.save()
+                user = request.user
+                user.cart.cartitem_set.all().delete()
+                return JsonResponse({'message': 'Payment successful'})
+            else:
+                return JsonResponse({'message': 'Payment failed'})
+
+        except Order.DoesNotExist:
+            return JsonResponse({'message': 'Invalid Order ID'})
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({'message': 'Server error, please try again later.'})
+
 def payment_successful(request):
+    if request.method == 'POST':
+        # Verify the Razorpay payment
+        params_dict = request.POST
+        razorpay_signature = params_dict.get('razorpay_signature')
+        order_id = params_dict.get('razorpay_order_id')
+        razorpay_payment_id = params_dict.get('razorpay_payment_id')
+        
+
+        # Verify the payment
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        try:
+            client.utility.verify_payment_signature(params_dict, razorpay_signature, order_id)
+            # Payment verified, process the order or update the status as needed
+
+            # Saving payment information to the database
+            user_payment_obj = Userpayment.objects.create(
+                user=request.user,  # Assuming you have authenticated users
+                amount=params_dict.get('amount'),  # Adjust fields as needed
+                datetime=params_dict.get('datetime'),  # Adjust fields as needed
+                order_id_data=order_id,
+                payment_id_data=razorpay_payment_id,
+                # item_id=
+            )
+
+            # Redirect to the payment_successful page
+            return redirect('payment_success')  # Assuming 'customer_account' is a valid URL name
+
+        except Exception as e:
+            # Payment verification failed
+            return HttpResponse(f'Payment Failed: {str(e)}')
+    else:
+        # Invalid request method
+        return HttpResponse(status=400)
+    
+def deliveryman_account(request):
+    # Your view logic here
+     return render(request, 'deliveryman_account.html')
+
+def payment_success(request):
+     return render(request, 'payment_success.html')
+
+def payment_unsuccess(request):
+     return render(request, 'payment_unsuccess.html')   
+
+# def order(request):
+#     # Fetch all user payments from both models
+#     user_payments = Userpayment.objects.all()  # Retrieve all user payments from Userpayment model
+#     user_payments_aquarium = Userpayment_aquarium.objects.all()  # Retrieve all user payments from Userpayment_aquarium model
+
+#     return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium})
+
+
+def order(request):
+    # Fetch all user payments from both models
+    user_payments = Userpayment.objects.all()  # Retrieve all user payments from Userpayment model
+    user_payments_aquarium = Userpayment_aquarium.objects.all()  # Retrieve all user payments from Userpayment_aquarium model
+
+    # Fetch all pets
+    pets = Pet.objects.all()
+
+    # Extract pet IDs
+    pet_ids = [pet.id for pet in pets]
+
+    return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium, 'pet_ids': pet_ids})
+
+def order_management(request):
+    # Assuming you have authentication in place to identify the dealer
+    dealer = request.user.dealer  # Assuming you have a dealer associated with the user
+    
+    # Fetching dealer's sales with related user, pet, and payment details
+    sales = Userpayment.objects.filter(user=dealer)
+    
+    context = {
+        'sales': sales
+    }
+    
+    return render(request, 'order_management.html', context)
+    
+
+def Dealer_feedback(request):
+     return render(request, 'Dealer_feedback.html') 
+
+from django.utils import timezone
+@csrf_exempt
+def add_payment_details(request):
     if request.method == 'POST':
         # Verify the Razorpay payment
         params_dict = request.POST
@@ -1032,30 +1175,163 @@ def payment_successful(request):
             client.utility.verify_payment_signature(params_dict, razorpay_signature, order_id)
             # Payment verified, process the order or update the status as needed
 
-            # Assuming you have an Order model with a 'user' and 'status' field
+            # Create a UserPayment instance
             try:
-                order = Order.objects.get(user=request.user, status='paid')  # Adjust the query as needed
+                current_datetime = timezone.now()
+                payment_instance = UserPayment.objects.create(
+                    user=request.user,  # Assuming the user is authenticated
+                    order_id_data=order_id,
+                    payment_id_data=razorpay_payment_id,
+                    datetime=current_datetime,
+                    # Add more fields as needed
+                )
 
-                # Do something with the order, for example, update its status
-                order.status = 'completed'
-                order.save()
+                # Optionally, you can perform additional actions here
+                # such as updating user account, sending confirmation emails, etc.
 
-            except Order.DoesNotExist:
-                # Handle the case where the order does not exist
-                return HttpResponse('Order not found')
+                # Redirect to the customer_account.html page
+                return redirect('customer_account')  # Adjust the URL name as needed
 
-            # Redirect to the payment_successful page
-            return redirect('payment_successful')
+            except Exception as e:
+                # Handle exceptions related to creating UserPayment instance
+                return HttpResponse(f'Failed to add payment details: {str(e)}')
 
         except Exception as e:
             # Payment verification failed
             return HttpResponse(f'Payment Failed: {str(e)}')
+
     else:
         # Invalid request method
         return HttpResponse(status=400)
-    
-def deliveryman_account(request):
-    # Your view logic here
-     return render(request, 'deliveryman_account.html')
+
+
     
 
+    def product_details(request, payment_id):
+     user_payments= get_object_or_404(Userpayment, pk=payment_id)
+    return render(request, 'product_details.html', {'user_payment': user_payment})
+
+
+
+
+def dealer_dashboard(request):
+    # Fetch data for the dealer
+    dealer_payments = Userpayment.objects.filter(user=request.user.dealer)
+
+    return render(request, 'dealer_dashboard.html', {'dealer_payments': dealer_payments})
+
+def dealer_sales(request, dealer_id=None):
+    if dealer_id is not None:
+        dealer_obj = dealer.objects.get(id=dealer_id)
+        payments_pet = Userpayment.objects.filter(item__dealer=dealer_obj)
+        payments_aquarium = Userpayment_aquarium.objects.filter(item__dealer=dealer_obj)
+    else:
+        # If no dealer_id is provided, fetch all payments
+        payments_pet = Userpayment.objects.all()
+        payments_aquarium = Userpayment_aquarium.objects.all()
+    
+    context = {
+        'dealer': dealer_obj if dealer_id is not None else None,
+        'payments': list(payments_pet) + list(payments_aquarium)
+    }
+    return render(request, 'dealer_sales.html', context)
+
+def payment_details_view(request):
+    # For Pet payments
+    pet_payments = Userpayment.objects.select_related('user', 'item').all()
+    pet_payment_details = []
+    for payment in pet_payments:
+        pet_payment_details.append({
+            'payment_id': payment.id,
+            'customer_id': payment.user.id,
+            'customer_name': payment.user.fullname,
+            'dealer_id': payment.item.dealer.id,
+            'dealer_name': payment.item.dealer.fullname,
+            'order_id': payment.order_id_data,
+            'payment_details': payment.payment_id_data,
+            'item_id': payment.item.id,
+            'item_name': payment.item.pet_breed,
+            'item_image': payment.item.image.url,
+            'amount': payment.amount,
+            'datetime': payment.datetime
+        })
+
+    # For Aquarium payments
+    aquarium_payments = Userpayment_aquarium.objects.select_related('user', 'item').all()
+    aquarium_payment_details = []
+    for payment in aquarium_payments:
+        aquarium_payment_details.append({
+            'payment_id': payment.id,
+            'customer_id': payment.user.id,
+            'customer_name': payment.user.fullname,
+            'dealer_id': payment.item.dealer.id,
+            'dealer_name': payment.item.dealer.fullname,
+            'order_id': payment.order_id_data,
+            'payment_details': payment.payment_id_data,
+            'item_id': payment.item.id,
+            'item_name': payment.item.name,
+            'item_image': payment.item.image.url,
+            'amount': payment.amount,
+            'datetime': payment.datetime
+        })
+
+    # Pass the payment details to the template
+    return render(request, 'payment_details.html', {'pet_payments': pet_payment_details, 'aquarium_payments': aquarium_payment_details})
+
+# @login_required
+# def submit_review(request):
+#     if request.method == 'POST':
+#         product_name = request.POST.get('item-name')
+#         rating = request.POST.get('product_rating')
+#         review_text = request.POST.get('product_review')
+#         print(product_name)
+
+#         print(rating)
+#         print(review_text)
+
+#         # Get the current user as the dealer
+#         dealer = request.user
+
+#         # Create a new review object and save it to the database
+#         review = Review.objects.create(
+#             dealer=dealer,
+#             product_name=product_name,
+#             rating=rating,
+#             review_text=review_text
+#         )
+
+#         # Optionally, you can add validation logic here before saving the review
+
+#         messages.success(request, 'Your review has been submitted successfully.')
+#         return redirect('customer_account')  # Redirect to the home page or any other page you prefer
+#     return render(request, 'order.html')
+
+
+@login_required
+def submit_review(request, pet_id):
+    if request.method == 'POST':
+        rating = request.POST.get('product_rating')
+        review_text = request.POST.get('product_review')
+
+        # Get the current user as the dealer
+        dealer = request.user
+
+        try:
+            pet = Pet.objects.get(id=pet_id)
+        except Pet.DoesNotExist:
+            messages.error(request, 'The selected pet does not exist.')
+            return redirect('customer_account')  # Redirect to a suitable page if the pet doesn't exist
+
+        # Create a new review object and save it to the database
+        review = Review.objects.create(
+            dealer=dealer,
+            pet=pet,
+            rating=rating,
+            review_text=review_text
+        )
+
+        # Optionally, you can add validation logic here before saving the review
+
+        messages.success(request, 'Your review has been submitted successfully.')
+        return redirect('customer_account')  # Redirect to the home page or any other page you prefer
+    return render(request, 'order.html')

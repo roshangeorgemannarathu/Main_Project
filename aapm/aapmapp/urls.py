@@ -30,7 +30,7 @@ urlpatterns = [
    # path('toggle-activation/<int:dealers_id>/', views.toggle_activation, name='toggle_activation'),
    # path('toggle-activation/<int:deliveryman_id>/', views.toggle_activation, name='toggle_activation'),
      #path('addpets/', views.add_pets, name='add_pets'),
-     path('edit_profile/', views.edit_profile, name='edit_profile'),
+    #  path('edit_profile/', views.edit_profile, name='edit_profile'),
      path('activate_user/<int:user_id>/', views.activate_user, name='activate_user'),
     path('deactivate_user/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
     path('userdealer/', views.userdealer, name='userdealer'),
@@ -64,6 +64,7 @@ urlpatterns = [
 path('usercustomer/', views.usercustomer, name='usercustomer'),
 
 # path('cart/',views.cart, name='cart'),
+ 
  path('customer_account/', views.customer_account, name='customer_account'),
  path('dealer_account/', views.dealer_account, name='dealer_account'),
  path('deliveryman/account/', views.deliveryman_account, name='deliveryman_account'),
@@ -74,15 +75,35 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('mycart/',views.mycart,name="mycart"),
     # path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+     path('deliveryman/account/', views.deliveryman_account, name='deliveryman_account'),
      path('pet_details/<int:pet_id>/', views.pet_details, name='pet_details'),
      
      path('aquarium_details/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
      path('buy_now/<str:category>/<int:item_id>/', views.buy_now, name='buy_now'),
-   path('buy-now/<str:category>/<int:item_id>/', buy_now, name='buy_now'),
+   
     path('razorpay-payment/', razorpay_payment, name='razorpay_payment'),
-    #  path('payment_successful/', views.payment_successful, name='payment_successful'),
-    path('deliveryman/account/', views.deliveryman_account, name='deliveryman_account'),
+     path('payment_successful/', views.payment_successful, name='payment_successful'),
+   
+
+        path('add_payment_details/', views.add_payment_details, name='add_payment_details'),
+         
+         path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
     
+    path('paymenthandler1/', views.paymenthandler1, name='paymenthandler1'),
+    path('payment_success/', views.payment_success, name='payment_success'),
+    path('payment_unsuccess/', views.payment_unsuccess, name='payment_unsuccess'),
+    path('order/', views.order, name='order'),
+    # path('submit_review/', views.submit_review, name='submit_review'),
+    path('submit_review/<int:pet_id>/', views.submit_review, name='submit_review'),
+    path('order_management/', views.order_management, name='order_management'),
+    path('Dealer_feedback/', views.Dealer_feedback, name='Dealer_feedback'),
+    
+    # path('product-details/', views.product_details_view, name='product_details'),
+    
+    path('dealer_sales/', views.dealer_sales, name='dealer_sales'),
+    path('dealer/dashboard/', views.dealer_dashboard, name='dealer_dashboard'),
+    path('payment-details/', views.payment_details_view, name='payment_details'),
+
 
 
 

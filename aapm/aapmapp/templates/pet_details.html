@@ -141,26 +141,43 @@
                     <form method="post" action="{% url 'add_to_cart' category='pet' item_id=pet.id %}" style="margin-right: 5px;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary">Add To Cart</button>
+                        <input type="hidden" value="{{pet.id}}" name="petId"></input>
                     </form>
-                    {% comment %} <button id="razorpay-btn" class="btn btn-pay">Buy Now</button> {% endcomment %}
+                    <button id="razorpay-btn" class="btn btn-pay">Buy Now</button>
+
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script>
+                      var options = {
+                         
+                        // Enter the Key ID generated from the Dashboard
+                        key: "{{ razorpay_merchant_key }}", 
+                         
+                        // Amount is in currency subunits.
+                        // Default currency is INR. Hence, 
+                        // 50000 refers to 50000 paise
+                        amount: "{{ razorpay_amount }}", 
+                        currency: "{{ currency }}",
+                         
+                        // Your/store name.
+                        name: "Roshan", 
+                         
+                        // Pass the `id` obtained in the response of Step 1
+                        order_id: "{{ razorpay_order_id }}", 
+                        callback_url: "{{ callback_url }}",
+                      };
+                       
+                      // initialise razorpay with the options.
+                      var rzp1 = new Razorpay(options);
+                       
+                      // add event listener to the payment button.
+                      document.getElementById("razorpay-btn").onclick = function (e) {
+                        rzp1.open();
+                        e.preventDefault();
+                      };
+                    </script>
 
 
-                    <form action="#" method="POST">
-                        {% csrf_token %}
-                        <script src="https://checkout.razorpay.com/v1/checkout.js"
-                                data-key="rzp_test_KPliOP7waiGNR8"
-                                data-amount="{{ amount_in_paise }}"
-                                data-currency="INR"
-                                data-order_id="{{ order.id }}"
-                                data-buttontext="Buy Now "
-                                data-name="Multiservice provider"
-                                data-description="An efficient and reliable service provider"
-                                data-image="https://img.freepik.com/free-vector/payment-background-design_1223-72.jpg"
-                                data-prefill.name="Roshan George"
-                                data-prefill.email="roshangeorge2024b@mca.ajce.in"
-                                data-theme.color="#F37254">
-                        </script>
-                    </form>
+                
                 </div>
             </div>
         </div>

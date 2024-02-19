@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .order-details {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .order-details h3 {
+            margin-bottom: 10px;
+        }
+        .delivery-section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .delivery-section select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .btn-assign {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Details</h1>
+        <body>
+            <h1>Welcome to Your Dashboard</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Date of Birth</th>
+                        <th>Phone</th>
+                        <th>House Name</th>
+                        <th>Pincode</th>
+                        <th>District</th>
+                        <th>Purchased Pet</th>
+                        <th>Payment Amount</th>
+                        <th>Payment Date</th>
+                        <th>Order ID</th>
+                        <th>Payment ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale.user.fullname }}</td>
+                        <td>{{ sale.user.dateofbirth }}</td>
+                        <td>{{ sale.user.phone }}</td>
+                        <td>{{ sale.user.housename }}</td>
+                        <td>{{ sale.user.pincode }}</td>
+                        <td>{{ sale.user.district }}</td>
+                        <td>{{ sale.item.name }}</td>  <!-- Assuming 'name' is a field in your Pet model -->
+                        <td>{{ sale.amount }}</td>
+                        <td>{{ sale.datetime }}</td>
+                        <td>{{ sale.order_id_data }}</td>
+                        <td>{{ sale.payment_id_data }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </body>
+        <div class="delivery-section">
+            <h3>Assign Delivery Person</h3>
+            <select>
+                <option value="">Select Delivery Person</option>
+                <option value="delivery-person-1">Delivery Person 1</option>
+                <option value="delivery-person-2">Delivery Person 2</option>
+                <option value="delivery-person-3">Delivery Person 3</option>
+                <!-- Add more delivery persons as needed -->
+            </select>
+            <button class="btn btn-primary btn-assign">Assign Delivery</button>
+        </div>
+    </div>
+</body>
+</html>

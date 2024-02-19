@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dealer Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Dealer Dashboard</h1>
+    <h2>Payments for your products:</h2>
+    <ul>
+        {% for payment in dealer_payments %}
+        <li>
+            <strong>Product:</strong> {{ payment.item }}
+            <br>
+            <strong>Amount:</strong> {{ payment.amount }}
+            <br>
+            <strong>Payment Date:</strong> {{ payment.datetime }}
+            <br>
+            <!-- Add more fields as needed -->
+        </li>
+        {% empty %}
+        <li>No payments found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

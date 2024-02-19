@@ -104,13 +104,20 @@ https://templatemo.com/tm-571-hexashop
                             
                            
                             <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li>
-                        
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
 
 
 
                            
                             </li>
                             <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                            <li>
+                                {% if user.is_authenticated %}
+                                    <img src="{{ user.profile.photo.url }}" alt="User Photo">
+/
+                                    Welcome, {{ user.profile.fullname }}
+                                {% endif %}
+                            </li>
                         </ul>        
                         <a class='menu-trigger'>
                             <span>Menu</span>
