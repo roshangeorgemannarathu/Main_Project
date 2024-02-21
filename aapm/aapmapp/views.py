@@ -18,7 +18,7 @@ from django.utils.html import strip_tags
 from django.http import HttpResponse
 from .urls import *
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
 
 
 from django.shortcuts import render
@@ -649,44 +649,60 @@ def usercustomer(request):
 #     pets = Pet.objects.all()
 #     aquariums = Aquarium.objects.all()
 #     return render(request, 'cart.html', {'pets': pets, 'aquariums': aquariums})
+# from .models import Pet, Payment
+
+
+# @never_cache
+# def customer_account(request):
+#     # Fetch all pets from the database
+#     pets = Pet.objects.all()
+
+#     # Fetch all aquariums from the database
+#     aquariums = Aquarium.objects.all()
+
+#     # Check if any of the pets are already sold and fetch their reviews
+#     for pet in pets:
+#         if Userpayment.objects.filter(item=pet).exists():
+#             pet.status = 'sold'
+            
+#             reviews = Review.objects.filter(pet=pet)
+#             # Instead of directly assigning, use the set() method
+#             pet.review_set.set(reviews)
+            
+
+#     # Check if any of the aquariums are already sold and fetch their reviews
+#     for aquarium in aquariums:
+#         if Userpayment_aquarium.objects.filter(item=aquarium).exists():
+#             aquarium.status = 'sold'
+#             aquarium.reviews = Review_Aquarium.objects.filter(aquarium=aquarium)
+
+#     # Render the template with the updated pet and aquarium status
+#     return render(request, 'customer_account.html', {'pets': pets, 'aquariums': aquariums})
+
 
 @never_cache
 def customer_account(request):
-    if request.method == 'POST':
-        # Assuming you have a form submission to process the payment
-        # Retrieve form data and process the payment
-        # Once payment is successful, remove the item from the cart
-
-        # Example code for processing payment and removing item from the cart
-        # For simplicity, let's assume the payment is processed successfully
-        item_id = request.POST.get('item_id')  # Assuming you have a hidden input field in your form with the item ID
-        item_type = request.POST.get('item_type')  # Assuming you have a hidden input field in your form with the item type (e.g., 'pet' or 'aquarium')
-
-        print("Item ID:", item_id)
-        print("Item Type:", item_type)
-
-        if item_type == 'pet':
-            payment_item = Userpayment.objects.filter(item_id=item_id).first()
-        elif item_type == 'aquarium':
-            payment_item = Userpayment_aquarium.objects.filter(item_id=item_id).first()
-
-        print("Payment Item:", payment_item)
-
-        # Remove the item from the cart after payment
-        if payment_item:
-            payment_item.delete()
-            print("Item deleted successfully.")
-        else:
-            print("Item not found in the cart.")
-
-        # Redirect to the customer account page after processing payment and removing item from the cart
-        return redirect('customer_account')
-
-    # If the request method is not POST or if the payment is not processed, render the customer account page as usual
-    aquariums = Aquarium.objects.all()
+    # Fetch all pets from the database
     pets = Pet.objects.all()
-    
-    return render(request, 'customer_account.html', {'aquariums': aquariums, 'pets': pets})
+
+    # Check if any of the pets are already sold
+    for pet in pets:
+        if Userpayment.objects.filter(item=pet).exists():
+            pet.status = 'sold'
+            pet.save()
+
+    # Fetch all aquariums from the database
+    aquariums = Aquarium.objects.all()
+
+
+    # Check if any of the aquariums are already sold
+    for aquarium in aquariums:
+        if Userpayment_aquarium.objects.filter(item=aquarium).exists():
+            aquarium.status = 'sold'
+            aquarium.save()
+
+    # Render the template with the updated pet and aquarium status
+    return render(request, 'customer_account.html', {'pets': pets, 'aquariums': aquariums})
 
 @never_cache
 def dealer_account(request):
@@ -856,7 +872,7 @@ from .models import Pet
 from django.utils import timezone
 
 
-@csrf_exempt
+
 @csrf_exempt
 def paymenthandler(request):
     if request.method == "POST":
@@ -1128,11 +1144,14 @@ def payment_unsuccess(request):
 
 #     return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium})
 
-
+@login_required
 def order(request):
-    # Fetch all user payments from both models
-    user_payments = Userpayment.objects.all()  # Retrieve all user payments from Userpayment model
-    user_payments_aquarium = Userpayment_aquarium.objects.all()  # Retrieve all user payments from Userpayment_aquarium model
+    # Get the logged-in customer
+    customer = request.user
+
+    # Fetch user payments for the logged-in customer from both models
+    user_payments = Userpayment.objects.filter(user=customer)
+    user_payments_aquarium = Userpayment_aquarium.objects.filter(user=customer)
 
     # Fetch all pets
     pets = Pet.objects.all()
@@ -1141,6 +1160,19 @@ def order(request):
     pet_ids = [pet.id for pet in pets]
 
     return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium, 'pet_ids': pet_ids})
+
+# def order(request):
+#     # Fetch all user payments from both models
+#     user_payments = Userpayment.objects.all()  # Retrieve all user payments from Userpayment model
+#     user_payments_aquarium = Userpayment_aquarium.objects.all()  # Retrieve all user payments from Userpayment_aquarium model
+
+#     # Fetch all pets
+#     pets = Pet.objects.all()
+
+#     # Extract pet IDs
+#     pet_ids = [pet.id for pet in pets]
+
+#     return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium, 'pet_ids': pet_ids})
 
 def order_management(request):
     # Assuming you have authentication in place to identify the dealer
@@ -1220,21 +1252,40 @@ def dealer_dashboard(request):
 
     return render(request, 'dealer_dashboard.html', {'dealer_payments': dealer_payments})
 
-def dealer_sales(request, dealer_id=None):
-    if dealer_id is not None:
-        dealer_obj = dealer.objects.get(id=dealer_id)
-        payments_pet = Userpayment.objects.filter(item__dealer=dealer_obj)
-        payments_aquarium = Userpayment_aquarium.objects.filter(item__dealer=dealer_obj)
-    else:
-        # If no dealer_id is provided, fetch all payments
-        payments_pet = Userpayment.objects.all()
-        payments_aquarium = Userpayment_aquarium.objects.all()
+# def dealer_sales(request, dealer_id=None):
+#     if dealer_id is not None:
+#         dealer_obj = dealer.objects.get(id=dealer_id)
+#         payments_pet = Userpayment.objects.filter(item__dealer=dealer_obj)
+#         payments_aquarium = Userpayment_aquarium.objects.filter(item__dealer=dealer_obj)
+#     else:
+#         # If no dealer_id is provided, fetch all payments
+#         payments_pet = Userpayment.objects.all()
+#         payments_aquarium = Userpayment_aquarium.objects.all()
+    
+#     context = {
+#         'dealer': dealer_obj if dealer_id is not None else None,
+#         'payments': list(payments_pet) + list(payments_aquarium)
+#     }
+#     return render(request, 'dealer_sales.html', context)
+
+
+@login_required
+def dealer_sales(request):
+    # Retrieve the logged-in dealer
+    dealer_obj = request.user
+    
+    # Filter payments for pets belonging to the dealer
+    payments_pet = Userpayment.objects.filter(item__dealer=dealer_obj)
+    
+    # Filter payments for aquariums belonging to the dealer
+    payments_aquarium = Userpayment_aquarium.objects.filter(item__dealer=dealer_obj)
     
     context = {
-        'dealer': dealer_obj if dealer_id is not None else None,
+        'dealer': dealer_obj,
         'payments': list(payments_pet) + list(payments_aquarium)
     }
     return render(request, 'dealer_sales.html', context)
+
 
 def payment_details_view(request):
     # For Pet payments
@@ -1307,6 +1358,7 @@ def payment_details_view(request):
 #     return render(request, 'order.html')
 
 
+
 @login_required
 def submit_review(request, pet_id):
     if request.method == 'POST':
@@ -1334,4 +1386,37 @@ def submit_review(request, pet_id):
 
         messages.success(request, 'Your review has been submitted successfully.')
         return redirect('customer_account')  # Redirect to the home page or any other page you prefer
+    return render(request, 'order.html')
+
+
+@login_required
+def submit_review_aqu(request, aquarium_id):
+    if request.method == 'POST':
+        # Retrieve data from the POST request
+        rating_aqu = request.POST.get('product_rating_aqu')  # Update to match the name attribute in the form
+        review_text_aqu = request.POST.get('product_review_aqu')  # Update to match the name attribute in the form
+
+        # Get the current user as the dealer
+        dealer = request.user
+
+        try:
+            aquarium = Aquarium.objects.get(id=aquarium_id)
+        except Aquarium.DoesNotExist:
+            messages.error(request, 'The selected aquarium does not exist.')
+            return redirect('customer_account')  # Redirect to a suitable page if the aquarium doesn't exist
+
+        # Create a new review object and save it to the database
+        review = Review_Aquarium.objects.create(
+            dealer_aqu=dealer,
+            aquarium=aquarium,
+            rating_aqu=rating_aqu,
+            review_text_aqu=review_text_aqu
+        )
+
+        # Optionally, you can add validation logic here before saving the review
+
+        messages.success(request, 'Your review has been submitted successfully.')
+        return redirect('customer_account')  # Redirect to the home page or any other page you prefer
+    
+    # If the request method is not POST, render the form again
     return render(request, 'order.html')

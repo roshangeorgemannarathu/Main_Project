@@ -143,3 +143,21 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review for {self.product_name} by {self.dealer.username}'
+    
+
+class Review_Aquarium(models.Model):
+    RATING_CHOICES_aqu = [
+        (1, '1 Star'),
+        (2, '2 Stars'),
+        (3, '3 Stars'),
+        (4, '4 Stars'),
+        (5, '5 Stars'),
+    ]
+    dealer_aqu = models.ForeignKey(dealer, on_delete=models.CASCADE, related_name='aquarium_reviews')
+    aquarium = models.ForeignKey(Aquarium, on_delete=models.CASCADE, related_name='reviews')
+    rating_aqu = models.IntegerField(choices=RATING_CHOICES_aqu, null=True)
+    review_text_aqu = models.TextField(null=True)
+    created_at_aqu = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review for {self.aquarium.name} by {self.dealer.username}'

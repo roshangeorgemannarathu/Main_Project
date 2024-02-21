@@ -85,7 +85,7 @@ https://templatemo.com/tm-571-hexashop
                             <li class="scroll-to-section"><a href="{% url 'addpets' %}">Add Aquarium / Pets</a></li>
                             
                             <li class="scroll-to-section"><a href="{% url 'viewdatabase' request.user.id %}">View Your Databse</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'dealer_sales' %}">order_management</a></li>
+                            <li class="scroll-to-section"><a  id='logout-link' href="{% url 'dealer_sales' %}">order_management</a></li>
                                 
                                 
                             </li>
@@ -147,7 +147,16 @@ https://templatemo.com/tm-571-hexashop
     <!-- Global Init -->
     <script src="{% static 'aapmapp/js/custom.js' %}"></script>
 
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var logoutButton = document.getElementById("logout-link");
+            logoutButton.addEventListener("click", function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            });
+        });
+    </script>
     
   </body>
 </html>

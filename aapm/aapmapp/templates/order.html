@@ -112,11 +112,11 @@
                             <input type="hidden" name="payment_id" value="{{ payment.id }}">
                             <label for="product_rating">Product Rating:</label>
                             <div class="rating">
-                                <input type="radio" id="star5" name="product_rating" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star4" name="product_rating" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star3" name="product_rating" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star2" name="product_rating" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star1" name="product_rating" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star5_{{ payment.id }}" name="product_rating" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star4_{{ payment.id }}" name="product_rating" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star3_{{ payment.id }}" name="product_rating" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star2_{{ payment.id }}" name="product_rating" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star1_{{ payment.id }}" name="product_rating" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
                             </div>
                             <textarea name="product_review" placeholder="Write your review here...">{{ payment.review }}</textarea>
                             <button type="submit">Submit Review</button>
@@ -144,18 +144,19 @@
                     <div class="item-meta">Type: Aquarium</div>
                     <div class="item-meta">Location: {{ payment.item.location }}</div>
                     <div class="review-form">
-                        <form method="post" action="{% url 'submit_review' payment.item.id %}">
+                        <form method="post" action="{% url 'submit_review_aqu' payment.item.id %}">
                             {% csrf_token %}
                             <input type="hidden" name="payment_id" value="{{ payment.id }}">
-                            <label for="product_rating">Product Rating:</label>
+                            <label for="product_rating_aqu">Product Rating:</label>
                             <div class="rating">
-                                <input type="radio" id="star5" name="product_rating" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star4" name="product_rating" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star3" name="product_rating" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star2" name="product_rating" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star1" name="product_rating" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star5_aqu_{{ payment.id }}" name="product_rating_aqu" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star4_aqu_{{ payment.id }}" name="product_rating_aqu" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star3_aqu_{{ payment.id }}" name="product_rating_aqu" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star2_aqu_{{ payment.id }}" name="product_rating_aqu" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
+                                <input type="radio" id="star1_aqu_{{ payment.id }}" name="product_rating_aqu" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
                             </div>
-                            <textarea name="product_review" placeholder="Write your review here...">{{ payment.review }}</textarea>
+                            <textarea name="product_review_aqu" placeholder="Write your review here...">{{ payment.review }}</textarea>
+                            
                             <button type="submit">Submit Review</button>
                         </form>
                     </div>

@@ -103,7 +103,8 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('dealer_sales/', views.dealer_sales, name='dealer_sales'),
     path('dealer/dashboard/', views.dealer_dashboard, name='dealer_dashboard'),
     path('payment-details/', views.payment_details_view, name='payment_details'),
-
+    #  path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu')
+    path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu'),
 
 
 

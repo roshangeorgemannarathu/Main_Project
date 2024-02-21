@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,15 +16,11 @@
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
-<!--
+    <!--
 
 TemplateMo 571 Hexashop
 
@@ -32,41 +28,45 @@ https://templatemo.com/tm-571-hexashop
 
 
 -->
-<style>
-    h1{
-        color:black;
+    <style>
+        h1 {
+            color: black;
+        }
 
+        h4 {
+            color: black;
+        }
+    </style>
+    <style>
+        .product-img {
+            width: 100%;
+            /* Set the width as needed */
+            height: auto;
+            /* Maintain aspect ratio */
+            max-height: 200px;
+            /* Set the maximum height if needed */
+            object-fit: cover;
+            /* Ensure the image covers the container */
+        }
+    </style>
+    <style>
+        .product-item {
+            height: 300px;
+            /* Set the desired height for the product container */
+            overflow: hidden;
+            /* Hide overflowing content */
+        }
 
-    }
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
 
-    h4{
-        color:black; 
-    }
-</style>
-<style>
-    .product-img {
-        width: 100%; /* Set the width as needed */
-        height: auto; /* Maintain aspect ratio */
-        max-height: 200px; /* Set the maximum height if needed */
-        object-fit: cover; /* Ensure the image covers the container */
-    }
-</style>
-<style>
-    .product-item {
-        height: 300px; /* Set the desired height for the product container */
-        overflow: hidden; /* Hide overflowing content */
-    }
+<body>
 
-    .product-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-</style>
-    </head>
-    
-    <body>
-    
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -74,9 +74,9 @@ https://templatemo.com/tm-571-hexashop
             <div></div>
             <div></div>
         </div>
-    </div>  
+    </div>
     <!-- ***** Preloader End ***** -->
-    
+
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -85,40 +85,26 @@ https://templatemo.com/tm-571-hexashop
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
                         <a href="" class="logo">
-                            
                             <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
                         </a>
-                        
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="#Home" class="active">Home</a></li>
                             <li class="scroll-to-section"><a href="#Aquarium">Aquarium</a></li>
-                            
                             <li class="scroll-to-section"><a href="#Pets">Pets</a></li>
-                           
-                                <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
-                            </li>
-
-
-                            
-                           
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
                             <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li>
                             <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
-
-
-
-                           
-                            </li>
-                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                             <li>
                                 {% if user.is_authenticated %}
                                     <img src="{{ user.profile.photo.url }}" alt="User Photo">
-/
+                                    /
                                     Welcome, {{ user.profile.fullname }}
                                 {% endif %}
                             </li>
-                        </ul>        
+                        </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>
@@ -128,12 +114,10 @@ https://templatemo.com/tm-571-hexashop
             </div>
         </div>
     </header>
-    
     <!-- ***** Header Area End ***** -->
-    
 
     <!-- ***** Main Banner Area Start ***** -->
-    
+
     <div class="main-banner" id="Home">
         <div class="container-fluid">
             <div class="row">
@@ -141,8 +125,8 @@ https://templatemo.com/tm-571-hexashop
                     <div class="left-content">
                         <div class="thumb">
                             <div class="inner-content">
-                                <h1 >Aquarium</h1>
-                                <span>" Dive into a world of exquisite aquariums, where you can find the perfect aquatic haven for your finned friends. "   </span>
+                                <h1>Aquarium</h1>
+                                <span>" Dive into a world of exquisite aquariums, where you can find the perfect aquatic haven for your finned friends. "</span>
                                 <div class="main-border-button">
                                     <a href="#">Purchase Now</a>
                                 </div>
@@ -201,7 +185,6 @@ https://templatemo.com/tm-571-hexashop
                                             <h4>Dogs</h4>
                                             <span>Best Dogs For Customers</span>
                                         </div>
-                                        
                                         <div class="hover-content">
                                             <div class="inner">
                                                 <h4>Dogs</h4>
@@ -216,7 +199,7 @@ https://templatemo.com/tm-571-hexashop
                                 </div>
                             </div>
 
-                            
+
                             <div class="col-lg-6">
                                 <div class="right-first-image">
                                     <div class="thumb">
@@ -244,83 +227,92 @@ https://templatemo.com/tm-571-hexashop
         </div>
     </div>
     <!-- ***** Main Banner Area End ***** -->
-<!-- ***** Pets area start Area Starts ***** -->
-<section class="section" id="Pets">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="section-heading">
-                    <h2>Pets</h2><br>
-                    <span>"Explore our diverse selection of loving companions, each waiting to bring joy, comfort, and laughter into your life as a cherished member of your family.."</span>
+    <section class="section" id="Pets">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="section-heading">
+                        <h2>Pets</h2><br>
+                        <span>"Explore our diverse selection of loving companions, each waiting to bring joy, comfort, and laughter into your life as a cherished member of your family.."</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="product-container">
-            <div class="row">
-                {% for pet in pets %}
+            <div class="product-container">
+                <div class="row">
+                    {% for pet in pets %}
                     <div class="col-lg-3 col-md-6">
                         <div class="product-item">
-                            <!-- Link to details page when clicking on the image -->
-                            <a href="{% url 'pet_details' pet.id %}">
-                                <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}" class="product-img">
+                            <a href="">
+                                <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}"
+                                    class="product-img">
                             </a>
                             <h6>{{ pet.category }}</h6>
                             <p>Breed: {{ pet.pet_breed }}</p>
                             <p>Rs{{ pet.price }}</p>
-                            <!-- Add a form for Buy Now -->
-                            
+                            {% if pet.status == 'sold' %}
+                            <p>Sold Out</p>
+                            {% else %}
+                            <form action="{% url 'pet_details' pet.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ pet.id }}">
+                                <input type="hidden" name="item_type" value="pet">
+                                <button type="submit">Purchase Now</button>
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- ***** Pets Area Ends ***** -->
- 
- <!-- ***** Aquarium Area Starts ***** -->
- <section class="section" id="Aquarium">
-      <div class="container">
-         <div class="row">
-             <div class="col-lg-6">
-                 <div class="section-heading">
-                     <h2>Aquarium</h2><br>
-                     <span>
-                         "Tailor your aquarium to perfection with our comprehensive customization options, allowing you to create a unique underwater paradise for your aquatic companions."</span>
-                 </div>
-             </div>
-         </div>
- 
+    </section>
+    <!-- ***** Pets Area Ends ***** -->
 
-         
-         <!-- Display Aquariums -->
-         <div class="product-container">
+    <!-- ***** Aquarium Area Starts ***** -->
+    <section class="section" id="Aquarium">
+        <div class="container">
             <div class="row">
-                {% for aquarium in aquariums %}
+                <div class="col-lg-6">
+                    <div class="section-heading">
+                        <h2>Aquarium</h2><br>
+                        <span>
+                            "Tailor your aquarium to perfection with our comprehensive customization options, allowing you to create a unique underwater paradise for your aquatic companions."</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Aquariums -->
+            <div class="product-container">
+                <div class="row">
+                    {% for aquarium in aquariums %}
                     <div class="col-lg-3 col-md-6">
                         <div class="product-item">
                             <!-- Link to details page when clicking on the image -->
-                           
-                            <a href="{% url 'aquarium_details' aquarium.id %}">
+                            <a href="">
                                 <img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}" class="product-img">
                             </a>
                             <h6>{{ aquarium.name }}</h6>
                             <p>Rs{{ aquarium.price }}</p>
                             <!-- Add a form for Buy Now -->
-                            
+                            {% if aquarium.status == 'sold' %}
+                            <p>Sold Out</p>
+                            {% else %}
+                            <form action="{% url 'aquarium_details' aquarium.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ aquarium.id }}">
+                                <input type="hidden" name="item_type" value="aquarium">
+                                <button type="submit">Purchase Now</button>
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-
-
- 
-     
- <!-- ***** Aquarium Area Ends ***** -->
- 
-
+    </section>
+    <!-- ***** Aquarium Area Ends ***** -->
 
     <!-- ***** Explore Area Starts ***** -->
     <section class="section" id="explore">
@@ -331,11 +323,12 @@ https://templatemo.com/tm-571-hexashop
                         <h2>Explore Our Aquariums and Pets</h2>
                         <span>"Embark on an exciting exploration of our comprehensive Aquarium and Pet Shop Management System, where you can seamlessly navigate the world of aquatic life a"</span>
                         <div class="quote">
-                            <i class="fa fa-quote-left"></i><p>Step into the world of our Aquarium and Pet Shop Management System, a meticulously crafted platform designed to simplify and enhance your experience with aquatic life and pet ownership. .</p>
+                            <i class="fa fa-quote-left"></i>
+                            <p>Step into the world of our Aquarium and Pet Shop Management System, a meticulously crafted platform designed to simplify and enhance your experience with aquatic life and pet ownership. .</p>
                         </div>
                         <p>"With intuitive interfaces and robust features, we empower enthusiasts, pet shop owners, and administrators alike to effortlessly manage their pets and aquariums. Explore our extensive inventory, ensuring the well-being of your pets and the beauty of your aquatic landscapes. Dive into a world where passion meets convenience, and let us be your trusted companion in the world of pets and aquariums."</p>
                         <p>If this template is beneficial for your website or business, please kindly <a rel="nofollow" href="https://paypal.me/templatemo" target="_blank">support us</a> a little via PayPal. Please also tell your friends about our great website. Thank you.</p>
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -371,24 +364,18 @@ https://templatemo.com/tm-571-hexashop
     </section>
     <!-- ***** Explore Area Ends ***** -->
 
-    
-
-    
-    
     <!-- ***** Footer Start ***** -->
     <footer>
-     
-                <div class="col-lg-12">
-                    <div class="under-footer">
-                        <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved. 
-                        
-                       
-                    </div>
-                </div>
+
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
             </div>
         </div>
+        </div>
+        </div>
     </footer>
-    
+
 
     <!-- jQuery -->
     <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
@@ -404,31 +391,40 @@ https://templatemo.com/tm-571-hexashop
     <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
     <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
     <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
-    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script> 
-    <script src="{% static 'aapmapp/js/slick.js' %}"></script> 
-    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script> 
-    <script src="{% static 'aapmapp/js/isotope.js' %}"></script> 
-    
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
     <!-- Global Init -->
     <script src="{% static 'aapmapp/js/custom.js' %}"></script>
 
     <script>
-
-        $(function() {
+        $(function () {
             var selectedClass = "";
-            $("p").click(function(){
-            selectedClass = $(this).attr("data-rel");
-            $("#portfolio").fadeTo(50, 0.1);
-                $("#portfolio div").not("."+selectedClass).fadeOut();
-            setTimeout(function() {
-              $("."+selectedClass).fadeIn();
-              $("#portfolio").fadeTo(50, 1);
-            }, 500);
-                
+            $("p").click(function () {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function () {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+
             });
         });
-
     </script>
-    
-  </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var logoutButton = document.getElementById("logout-link");
+            logoutButton.addEventListener("click", function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            });
+        });
+    </script>
+
+</body>
+
 </html>
