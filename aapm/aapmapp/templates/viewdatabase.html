@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
+        /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -28,7 +29,7 @@
             color: #000;
         }
 
-        h1 {
+        h2 {
             font-size: 24px;
             margin-bottom: 20px;
         }
@@ -70,6 +71,9 @@
             padding: 30px;
             margin-bottom: 20px;
             position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logout-button {
@@ -78,24 +82,13 @@
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 4px;
-            position: absolute;
-            top: 20px;
-            right: 20px;
         }
 
-        .enable-button {
+        .go-back-button {
             background-color: #007BFF;
             color: #fff;
             text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .disable-button {
-            background-color: #000;
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
+            padding: 10px 20px;
             border-radius: 4px;
         }
 
@@ -109,10 +102,11 @@
     </style>
 </head>
 <body>
-<header>
-    <h2><div>Your Aquarium / Pets</div></h2>
-    {% comment %} <a href="{% url 'logout' %}" class="logout-button">Logout</a> {% endcomment %}
-</header>
+    <header>
+        <h2>Your Aquarium / Pets</h2>
+        <a href="javascript:history.back()" class="go-back-button">Go Back</a>
+        {% comment %} <a href="{% url 'logout' %}" class="logout-button">Logout</a> {% endcomment %}
+    </header>
 
 <div class="container">
    

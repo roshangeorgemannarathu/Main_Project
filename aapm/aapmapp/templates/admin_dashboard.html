@@ -12,18 +12,41 @@
             padding: 0;
         }
 
-        /* CSS for Content Area */
+        /* CSS for Sidebar */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #000;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
         .content {
+            margin-left: 250px;
             padding: 20px;
             font-family: Arial, sans-serif;
         }
 
         /* CSS for Header */
         .header {
-            background-color: #000; /* Change header color to black */
+            background-color: #000;
             color: #fff;
             padding: 20px;
-            position: fixed;
             width: 100%;
             z-index: 1;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -33,34 +56,27 @@
         }
 
         .header h1 {
-            margin: 0 auto; /* Center the text */
+            margin: 0 auto;
         }
 
         #logout-link {
             color: #fff;
             text-decoration: none;
-            padding: 8px 15px; /* Adjust padding to reduce spacing */
+            padding: 8px 15px;
             border-radius: 10px;
             transition: background-color 0.3s ease;
-            background-color: #dc3545; /* Change logout button color to red */
+            background-color: #dc3545;
         }
         #logout-link:hover {
-            background-color: #c82333; /* Darker red on hover */
+            background-color: #c82333;
         }
 
         /* CSS for Buttons */
-        .button-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 60px;
-        }
-
         .button {
-            width: calc(33.3333% - 20px);
+            width: 100%;
             padding: 20px;
             margin-bottom: 20px;
-            background-color: #28a745; /* Change button color */
+            background-color: #28a745;
             color: #fff;
             text-align: center;
             border: none;
@@ -70,7 +86,7 @@
         }
 
         .button:hover {
-            background-color: #218838; /* Change button hover color */
+            background-color: #218838;
         }
 
         /* CSS for Cards (Sample Content) */
@@ -91,37 +107,39 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            z-index: 1; /* Ensure the footer appears above the sidebar */
         }
     </style>
 </head>
 <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="users.html">User Accounts</a>
+        <a href="customers.html">Customers</a>
+        <a href="dealers.html">Dealers</a>
+        <a href="deliveryman.html">Delivery Man</a>
+        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
+        <a href="{% url 'payment_details' %}">Payment Management</a>
+        <a href="{% url 'Dealer_feedback' %}">Aquarium or Pet Feedback</a>
+    </div>
+
     <!-- Content Area -->
     <div class="content">
         <!-- Header -->
         <div class="header">
-            <!-- Admin Dashboard in the center -->
-            <center><h1>Admin Dashboard</h1></center>
-            <!-- Logout Button on the right -->
-            <a  id = 'logout-link' href="{% url 'logout' %}" id='logout-link'>Logout</a>
+            <h1>Admin Dashboard</h1>
+            <a id="logout-link" href="{% url 'logout' %}">Logout</a>
         </div>
 
-        <!-- Button Container -->
-        <br><br><br>
-        <div class="button-container">
-            <button class="button"><a href="users.html">User Accounts</a></button>
-            <button class="button"><a href="customers.html">Customers</a></button>
-            <button class="button"><a href="dealers.html">Dealers</a></button>
-            <button class="button"><a href="deliveryman.html">Delivery Man</a></button>
-            <button class="button"><a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a></button>
-            <button class="button"><a href="{% url 'payment_details' %}">Payment Managemrnt</a></button>
-            <button class="button"><a href="{% url 'Dealer_feedback' %}">Dealer Feedback</a></button>
-        </div>
+        <!-- Main Content -->
+        <!-- Add your main content here -->
 
         <!-- Footer -->
         <div class="footer">
             &copy; 2023 Pet Paradise Cart
         </div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var logoutButton = document.getElementById("logout-link");
@@ -131,6 +149,6 @@
                 }, 1000);
             });
         });
-    </script>
+    </script>
 </body>
 </html>

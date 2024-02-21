@@ -130,31 +130,34 @@
                     <th>Fullname</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Delete</th>
+                    <th>Action</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                {% for deliveryman in deliveryman %}
+                {% for deliveryman in deliverymen %}
                 <tr>
                     <td>{{ deliveryman.username }}</td>
                     <td>{{ deliveryman.fullname }}</td>
                     <td>{{ deliveryman.email }}</td>
                     <td>{{ deliveryman.role }}</td>
                     <td>
-                        <!-- Add Delete button with a form -->
-                        {% comment %} <form method="POST" action="{% url 'toggle_activation' deliveryman.id %}">
+                        {% if dealer.is_active %}
+                        <form method="post" action="{% url 'deactivate_user' deliveryman.id %}">
                             {% csrf_token %}
-                            {% if deliveryman.is_active %}
-                                <button type="submit" name="action" value="deactivate" style="background-color: red; color: white;">Deactivate</button>
-                            {% else %}
-                                <button type="submit" name="action" value="activate" style="background-color: green; color: white;">Activate</button>
-                            {% endif %}
-                        </form> {% endcomment %}
+                            <button type="submit" style="background-color: red; color: white;">Deactivate</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'activate_user' deliveryman.id %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: green; color: white;">Activate</button>
+                        </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5">No deliveryman available.</td>
+                    <td colspan="4">No deliveryman available.</td>
                 </tr>
                 {% endfor %}
             </tbody>

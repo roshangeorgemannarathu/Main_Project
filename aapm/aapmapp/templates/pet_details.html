@@ -108,12 +108,9 @@
                 <!-- ***** Logo End ***** -->
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
-                    <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
-                    <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                    <!-- Remove the 'Home' and 'Logout' links -->
+                    <li class="scroll-to-section"><a href="#" id="goBackHome">Go Back Home</a></li>
                 </ul>
-                <a class='menu-trigger'>
-                    <span>Menu</span>
-                </a>
                 <!-- ***** Menu End ***** -->
             </nav>
         </div>
@@ -196,10 +193,17 @@
     </footer>
 
     <!-- Additional JS Files -->
+    <!-- Add JavaScript for handling redirection -->
     <script src="{% static 'aapmapp/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'aapmapp/js/popper.min.js' %}"></script>
-    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout"></script>
+    <script>
+        // JavaScript for handling redirection
+        $(document).ready(function () {
+            $('#goBackHome').click(function (e) {
+                e.preventDefault();
+                window.history.back();
+            });
+        });
+    </script>
 </body>
 
 </html>

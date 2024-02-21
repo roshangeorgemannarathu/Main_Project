@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
-from .models import Review
+from .models import Review, Review_Aquarium
 
 
 import razorpay
@@ -118,6 +118,10 @@ def user_login(request):
 
 
 
+# def user_logout(request):
+#     if request.user.is_authenticated:
+#         logout(request)
+#     return redirect('userloginhome')
 def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
@@ -179,16 +183,28 @@ def dealers(request):
     return render(request, 'dealers.html', context) 
 
 
-def deliveryman(request):
-    # Query the database to get the data you want to display on the admin dashboard
-    deliverymen = dealer.objects.filter(role='deliveryman')  # Filter by role 'deliveryman'
+# def deliveryman(request):
+#     # Query the database to get the data you want to display on the admin dashboard
+#     deliverymen = dealer.objects.filter(role='deliveryman')  # Filter by role 'deliveryman'
 
-    # Pass the data to the template context
+#     # Pass the data to the template context
+#     context = {
+#         'deliverymen': deliverymen,  # Update the variable name to 'deliverymen'
+#         # Add other data you want to pass to the template
+#     }
+#     return render(request, 'deliveryman.html', context)
+
+def deliveryman(request):
+    # Query the database to get the deliverymen
+    deliverymen = dealer.objects.filter(role='deliveryman')
+
+    # Pass the deliverymen data to the template context
     context = {
-        'deliverymen': deliverymen,  # Update the variable name to 'deliverymen'
-        # Add other data you want to pass to the template
+        'deliverymen': deliverymen,
     }
     return render(request, 'deliveryman.html', context)
+
+
 # def toggle_activation(request, customers_id):
 #     customers= get_object_or_404(dealer, id=customers_id)  # Use 'dealer' instead of 'Dealer'
 
@@ -793,21 +809,81 @@ def add_to_cart(request, category, item_id):
     return redirect('customer_account')
 
 
+# def mycart(request):
+#     # Retrieve relevant data and pass it to the template
+#     user_profile_list = UserProfile.objects.filter(user=request.user)
+    
+#     if not user_profile_list:
+#         # Handle the case where no UserProfile is found
+#         return HttpResponse("User profile not found.", status=404)
+
+#     # Choose the first UserProfile instance (you may want to modify this logic)
+#     user_profile = user_profile_list[0]
+
+#     cart_items = CartItem.objects.filter(user=user_profile)
+#     context = {'cart_items': cart_items}
+    
+#     return render(request, 'add_to_cart.html', context)
+
+def purchase_item(request):
+    if request.method == 'POST':
+        # Handle the purchase logic here
+        # For example, you can process the purchase and redirect the user to a thank you page
+        return redirect('thank_you_page')  # Replace 'thank_you_page' with the actual URL name for your thank you page
+    else:
+        # Handle GET requests (optional)
+        pass
+
 def mycart(request):
-    # Retrieve relevant data and pass it to the template
-    user_profile_list = UserProfile.objects.filter(user=request.user)
-    
-    if not user_profile_list:
-        # Handle the case where no UserProfile is found
-        return HttpResponse("User profile not found.", status=404)
+    if request.method == 'POST':
+        # Assuming you have a form to add items to the cart
+        # Retrieve item data from the form submission
+        item_id = request.POST.get('item_id')
+        item_category = request.POST.get('item_category')
+        quantity = int(request.POST.get('quantity'))
+        
+        # Retrieve the user's profile
+        user_profile_list = UserProfile.objects.filter(user=request.user)
+        
+        if not user_profile_list:
+            return HttpResponse("User profile not found.", status=404)
+        
+        user_profile = user_profile_list[0]
 
-    # Choose the first UserProfile instance (you may want to modify this logic)
-    user_profile = user_profile_list[0]
+        # Create or update the cart item
+        if item_category == 'pet':
+            # Retrieve pet object based on item_id
+            # Replace 'Pet' with your actual model name for pets
+            pet = Pet.objects.get(id=item_id)
+            # Create or update the cart item for the pet
+            cart_item, created = CartItem.objects.get_or_create(user=user_profile, pet=pet)
+            if not created:
+                cart_item.quantity += quantity
+                cart_item.save()
+        elif item_category == 'aquarium':
+            # Retrieve aquarium object based on item_id
+            # Replace 'Aquarium' with your actual model name for aquariums
+            aquarium = Aquarium.objects.get(id=item_id)
+            # Create or update the cart item for the aquarium
+            cart_item, created = CartItem.objects.get_or_create(user=user_profile, aquarium=aquarium)
+            if not created:
+                cart_item.quantity += quantity
+                cart_item.save()
 
-    cart_items = CartItem.objects.filter(user=user_profile)
-    context = {'cart_items': cart_items}
-    
-    return render(request, 'add_to_cart.html', context)
+        # Redirect to the cart page after adding items
+        return redirect('mycart')
+
+    else:
+        user_profile_list = UserProfile.objects.filter(user=request.user)
+        if not user_profile_list:
+            return HttpResponse("User profile not found.", status=404)
+
+        user_profile = user_profile_list[0]
+
+        cart_items = CartItem.objects.filter(user=user_profile)
+        context = {'cart_items': cart_items}
+
+        return render(request, 'add_to_cart.html', context)
 
 
 
@@ -1121,7 +1197,7 @@ def payment_successful(request):
             return redirect('payment_success')  # Assuming 'customer_account' is a valid URL name
 
         except Exception as e:
-            # Payment verification failed
+            # Payment verification faileddea
             return HttpResponse(f'Payment Failed: {str(e)}')
     else:
         # Invalid request method
@@ -1188,8 +1264,13 @@ def order_management(request):
     return render(request, 'order_management.html', context)
     
 
+# def Dealer_feedback(request):
+#      return render(request, 'Dealer_feedback.html') 
+
 def Dealer_feedback(request):
-     return render(request, 'Dealer_feedback.html') 
+    pet_reviews = Review.objects.all()
+    aquarium_reviews = Review_Aquarium.objects.all()
+    return render(request, 'Dealer_feedback.html', {'pet_reviews': pet_reviews, 'aquarium_reviews': aquarium_reviews})
 
 from django.utils import timezone
 @csrf_exempt

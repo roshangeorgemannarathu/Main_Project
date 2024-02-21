@@ -14,62 +14,91 @@
             padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+        .rating-section {
+            margin-bottom: 40px;
+        }
+        .rating-item {
             background-color: #fff;
-            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .rating-item p {
+            margin-bottom: 10px;
+        }
+        .rating-item img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .rating-item strong {
+            color: #007bff;
         }
         h1 {
             margin-bottom: 20px;
+            text-align: center;
         }
-        .rating-section {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
+        h3 {
             margin-bottom: 20px;
-        }
-        .rating-section h3 {
-            margin-bottom: 10px;
-        }
-        .feedback-section {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-        }
-        .feedback-section h3 {
-            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dealer_dashboard' %}">Go Back Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
     <div class="container">
-        <h1>Admin Dashboard</h1>
+        <h1>Feedback</h1>
+        
         <div class="rating-section">
-            <h3>Product Ratings</h3>
+            <h3>Pet Ratings</h3>
+            {% for review in pet_reviews %}
             <div class="rating-item">
-                <p><strong>Product Name:</strong> Product A</p>
-                <p><strong>Rating:</strong> 4.5</p>
+                <p><strong>Pet Name:</strong> {{ review.pet.pet_breed }}</p>
+                <p><strong>Rating:</strong> {{ review.get_rating_display }}</p>
+                <p><strong>Review:</strong> {{ review.review_text }}</p>
+                <p><strong>Dealer ID:</strong> {{ review.dealer.id }}</p>
+                <p><strong>Pet ID:</strong> {{ review.pet.id }}</p>
+                <p><strong>Created At:</strong> {{ review.created_at }}</p>
+                <img src="{{ review.pet.image.url }}" alt="{{ review.pet.name }}">
             </div>
-            <div class="rating-item">
-                <p><strong>Product Name:</strong> Product B</p>
-                <p><strong>Rating:</strong> 3.8</p>
-            </div>
-            <!-- Add more rating items as needed -->
+            {% endfor %}
         </div>
-        <div class="feedback-section">
-            <h3>Dealer Feedback</h3>
-            <div class="feedback-item">
-                <p><strong>Dealer Name:</strong> Dealer X</p>
-                <p><strong>Feedback:</strong> Excellent service. Prompt delivery and great communication.</p>
+
+        <div class="rating-section">
+            <h3>Aquarium Ratings</h3>
+            {% for review in aquarium_reviews %}
+            <div class="rating-item">
+                <p><strong>Aquarium Name:</strong> {{ review.aquarium.name }}</p>
+                <p><strong>Rating:</strong> {{ review.get_rating_aqu_display }}</p>
+                <p><strong>Review:</strong> {{ review.review_text_aqu }}</p>
+                <p><strong>Dealer ID:</strong> {{ review.dealer_aqu.id }}</p>
+                <p><strong>Aquarium ID:</strong> {{ review.aquarium.id }}</p>
+                <p><strong>Created At:</strong> {{ review.created_at_aqu }}</p>
+                <img src="{{ review.aquarium.image.url }}" alt="{{ review.aquarium.name }}">
             </div>
-            <div class="feedback-item">
-                <p><strong>Dealer Name:</strong> Dealer Y</p>
-                <p><strong>Feedback:</strong> Satisfactory service. Could improve response time.</p>
-            </div>
-            <!-- Add more feedback items as needed -->
+            {% endfor %}
         </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Admin Dashboard. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

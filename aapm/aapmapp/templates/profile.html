@@ -74,8 +74,8 @@
 <body>
     <header>
         <h1>Profile</h1>
+        <button class="go-back-btn" onclick="goBack()">Go Back</button>
         {% comment %} <a href="{% url 'logout' %}" class="logout-btn">Logout</a> {% endcomment %}
-        
     </header>
 
     <table>
@@ -120,5 +120,10 @@
     <footer>
         &copy; Pet Paradise Cart
     </footer>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

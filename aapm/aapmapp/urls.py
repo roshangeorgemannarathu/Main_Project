@@ -13,6 +13,7 @@ urlpatterns = [
     path('register/',views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
+    
     path('homelogin/',views.homelogin, name='homelogin'),
     path('userloginhome/', views.userloginhome, name='userloginhome'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
@@ -64,6 +65,7 @@ urlpatterns = [
 path('usercustomer/', views.usercustomer, name='usercustomer'),
 
 # path('cart/',views.cart, name='cart'),
+ path('purchase/', views.purchase_item, name='purchase_item'), 
  
  path('customer_account/', views.customer_account, name='customer_account'),
  path('dealer_account/', views.dealer_account, name='dealer_account'),
@@ -96,6 +98,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     # path('submit_review/', views.submit_review, name='submit_review'),
     path('submit_review/<int:pet_id>/', views.submit_review, name='submit_review'),
     path('order_management/', views.order_management, name='order_management'),
+    
     path('Dealer_feedback/', views.Dealer_feedback, name='Dealer_feedback'),
     
     # path('product-details/', views.product_details_view, name='product_details'),

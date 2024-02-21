@@ -115,6 +115,7 @@ https://templatemo.com/tm-571-hexashop
         </div>
     </header>
     <!-- ***** Header Area End ***** -->
+   
 
     <!-- ***** Main Banner Area Start ***** -->
 
@@ -417,11 +418,13 @@ https://templatemo.com/tm-571-hexashop
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var logoutButton = document.getElementById("logout-link");
-            logoutButton.addEventListener("click", function () {
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
-            });
+            if (logoutButton) {
+                logoutButton.addEventListener("click", function () {
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                });
+            }
         });
     </script>
 

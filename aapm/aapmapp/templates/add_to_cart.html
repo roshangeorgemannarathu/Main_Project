@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,15 +15,11 @@
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
-
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
-<!--
+    <!--
 
 TemplateMo 571 Hexashop
 
@@ -31,53 +27,57 @@ https://templatemo.com/tm-571-hexashop
 
 
 -->
-<style>
-    h1{
-        color:black;
+    <style>
+        h1 {
+            color: black;
+        }
+
+        h4 {
+            color: black;
+        }
+
+        .go-back-home-button {
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-right: 20px;
+        }
+    </style>
 
 
-    }
+</head>
 
-    h4{
-        color:black; 
-    }
-</style>
-
-
-    </head>
- <!-- ***** Header Area Start ***** -->
-<header class="header-area header-sticky" style="background-color: #F6F2E3; margin-bottom: 20px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <h1> Your Cart</h1>
-                    <!-- ***** Logo Start ***** -->
-                    <a href="" class="logo">
-                        <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
-                        <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
-                    </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
+<body>
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky" style="background-color: #F6F2E3; margin-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <nav class="main-nav">
+                        <h1> Your Cart</h1>
+                        <!-- ***** Logo Start ***** -->
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                    </nav>
+                </div>
+                <div class="col-6 text-right">
+                    <a href="{% url 'customer_account' %}" class="go-back-home-button">Go Back Home</a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<!-- Content for My Cart page -->
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8">
-            <h2 class="mb-4">Your Shopping Cart</h2>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <!-- Content for My Cart page -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="mb-4">Your Shopping Cart</h2>
 
-            {% if cart_items %}
+                {% if cart_items %}
                 <!-- Table for Pet and Aquarium items -->
                 <table class="table">
                     <thead>
@@ -93,69 +93,73 @@ https://templatemo.com/tm-571-hexashop
                     </thead>
                     <tbody>
                         {% for item in cart_items %}
-                            <tr>
-                                <td>
-                                    {% if item.item_category == 'pet' %}
-                                        {{ item.pet.pet_breed }}
-                                    {% elif item.item_category == 'aquarium' %}
-                                        {{ item.aquarium.name }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ item.quantity }}</td>
-                                <td>
-                                    {% if item.item_category == 'pet' %}
-                                        Rs{{ item.pet.price }}
-                                    {% elif item.item_category == 'aquarium' %}
-                                        Rs{{ item.aquarium.price }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if item.item_category == 'pet' %}
-                                        {{ item.pet.pet_description }}
-                                    {% elif item.item_category == 'aquarium' %}
-                                        {{ item.aquarium.description }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if item.item_category == 'pet' %}
-                                        {{ item.pet.location }}
-                                    {% elif item.item_category == 'aquarium' %}
-                                        {{ item.aquarium.location }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if item.item_category == 'pet' %}
-                                        <img src="{{ item.pet.image.url }}" alt="{{ item.pet.pet_breed }}"
-                                            style="max-width: 100px; max-height: 100px;">
-                                    {% elif item.item_category == 'aquarium' %}
-                                        <img src="{{ item.aquarium.image.url }}" alt="{{ item.aquarium.name }}"
-                                            style="max-width: 100px; max-height: 100px;">
-                                    {% endif %}
-                                </td>
-                                <td>
+                        <tr>
+                            <td>
+                                {% if item.item_category == 'pet' %}
+                                {{ item.pet.pet_breed }}
+                                {% elif item.item_category == 'aquarium' %}
+                                {{ item.aquarium.name }}
+                                {% endif %}
+                            </td>
+                            <td>{{ item.quantity }}</td>
+                            <td>
+                                {% if item.item_category == 'pet' %}
+                                Rs{{ item.pet.price }}
+                                {% elif item.item_category == 'aquarium' %}
+                                Rs{{ item.aquarium.price }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.item_category == 'pet' %}
+                                {{ item.pet.pet_description }}
+                                {% elif item.item_category == 'aquarium' %}
+                                {{ item.aquarium.description }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.item_category == 'pet' %}
+                                {{ item.pet.location }}
+                                {% elif item.item_category == 'aquarium' %}
+                                {{ item.aquarium.location }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.item_category == 'pet' %}
+                                <img src="{{ item.pet.image.url }}" alt="{{ item.pet.pet_breed }}"
+                                    style="max-width: 100px; max-height: 100px;">
+                                {% elif item.item_category == 'aquarium' %}
+                                <img src="{{ item.aquarium.image.url }}" alt="{{ item.aquarium.name }}"
+                                    style="max-width: 100px; max-height: 100px;">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <!-- Assuming you have a form to handle purchase -->
+                                <form method="post" action="{% url 'purchase_item' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
                                     <button type="submit" class="btn btn-primary">Buy Now</button>
-                                </td>
-                            </tr>
+                                </form>
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
 
-            {% else %}
+                {% else %}
                 <p>Your cart is empty.</p>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 
-<footer>
-     
-    <div class="col-lg-12">
-        <div class="under-footer">
-            <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved. 
-            
-           
+    <footer>
+
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+            </div>
         </div>
-    </div>
-  </div>
-  </div>
-  </footer>
+    </footer>
+</body>
+
+</html>
