@@ -72,85 +72,86 @@ https://templatemo.com/tm-571-hexashop
     </header>
     <!-- ***** Header Area End ***** -->
     <!-- Content for My Cart page -->
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8">
-                <h2 class="mb-4">Your Shopping Cart</h2>
+   <!-- Content for My Cart page -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Your Shopping Cart</h2>
 
-                {% if cart_items %}
-                <!-- Table for Pet and Aquarium items -->
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Item Name</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Image</th>
-                            <th>Buy now</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in cart_items %}
-                        <tr>
-                            <td>
-                                {% if item.item_category == 'pet' %}
-                                {{ item.pet.pet_breed }}
-                                {% elif item.item_category == 'aquarium' %}
-                                {{ item.aquarium.name }}
-                                {% endif %}
-                            </td>
-                            <td>{{ item.quantity }}</td>
-                            <td>
-                                {% if item.item_category == 'pet' %}
-                                Rs{{ item.pet.price }}
-                                {% elif item.item_category == 'aquarium' %}
-                                Rs{{ item.aquarium.price }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if item.item_category == 'pet' %}
-                                {{ item.pet.pet_description }}
-                                {% elif item.item_category == 'aquarium' %}
-                                {{ item.aquarium.description }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if item.item_category == 'pet' %}
-                                {{ item.pet.location }}
-                                {% elif item.item_category == 'aquarium' %}
-                                {{ item.aquarium.location }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if item.item_category == 'pet' %}
-                                <img src="{{ item.pet.image.url }}" alt="{{ item.pet.pet_breed }}"
-                                    style="max-width: 100px; max-height: 100px;">
-                                {% elif item.item_category == 'aquarium' %}
-                                <img src="{{ item.aquarium.image.url }}" alt="{{ item.aquarium.name }}"
-                                    style="max-width: 100px; max-height: 100px;">
-                                {% endif %}
-                            </td>
-                            <td>
-                                <!-- Assuming you have a form to handle purchase -->
-                                <form method="post" action="{% url 'purchase_item' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <button type="submit" class="btn btn-primary">Buy Now</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            {% if cart_items %}
+            <!-- Table for Pet and Aquarium items -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Image</th>
+                        <th>Buy now</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>
+                            {% if item.item_category == 'pet' %}
+                            {{ item.pet.pet_breed }}
+                            {% elif item.item_category == 'aquarium' %}
+                            {{ item.aquarium.name }}
+                            {% endif %}
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>
+                            {% if item.item_category == 'pet' %}
+                            Rs{{ item.pet.price }}
+                            {% elif item.item_category == 'aquarium' %}
+                            Rs{{ item.aquarium.price }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.item_category == 'pet' %}
+                            {{ item.pet.pet_description }}
+                            {% elif item.item_category == 'aquarium' %}
+                            {{ item.aquarium.description }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.item_category == 'pet' %}
+                            {{ item.pet.location }}
+                            {% elif item.item_category == 'aquarium' %}
+                            {{ item.aquarium.location }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.item_category == 'pet' %}
+                            <img src="{{ item.pet.image.url }}" alt="{{ item.pet.pet_breed }}"
+                                style="max-width: 100px; max-height: 100px;">
+                            {% elif item.item_category == 'aquarium' %}
+                            <img src="{{ item.aquarium.image.url }}" alt="{{ item.aquarium.name }}"
+                                style="max-width: 100px; max-height: 100px;">
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Assuming you have a form to handle purchase -->
+                            <form method="post" action="{% url 'purchase_item' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <button type="submit" class="btn btn-primary">Buy Now</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-                {% else %}
-                <p>Your cart is empty.</p>
-                {% endif %}
-            </div>
+            {% else %}
+            <p>Your cart is empty.</p>
+            {% endif %}
         </div>
     </div>
+</div>
 
     <footer>
 

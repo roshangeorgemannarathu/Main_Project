@@ -5,6 +5,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import buy_now, razorpay_payment
+from django.urls import path
 
 
 
@@ -108,7 +109,11 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('payment-details/', views.payment_details_view, name='payment_details'),
     #  path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu')
     path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu'),
+     path('add_to_cart/<str:category>/<int:item_id>/',views. add_to_cart, name='add_to_cart'),
 
+
+    path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
+    # path('import_delivery_men/', views.import_delivery_men, name='import_delivery_men'),
 
 
 

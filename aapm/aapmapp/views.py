@@ -25,6 +25,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from .models import Review, Review_Aquarium
+from django.shortcuts import redirect
 
 
 import razorpay
@@ -54,6 +55,11 @@ from .models import Userpayment, Userpayment_aquarium
 #reset passwor generater
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 # Create your views here.
+
+
+#add delivery man
+# from django.http import HttpResponseRedirect
+# from .forms import DeliveryManForm
 
 
 def homelogin(request):
@@ -88,15 +94,7 @@ def register(request):
     return render(request, 'register.html')
 
 
-# def toggle_activation(request, dealer_id):
-#     dealer = get_object_or_404(dealer, id=dealer_id)  # Use 'Dealer' instead of 'Customer'
 
-#     # Toggle the dealer's activation status
-#     dealer.is_active = not dealer.is_active
-#     dealer.save()
-
-#     # Redirect back to the dealer list page
-#     return redirect('dealers')  # Update 'dealers' with the correct URL name for your dealer list page
 
 def user_login(request):
     if request.method == 'POST':
@@ -118,14 +116,15 @@ def user_login(request):
 
 
 
-# def user_logout(request):
-#     if request.user.is_authenticated:
-#         logout(request)
-#     return redirect('userloginhome')
+
+
 def user_logout(request):
-    if request.user.is_authenticated:
-        logout(request)
-    return redirect('userloginhome')
+    # Perform logout logic here
+    # For example, you can clear session data
+    request.session.clear()
+    # Redirect to the desired page after logout
+    return redirect('login')
+
 
 @login_required(login_url='login')
 
@@ -183,16 +182,7 @@ def dealers(request):
     return render(request, 'dealers.html', context) 
 
 
-# def deliveryman(request):
-#     # Query the database to get the data you want to display on the admin dashboard
-#     deliverymen = dealer.objects.filter(role='deliveryman')  # Filter by role 'deliveryman'
 
-#     # Pass the data to the template context
-#     context = {
-#         'deliverymen': deliverymen,  # Update the variable name to 'deliverymen'
-#         # Add other data you want to pass to the template
-#     }
-#     return render(request, 'deliveryman.html', context)
 
 def deliveryman(request):
     # Query the database to get the deliverymen
@@ -205,66 +195,7 @@ def deliveryman(request):
     return render(request, 'deliveryman.html', context)
 
 
-# def toggle_activation(request, customers_id):
-#     customers= get_object_or_404(dealer, id=customers_id)  # Use 'dealer' instead of 'Dealer'
 
-#     if request.method == 'POST':
-#         action = request.POST.get('action')  # Get the value of the clicked button
-
-#         if action == 'activate':
-#             customers.is_active = True
-#         elif action == 'deactivate':
-#             customers.is_active = False
-
-#         customers.save()
-
-#         # Send a JSON response to update the button text on the page
-#         response_data = {'message': 'Activation status toggled successfully.'}
-#         return JsonResponse(response_data)
-
-#     # Redirect back to the customers list page
-#     return redirect('customers')
-
-    
-# def toggle_dealer_activation(request, dealer_id):
-#     dealer = get_object_or_404(dealers, id=dealer_id)
-
-#     if request.method == 'POST':
-#         action = request.POST.get('action')  # Get the value of the clicked button
-
-#         if action == 'activate':
-#             dealer.is_active = True
-#         elif action == 'deactivate':
-#             dealer.is_active = False
-
-#         dealer.save()
-
-#         # Send a JSON response to update the button text on the page
-#         response_data = {'message': 'Activation status toggled successfully.'}
-#         return JsonResponse(response_data)
-
-#     # Redirect back to the dealer list page
-#     return redirect('dealers')
-
-# def toggle_deliveryman_activation(request, deliveryman_id):
-#     deliveryman= get_object_or_404(dealers, id=deliveryman_id)
-
-#     if request.method == 'POST':
-#         action = request.POST.get('action')  # Get the value of the clicked button
-
-#         if action == 'activate':
-#             deliveryman.is_active = True
-#         elif action == 'deactivate':
-#             deliveryman.is_active = False
-
-#         dealer.save()
-
-#         # Send a JSON response to update the button text on the page
-#         response_data = {'message': 'Activation status toggled successfully.'}
-#         return JsonResponse(response_data)
-
-#     # Redirect back to the dealer list page
-#     return redirect('deliveryman')
 def a(request):
     if requdd_pet_or_aquariumest.method == 'POST':
         category = request.POST.get('category')
@@ -661,39 +592,7 @@ def usercustomer(request):
 
 
 
-# def cart(request):
-#     pets = Pet.objects.all()
-#     aquariums = Aquarium.objects.all()
-#     return render(request, 'cart.html', {'pets': pets, 'aquariums': aquariums})
-# from .models import Pet, Payment
 
-
-# @never_cache
-# def customer_account(request):
-#     # Fetch all pets from the database
-#     pets = Pet.objects.all()
-
-#     # Fetch all aquariums from the database
-#     aquariums = Aquarium.objects.all()
-
-#     # Check if any of the pets are already sold and fetch their reviews
-#     for pet in pets:
-#         if Userpayment.objects.filter(item=pet).exists():
-#             pet.status = 'sold'
-            
-#             reviews = Review.objects.filter(pet=pet)
-#             # Instead of directly assigning, use the set() method
-#             pet.review_set.set(reviews)
-            
-
-#     # Check if any of the aquariums are already sold and fetch their reviews
-#     for aquarium in aquariums:
-#         if Userpayment_aquarium.objects.filter(item=aquarium).exists():
-#             aquarium.status = 'sold'
-#             aquarium.reviews = Review_Aquarium.objects.filter(aquarium=aquarium)
-
-#     # Render the template with the updated pet and aquarium status
-#     return render(request, 'customer_account.html', {'pets': pets, 'aquariums': aquariums})
 
 
 @never_cache
@@ -834,6 +733,60 @@ def purchase_item(request):
         # Handle GET requests (optional)
         pass
 
+# def mycart(request):
+#     if request.method == 'POST':
+#         # Assuming you have a form to add items to the cart
+#         # Retrieve item data from the form submission
+#         item_id = request.POST.get('item_id')
+#         item_category = request.POST.get('item_category')
+#         quantity = int(request.POST.get('quantity'))
+        
+#         # Retrieve the user's profile
+#         user_profile_list = UserProfile.objects.filter(user=request.user)
+        
+#         if not user_profile_list:
+#             return HttpResponse("User profile not found.", status=404)
+        
+#         user_profile = user_profile_list[0]
+
+#         # Create or update the cart item
+#         if item_category == 'pet':
+#             # Retrieve pet object based on item_id
+#             # Replace 'Pet' with your actual model name for pets
+#             pet = Pet.objects.get(id=item_id)
+#             # Create or update the cart item for the pet
+#             cart_item, created = CartItem.objects.get_or_create(user=user_profile, pet=pet)
+#             if not created:
+#                 cart_item.quantity += quantity
+#                 cart_item.save()
+#         elif item_category == 'aquarium':
+#             # Retrieve aquarium object based on item_id
+#             # Replace 'Aquarium' with your actual model name for aquariums
+#             aquarium = Aquarium.objects.get(id=item_id)
+#             # Create or update the cart item for the aquarium
+#             cart_item, created = CartItem.objects.get_or_create(user=user_profile, aquarium=aquarium)
+#             if not created:
+#                 cart_item.quantity += quantity
+#                 cart_item.save()
+
+#         # Redirect to the cart page after adding items
+#         return redirect('mycart')
+
+#     else:
+#         user_profile_list = UserProfile.objects.filter(user=request.user)
+#         if not user_profile_list:
+#             return HttpResponse("User profile not found.", status=404)
+
+#         user_profile = user_profile_list[0]
+
+#         cart_items = CartItem.objects.filter(user=user_profile)
+#         context = {'cart_items': cart_items}
+
+#         return render(request, 'add_to_cart.html', context)
+    
+    from django.shortcuts import render, redirect, HttpResponse
+from .models import CartItem, UserProfile, Pet, Aquarium
+
 def mycart(request):
     if request.method == 'POST':
         # Assuming you have a form to add items to the cart
@@ -872,7 +825,6 @@ def mycart(request):
 
         # Redirect to the cart page after adding items
         return redirect('mycart')
-
     else:
         user_profile_list = UserProfile.objects.filter(user=request.user)
         if not user_profile_list:
@@ -884,6 +836,7 @@ def mycart(request):
         context = {'cart_items': cart_items}
 
         return render(request, 'add_to_cart.html', context)
+
 
 
 
@@ -899,6 +852,8 @@ def item_detail(request, category, item_id):
     return render(request, 'item_detail.html', {'item': item, 'category': category})
 
 
+
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 import razorpay
@@ -907,6 +862,34 @@ import razorpay
 # authorize razorpay client with API Keys.
 razorpay_client = razorpay.Client(
     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+from .models import CartItem, UserProfile, Pet
+from django.contrib import messages
+
+def add_to_cart(request, category, item_id):
+    # Retrieve the user's profile
+    user_profile_list = UserProfile.objects.filter(user=request.user)
+    
+    if not user_profile_list:
+        return HttpResponse("User profile not found.", status=404)
+    
+    user_profile = user_profile_list[0]
+
+    # Retrieve the item object based on the category
+    if category == 'pet':
+        item = get_object_or_404(Pet, id=item_id)
+        cart_item, created = CartItem.objects.get_or_create(user=user_profile, item_category='pet', item_id=item_id)
+    else:
+        # Handle for other item categories (e.g., aquarium)
+        pass
+
+    if created:
+        messages.success(request, f"{item.pet_breed} added to cart successfully!")
+    else:
+        messages.info(request, f"{item.pet_breed} is already in your cart!")
+
+    return redirect('pet_details', pet_id=item_id)
+
 
 def pet_details(request, pet_id):
     request.session['pet_id'] = pet_id
@@ -1213,12 +1196,7 @@ def payment_success(request):
 def payment_unsuccess(request):
      return render(request, 'payment_unsuccess.html')   
 
-# def order(request):
-#     # Fetch all user payments from both models
-#     user_payments = Userpayment.objects.all()  # Retrieve all user payments from Userpayment model
-#     user_payments_aquarium = Userpayment_aquarium.objects.all()  # Retrieve all user payments from Userpayment_aquarium model
 
-#     return render(request, 'order.html', {'user_payments': user_payments, 'user_payments_aquarium': user_payments_aquarium})
 
 @login_required
 def order(request):
@@ -1501,3 +1479,67 @@ def submit_review_aqu(request, aquarium_id):
     
     # If the request method is not POST, render the form again
     return render(request, 'order.html')
+
+# def add_delivery_man(request):
+    
+#     return render(request, 'add_delivery_man.html')
+
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.conf import settings
+import threading
+import random
+import string
+from .models import DeliveryMan
+
+def add_delivery_man(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        house_name = request.POST.get('house_name')
+        district = request.POST.get('district')
+        city = request.POST.get('city')
+        pincode = request.POST.get('pincode')
+        vehicle_type = request.POST.get('vehicle_type')
+        vehicle_no = request.POST.get('vehicle_no')
+
+        # Generate random password
+        random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+        # Create user and delivery man instance
+        user = User.objects.create_user(username=email, email=email, password=random_password, first_name=name)
+        delivery_man = DeliveryMan.objects.create(
+            user=user,
+            contact_number=phone,
+            address=house_name,
+            district=district,
+            city=city,
+            pincode=pincode,
+            vehicle_type=vehicle_type,
+            registration_number=vehicle_no
+        )
+
+        # Send email with the random password
+        subject = 'Welcome to the Delivery Service'
+        html_message = render_to_string('email_to_deliveryboy.html', {'firstname': user.first_name, 'password': random_password})
+        to_email = [email]
+
+        # Function to send email in a thread
+        def sendmail_in_thread(subject, html_message, to_email):
+            send_mail(
+                subject,
+                '',
+                settings.EMAIL_HOST_USER,
+                to_email,
+                html_message=html_message,
+            )
+
+        # Use a thread to send the email asynchronously
+        email_thread = threading.Thread(target=sendmail_in_thread, args=(subject, html_message, to_email))
+        email_thread.start()
+
+        return redirect('admin_dashboard')  # Redirect to a success page after saving the delivery man
+        
+    return render(request, 'admin_dashboard.html')  # Replace 'your_template_name.html' with the actual template name

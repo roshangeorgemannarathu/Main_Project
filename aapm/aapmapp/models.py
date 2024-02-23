@@ -161,3 +161,18 @@ class Review_Aquarium(models.Model):
 
     def __str__(self):
         return f'Review for {self.aquarium.name} by {self.dealer.username}'
+    
+
+class DeliveryMan(models.Model):
+     name = models.CharField(max_length=100)
+     email = models.EmailField()
+     phone = models.CharField(max_length=15)
+     house_name = models.CharField(max_length=100)
+     district = models.CharField(max_length=100)
+     city = models.CharField(max_length=100)
+     pincode = models.CharField(max_length=10)
+     vehicle_type = models.CharField(max_length=50)
+     vehicle_no = models.CharField(max_length=20)
+
+     def __str__(self):
+        return self.name   
