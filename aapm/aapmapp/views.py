@@ -1480,18 +1480,54 @@ def submit_review_aqu(request, aquarium_id):
     # If the request method is not POST, render the form again
     return render(request, 'order.html')
 
-# def add_delivery_man(request):
+def add_delivery_man(request):
     
+    return render(request, 'add_delivery_man.html')
+
+
+
+
+
+# def add_delivery_man(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         house_name = request.POST.get('house_name')
+#         district = request.POST.get('district')
+#         city = request.POST.get('city')
+#         pincode = request.POST.get('pincode')
+#         vehicle_type = request.POST.get('vehicle_type')
+#         vehicle_no = request.POST.get('vehicle_no')
+
+        
+
+#         # Create delivery man instance
+#         delivery_man = DeliveryMan.objects.create(
+#             name=name,
+#             email=email,
+#             phone=phone,
+#             house_name=house_name,
+#             district=district,
+#             city=city,
+#             pincode=pincode,
+#             vehicle_type=vehicle_type,
+#             vehicle_no=vehicle_no
+#         )
+    
+#         # Redirect to a success page after saving the delivery man
+#         return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
+
 #     return render(request, 'add_delivery_man.html')
 
+
 from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.conf import settings
 import threading
-import random
+import random  # Import the random module
 import string
-from .models import DeliveryMan
 
 def add_delivery_man(request):
     if request.method == 'POST':
@@ -1508,38 +1544,55 @@ def add_delivery_man(request):
         # Generate random password
         random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
-        # Create user and delivery man instance
-        user = User.objects.create_user(username=email, email=email, password=random_password, first_name=name)
-        delivery_man = DeliveryMan.objects.create(
-            user=user,
-            contact_number=phone,
-            address=house_name,
-            district=district,
-            city=city,
-            pincode=pincode,
-            vehicle_type=vehicle_type,
-            registration_number=vehicle_no
-        )
-
-        # Send email with the random password
-        subject = 'Welcome to the Delivery Service'
-        html_message = render_to_string('email_to_deliveryboy.html', {'firstname': user.first_name, 'password': random_password})
-        to_email = [email]
-
-        # Function to send email in a thread
-        def sendmail_in_thread(subject, html_message, to_email):
-            send_mail(
-                subject,
-                '',
-                settings.EMAIL_HOST_USER,
-                to_email,
-                html_message=html_message,
+        try:
+            # Create delivery man instance
+            # Create delivery man instance
+            user = dealer.objects.create_user(
+            
+                username=email,
+                email=email,
+                password=random_password,
+                role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
             )
+            delivery_man = DeliveryMan.objects.create(
+                name=name,
+                email=email,
+                phone=phone,
+                house_name=house_name,
+                district=district,
+                city=city,
+                pincode=pincode,
+                vehicle_type=vehicle_type,
+                vehicle_no=vehicle_no
+            )
+            
+            # Send email to the deliveryman
+            subject = 'Welcome to the Delivery Service'
+            message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
+            send_mail(subject, message, 'your_email@example.com', [email])
 
-        # Use a thread to send the email asynchronously
-        email_thread = threading.Thread(target=sendmail_in_thread, args=(subject, html_message, to_email))
-        email_thread.start()
+            # Redirect to a success page after saving the delivery man
+            return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
 
-        return redirect('admin_dashboard')  # Redirect to a success page after saving the delivery man
-        
-    return render(request, 'admin_dashboard.html')  # Replace 'your_template_name.html' with the actual template name
+        except Exception as e:
+            # Handle any exceptions
+            print(f"Error: {e}")
+            # Redirect to an error page or display an error message
+            return render(request, 'error_page.html', {'error_message': 'An error occurred while processing your request.'})
+
+    return render(request, 'add_delivery_man.html')
+
+
+
+
+
+def Delivery_successfully_registerd(request):
+    return render(request, 'Delivery_successfully_registerd.html')
+
+
+
+
+
+def deliveryman_list(request):
+    deliverymen = DeliveryMan.objects.all()
+    return render(request, 'deliveryman_list.html', {'deliverymen': deliverymen})

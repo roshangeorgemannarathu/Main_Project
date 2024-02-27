@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Man List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2874F0;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .go-back {
+            background-color: #FF9F00;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .go-back:hover {
+            background-color: #FFBD59;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Delivery Man List</h1>
+        <button class="go-back" onclick="goBack()">Go Back Home</button>
+    </header>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>House Name</th>
+                    <th>District</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>Vehicle Type</th>
+                    <th>Vehicle No</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deliveryman in deliverymen %}
+                <tr>
+                    <td>{{ deliveryman.name }}</td>
+                    <td>{{ deliveryman.email }}</td>
+                    <td>{{ deliveryman.phone }}</td>
+                    <td>{{ deliveryman.house_name }}</td>
+                    <td>{{ deliveryman.district }}</td>
+                    <td>{{ deliveryman.city }}</td>
+                    <td>{{ deliveryman.pincode }}</td>
+                    <td>{{ deliveryman.vehicle_type }}</td>
+                    <td>{{ deliveryman.vehicle_no }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

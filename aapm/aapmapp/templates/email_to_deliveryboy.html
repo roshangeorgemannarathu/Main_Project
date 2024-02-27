@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Pet Paradise cart</title>
+    <style>
+        /* Add your custom CSS styles here */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .thank-you {
+            margin-top: 20px;
+            font-style: italic;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome Pet Paradise Cart</h2>
+        <p>Hello {{ firstname }},</p>
+        <p>You have been added as a delivery boy. Your temporary password is: <strong>{{ password }}</strong></p>
+        <p>Please log in and change your password as soon as possible.</p>
+        <p class="thank-you">Thank you for joining our service!</p>
+    </div>
+</body>
+</html>

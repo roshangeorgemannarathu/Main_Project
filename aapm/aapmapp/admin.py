@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 #from .models import dealer,UserProfile
+from .models import *
 
 class dealerAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'role') # Add 'role' to the list_display
@@ -52,3 +53,5 @@ class PetAdmin(admin.ModelAdmin):
     list_filter = ('dealer', 'category', 'location')
     search_fields = ('get_category_display', 'location')
     list_per_page = 20
+
+admin.site.register(dealer)

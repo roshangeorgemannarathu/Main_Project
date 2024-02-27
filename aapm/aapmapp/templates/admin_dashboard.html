@@ -117,10 +117,12 @@
         <a href="users.html">User Accounts</a>
         <a href="customers.html">Customers</a>
         <a href="dealers.html">Dealers</a>
-        <a href="deliveryman.html">Delivery Man</a>
+        <a href="{% url 'deliveryman_list' %}">Delivery Man</a> 
         <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
         <a href="{% url 'payment_details' %}">Payment Management</a>
         <a href="{% url 'Dealer_feedback' %}">Aquarium or Pet Feedback</a>
+        <a href="{% url 'add_delivery_man' %}">Add Delivery Man</a>
+
     </div>
 
     <!-- Content Area -->

@@ -78,7 +78,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('mycart/',views.mycart,name="mycart"),
     # path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
-     path('deliveryman/account/', views.deliveryman_account, name='deliveryman_account'),
+     path('deliveryman_account/', views.deliveryman_account, name='deliveryman_account'),
      path('pet_details/<int:pet_id>/', views.pet_details, name='pet_details'),
      
      path('aquarium_details/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
@@ -112,9 +112,11 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
      path('add_to_cart/<str:category>/<int:item_id>/',views. add_to_cart, name='add_to_cart'),
 
 
-    path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
+    # path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
+     path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
     # path('import_delivery_men/', views.import_delivery_men, name='import_delivery_men'),
-
+    path('Delivery_successfully_registerd/', views.Delivery_successfully_registerd, name='Delivery_successfully_registerd'),
+    path('deliveryman_list/', views.deliveryman_list, name='deliveryman_list'),
 
 
 

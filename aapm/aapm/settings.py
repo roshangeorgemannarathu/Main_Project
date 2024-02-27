@@ -128,6 +128,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
 AUTH_USER_MODEL = 'aapmapp.dealer'
 
 # email verifiation
@@ -136,7 +138,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'roshangeorge2k66@gmail.com'
-EMAIL_HOST_PASSWORD = '2k66joseph'
+EMAIL_HOST_PASSWORD = 'mndl sjyz dybm ezbd'
 
 
 RAZOR_KEY_ID  = 'rzp_test_KPliOP7waiGNR8'
