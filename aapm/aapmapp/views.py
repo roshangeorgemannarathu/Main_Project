@@ -1186,9 +1186,17 @@ def payment_successful(request):
         # Invalid request method
         return HttpResponse(status=400)
     
+# def deliveryman_account(request):
+#     # Your view logic here
+#      return render(request, 'deliveryman_account.html')
+    
+
+@login_required 
 def deliveryman_account(request):
-    # Your view logic here
-     return render(request, 'deliveryman_account.html')
+    # This view requires the user to be logged in.
+    # Only the logged-in deliveryman will be able to access it.
+    return render(request, 'deliveryman_account.html')
+
 
 def payment_success(request):
      return render(request, 'payment_success.html')
@@ -1521,66 +1529,118 @@ def add_delivery_man(request):
 #     return render(request, 'add_delivery_man.html')
 
 
+
+
+
+import csv
+import random
+import string
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.conf import settings
-import threading
-import random  # Import the random module
-import string
+from .models import DeliveryMan
 
 def add_delivery_man(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        house_name = request.POST.get('house_name')
-        district = request.POST.get('district')
-        city = request.POST.get('city')
-        pincode = request.POST.get('pincode')
-        vehicle_type = request.POST.get('vehicle_type')
-        vehicle_no = request.POST.get('vehicle_no')
+        if 'csvFile' in request.FILES:  # Check if a CSV file is uploaded
+            csv_file = request.FILES['csvFile']
+            if not csv_file.name.endswith('.csv'):
+                return render(request, 'Delivery_successfully_registerd', {'error_message': 'Uploaded file is not a CSV'})
 
-        # Generate random password
-        random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+            try:
+                decoded_file = csv_file.read().decode('utf-8').splitlines()
+                reader = csv.DictReader(decoded_file)
 
-        try:
-            # Create delivery man instance
-            # Create delivery man instance
-            user = dealer.objects.create_user(
-            
-                username=email,
-                email=email,
-                password=random_password,
-                role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
-            )
-            delivery_man = DeliveryMan.objects.create(
-                name=name,
-                email=email,
-                phone=phone,
-                house_name=house_name,
-                district=district,
-                city=city,
-                pincode=pincode,
-                vehicle_type=vehicle_type,
-                vehicle_no=vehicle_no
-            )
-            
-            # Send email to the deliveryman
-            subject = 'Welcome to the Delivery Service'
-            message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
-            send_mail(subject, message, 'your_email@example.com', [email])
+                for row in reader:
+                    name = row.get('name')
+                    email = row.get('email')
+                    phone = row.get('phone')
+                    house_name = row.get('house_name')
+                    district = row.get('district')
+                    city = row.get('city')
+                    pincode = row.get('pincode')
+                    vehicle_type = row.get('vehicle_type')
+                    vehicle_no = row.get('vehicle_no')
 
-            # Redirect to a success page after saving the delivery man
-            return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
+                    # Generate random password
+                    random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
-        except Exception as e:
-            # Handle any exceptions
-            print(f"Error: {e}")
-            # Redirect to an error page or display an error message
-            return render(request, 'error_page.html', {'error_message': 'An error occurred while processing your request.'})
+                    # Create delivery man instance
+                    user = dealer.objects.create_user(
+                        username=email,
+                        email=email,
+                        password=random_password,
+                        role='deliveryman'
+                    )
+                    delivery_man = DeliveryMan.objects.create(
+                        name=name,
+                        email=email,
+                        phone=phone,
+                        house_name=house_name,
+                        district=district,
+                        city=city,
+                        pincode=pincode,
+                        vehicle_type=vehicle_type,
+                        vehicle_no=vehicle_no
+                    )
+
+                    # Send email to the deliveryman
+                    subject = 'Welcome to the Delivery Service'
+                    message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
+                    send_mail(subject, message, 'your_email@example.com', [email])
+
+                return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
+
+            except Exception as e:
+                print(f"Error processing CSV file: {e}")
+                return redirect('Delivery_successfully_registerd') 
+
+        else:
+            # Handle form data for manual entry as before
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            house_name = request.POST.get('house_name')
+            district = request.POST.get('district')
+            city = request.POST.get('city')
+            pincode = request.POST.get('pincode')
+            vehicle_type = request.POST.get('vehicle_type')
+            vehicle_no = request.POST.get('vehicle_no')
+
+            random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+            try:
+                user = dealer.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=random_password,
+                    role='deliveryman'
+                )
+                delivery_man = DeliveryMan.objects.create(
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    house_name=house_name,
+                    district=district,
+                    city=city,
+                    pincode=pincode,
+                    vehicle_type=vehicle_type,
+                    vehicle_no=vehicle_no
+                )
+
+                subject = 'Welcome to the Delivery Service'
+                message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
+                send_mail(subject, message, 'your_email@example.com', [email])
+
+                return redirect('Delivery_successfully_registerd')
+
+            except Exception as e:
+                print(f"Error creating delivery man: {e}")
+                return render(request, 'Delivery_successfully_registerd')
 
     return render(request, 'add_delivery_man.html')
+
+
 
 
 
@@ -1596,3 +1656,7 @@ def Delivery_successfully_registerd(request):
 def deliveryman_list(request):
     deliverymen = DeliveryMan.objects.all()
     return render(request, 'deliveryman_list.html', {'deliverymen': deliverymen})
+
+
+def change_password(request):
+    return render(request, 'change_password.html')
