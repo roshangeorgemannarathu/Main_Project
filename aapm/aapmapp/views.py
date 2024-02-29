@@ -1186,17 +1186,105 @@ def payment_successful(request):
         # Invalid request method
         return HttpResponse(status=400)
     
-# def deliveryman_account(request):
-#     # Your view logic here
-#      return render(request, 'deliveryman_account.html')
-    
-
-@login_required 
 def deliveryman_account(request):
-    # This view requires the user to be logged in.
-    # Only the logged-in deliveryman will be able to access it.
-    return render(request, 'deliveryman_account.html')
+    # Your view logic here
+     return render(request, 'deliveryman_account.html')
+    
+   
 
+# from django.contrib.auth.models import User
+# from .models import UserProfile
+
+# def deliveryman_account(request):
+#     try:
+#         # Get the UserProfile object associated with the current user
+#         user_profile = UserProfile.objects.get(user=request.user)
+#     except UserProfile.DoesNotExist:
+#         # If UserProfile does not exist for the current user, create one
+#         user_profile = UserProfile.objects.create(
+#             user=request.user,
+#             fullname=request.user.get_full_name(),  # Assuming User model has first_name and last_name fields
+#             # You can set other fields here
+#         )
+
+#     context = {
+#         'user_profile': user_profile
+#     }
+#     return render(request, 'deliveryman_account.html', context)
+
+
+# from django.contrib.auth.models import User
+# from .models import UserProfile
+
+# def deliveryman_account(request):
+#     try:
+#         # Get the UserProfile object associated with the current user
+#         user_profile = UserProfile.objects.get(user=request.user)
+#     except UserProfile.DoesNotExist:
+#         # If UserProfile does not exist for the current user, create one
+#         user_profile = UserProfile.objects.create(
+#             user=request.user,
+#             fullname=request.user.get_full_name(),  # Assuming User model has first_name and last_name fields
+#             # You can set other fields here
+#         )
+
+#     context = {
+#         'user_profile': user_profile
+#     }
+#     return render(request, 'deliveryman_account.html', context)
+
+
+
+
+# from django.shortcuts import render
+# from django.contrib.auth.decorators import login_required
+# from .models import UserProfile  # Import the UserProfile model
+
+# @login_required
+# def deliveryman_account(request):
+#     # Retrieve the user's profile
+#     user_profile = UserProfile.objects.get(user=request.user)
+#     context = {
+#         'user_profile': user_profile
+#     }
+#     return render(request, 'deliveryman_account.html', context)
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+
+@login_required
+def deliveryman_account(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        full_name = user_profile.fullname
+        if user_profile.photo:
+            photo_url = user_profile.photo.url
+        else:
+            # Provide a default photo URL or handle it accordingly
+            photo_url = '/path/to/default/photo.jpg'  # Adjust this path as needed
+    except UserProfile.DoesNotExist:
+        # Handle the case where the user has no profile
+        full_name = ''
+        photo_url = ''
+    
+    context = {
+        'full_name': full_name,
+        'photo_url': photo_url
+    }
+    
+    return render(request, 'deliveryman_account.html', context)
+
+
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def dealer_account(request):
+    # Logic to fetch dealer details or perform any other operations
+    return render(request, 'dealer_account.html')
 
 def payment_success(request):
      return render(request, 'payment_success.html')
@@ -1488,9 +1576,9 @@ def submit_review_aqu(request, aquarium_id):
     # If the request method is not POST, render the form again
     return render(request, 'order.html')
 
-def add_delivery_man(request):
+# def add_delivery_man(request):
     
-    return render(request, 'add_delivery_man.html')
+#     return render(request, 'add_delivery_man.html')
 
 
 
@@ -1529,74 +1617,111 @@ def add_delivery_man(request):
 #     return render(request, 'add_delivery_man.html')
 
 
+# from django.shortcuts import render, redirect
+# from django.core.mail import send_mail
+# from django.template.loader import render_to_string
+# from django.conf import settings
+# import threading
+# import random  # Import the random module
+# import string
 
+# def add_delivery_man(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         house_name = request.POST.get('house_name')
+#         district = request.POST.get('district')
+#         city = request.POST.get('city')
+#         pincode = request.POST.get('pincode')
+#         vehicle_type = request.POST.get('vehicle_type')
+#         vehicle_no = request.POST.get('vehicle_no')
 
+#         # Generate random password
+#         random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+#         try:
+#             # Create delivery man instance
+#             # Create delivery man instance
+#             user = dealer.objects.create_user(
+            
+#                 username=email,
+#                 email=email,
+#                 password=random_password,
+#                 role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
+#             )
+#             delivery_man = DeliveryMan.objects.create(
+#                 name=name,
+#                 email=email,
+#                 phone=phone,
+#                 house_name=house_name,
+#                 district=district,
+#                 city=city,
+#                 pincode=pincode,
+#                 vehicle_type=vehicle_type,
+#                 vehicle_no=vehicle_no
+#             )
+            
+#             # Send email to the deliveryman
+#             subject = 'Welcome to the Delivery Service'
+#             message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
+#             send_mail(subject, message, 'your_email@example.com', [email])
+
+#             # Redirect to a success page after saving the delivery man
+#             return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
+
+#         except Exception as e:
+#             # Handle any exceptions
+#             print(f"Error: {e}")
+#             # Redirect to an error page or display an error message
+#             return redirect('Delivery_successfully_registerd') 
+
+#     return render(request, 'add_delivery_man.html')
 
 import csv
-import random
-import string
+import traceback
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
 from django.conf import settings
 from .models import DeliveryMan
+import random
+import string
 
 def add_delivery_man(request):
     if request.method == 'POST':
-        if 'csvFile' in request.FILES:  # Check if a CSV file is uploaded
-            csv_file = request.FILES['csvFile']
-            if not csv_file.name.endswith('.csv'):
-                return render(request, 'Delivery_successfully_registerd', {'error_message': 'Uploaded file is not a CSV'})
-
+        if 'csvFile' in request.FILES:  # If CSV file is uploaded
             try:
+                csv_file = request.FILES['csvFile']
                 decoded_file = csv_file.read().decode('utf-8').splitlines()
                 reader = csv.DictReader(decoded_file)
-
                 for row in reader:
-                    name = row.get('name')
-                    email = row.get('email')
-                    phone = row.get('phone')
-                    house_name = row.get('house_name')
-                    district = row.get('district')
-                    city = row.get('city')
-                    pincode = row.get('pincode')
-                    vehicle_type = row.get('vehicle_type')
-                    vehicle_no = row.get('vehicle_no')
-
-                    # Generate random password
-                    random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-
-                    # Create delivery man instance
-                    user = dealer.objects.create_user(
-                        username=email,
-                        email=email,
-                        password=random_password,
-                        role='deliveryman'
-                    )
-                    delivery_man = DeliveryMan.objects.create(
-                        name=name,
-                        email=email,
-                        phone=phone,
-                        house_name=house_name,
-                        district=district,
-                        city=city,
-                        pincode=pincode,
-                        vehicle_type=vehicle_type,
-                        vehicle_no=vehicle_no
-                    )
-
-                    # Send email to the deliveryman
-                    subject = 'Welcome to the Delivery Service'
-                    message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
-                    send_mail(subject, message, 'your_email@example.com', [email])
-
-                return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
-
+                    try:
+                        print("Reading CSV row:", row)  # Print the row being read
+                        delivery_man = DeliveryMan.objects.create(
+                            name=row['name'],
+                            email=row['email'],
+                            phone=row['phone'],
+                            house_name=row['house_name'],
+                            district=row['district'],
+                            city=row['city'],
+                            pincode=row['pincode'],
+                            vehicle_type=row['vehicle_type'],
+                            vehicle_no=row['vehicle_no']
+                        )
+                        print("Delivery man created:", delivery_man)  # Print the created delivery man object
+                    except Exception as e:
+                        print("Error creating delivery man:", e)  # Print any error that occurs during creation
+                        traceback.print_exc()  # Print the traceback for detailed error information
+                        error_message = str(e)
+                        return render(request, 'add_delivery_man.html', {'error_message': error_message})
+                return redirect('Delivery_successfully_registerd')  # Redirect to success page after all data is inserted
             except Exception as e:
-                print(f"Error processing CSV file: {e}")
-                return redirect('Delivery_successfully_registerd') 
-
-        else:
-            # Handle form data for manual entry as before
+                print("Error processing CSV file:", e)  # Print any error that occurs during CSV processing
+                traceback.print_exc()  # Print the traceback for detailed error information
+                error_message = str(e)
+                return render(request, 'add_delivery_man.html', {'error_message': error_message})
+        else:  # If form submission
             name = request.POST.get('name')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
@@ -1607,14 +1732,16 @@ def add_delivery_man(request):
             vehicle_type = request.POST.get('vehicle_type')
             vehicle_no = request.POST.get('vehicle_no')
 
+            # Generate random password
             random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
             try:
-                user = dealer.objects.create_user(
+                # Create user and delivery man instances
+                user = User.objects.create_user(
                     username=email,
                     email=email,
                     password=random_password,
-                    role='deliveryman'
+                    role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
                 )
                 delivery_man = DeliveryMan.objects.create(
                     name=name,
@@ -1628,17 +1755,25 @@ def add_delivery_man(request):
                     vehicle_no=vehicle_no
                 )
 
+                # Send email to the deliveryman
                 subject = 'Welcome to the Delivery Service'
                 message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
-                send_mail(subject, message, 'your_email@example.com', [email])
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [email])
 
-                return redirect('Delivery_successfully_registerd')
+                # Redirect to a success page after saving the delivery man
+                return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
 
             except Exception as e:
-                print(f"Error creating delivery man: {e}")
-                return render(request, 'Delivery_successfully_registerd')
+                # Handle any exceptions
+                print("Error creating delivery man:", e)  # Print any error that occurs during creation
+                traceback.print_exc()  # Print the traceback for detailed error information
+                error_message = str(e)
+                # Render the form page with the error message
+                return render(request, 'add_delivery_man.html', {'error_message': error_message})
 
     return render(request, 'add_delivery_man.html')
+
+
 
 
 
@@ -1649,6 +1784,9 @@ def add_delivery_man(request):
 def Delivery_successfully_registerd(request):
     return render(request, 'Delivery_successfully_registerd.html')
 
+def Delivery_unsuccessfully_registerd(request):
+    return render(request, 'Delivery_unsuccessfully_registerd.html')
+
 
 
 
@@ -1657,6 +1795,38 @@ def deliveryman_list(request):
     deliverymen = DeliveryMan.objects.all()
     return render(request, 'deliveryman_list.html', {'deliverymen': deliverymen})
 
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        user = request.user
+
+        # Check if the current password is correct
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+            return redirect('change_password')
+
+        # Check if the new passwords match
+        if new_password1 != new_password2:
+            messages.error(request, 'New passwords do not match.')
+            return redirect('change_password')
+
+        # Set the new password
+        user.set_password(new_password1)
+        user.save()
+
+        # Update session to prevent the user from being logged out
+        update_session_auth_hash(request, user)
+
+        messages.success(request, 'Password changed successfully.')
+        return redirect('deliveryman_account')  # Redirect to the appropriate URL after password change
+
     return render(request, 'change_password.html')

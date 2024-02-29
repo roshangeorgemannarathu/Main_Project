@@ -130,7 +130,7 @@
     <input type="submit" value="Add Delivery Man">
   </form>
 
-  <form id="csvForm" method="post" action="{% url 'add_delivery_man' %}" enctype="multipart/form-data">
+  <form id="csvForm" method="post" enctype="multipart/form-data" action="{% url 'add_delivery_man' %}">
     {% csrf_token %}
     <label for="csvFile">Import CSV File:</label>
     <input type="file" id="csvFile" name="csvFile" accept=".csv" required>

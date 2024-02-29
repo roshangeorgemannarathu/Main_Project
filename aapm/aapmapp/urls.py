@@ -118,6 +118,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('Delivery_successfully_registerd/', views.Delivery_successfully_registerd, name='Delivery_successfully_registerd'),
     path('deliveryman_list/', views.deliveryman_list, name='deliveryman_list'),
     path('change_password/', views.change_password, name='change_password'),
+    path('Delivery_unsuccessfully_registerd/', views.Delivery_unsuccessfully_registerd, name='Delivery_unsuccessfully_registerd'),
 
 
 
