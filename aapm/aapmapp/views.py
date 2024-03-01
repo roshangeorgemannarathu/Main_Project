@@ -1626,57 +1626,57 @@ def submit_review_aqu(request, aquarium_id):
 # import string
 
 # def add_delivery_man(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         email = request.POST.get('email')
-#         phone = request.POST.get('phone')
-#         house_name = request.POST.get('house_name')
-#         district = request.POST.get('district')
-#         city = request.POST.get('city')
-#         pincode = request.POST.get('pincode')
-#         vehicle_type = request.POST.get('vehicle_type')
-#         vehicle_no = request.POST.get('vehicle_no')
+    # if request.method == 'POST':
+    #     name = request.POST.get('name')
+    #     email = request.POST.get('email')
+    #     phone = request.POST.get('phone')
+    #     house_name = request.POST.get('house_name')
+    #     district = request.POST.get('district')
+    #     city = request.POST.get('city')
+    #     pincode = request.POST.get('pincode')
+    #     vehicle_type = request.POST.get('vehicle_type')
+    #     vehicle_no = request.POST.get('vehicle_no')
 
-#         # Generate random password
-#         random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    #     # Generate random password
+    #     random_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
-#         try:
-#             # Create delivery man instance
-#             # Create delivery man instance
-#             user = dealer.objects.create_user(
+    #     try:
+    #         # Create delivery man instance
+    #         # Create delivery man instance
+    #         user = dealer.objects.create_user(
             
-#                 username=email,
-#                 email=email,
-#                 password=random_password,
-#                 role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
-#             )
-#             delivery_man = DeliveryMan.objects.create(
-#                 name=name,
-#                 email=email,
-#                 phone=phone,
-#                 house_name=house_name,
-#                 district=district,
-#                 city=city,
-#                 pincode=pincode,
-#                 vehicle_type=vehicle_type,
-#                 vehicle_no=vehicle_no
-#             )
+    #             username=email,
+    #             email=email,
+    #             password=random_password,
+    #             role='deliveryman'  # Assuming 'deliveryman' is a string representing the role
+    #         )
+    #         delivery_man = DeliveryMan.objects.create(
+    #             name=name,
+    #             email=email,
+    #             phone=phone,
+    #             house_name=house_name,
+    #             district=district,
+    #             city=city,
+    #             pincode=pincode,
+    #             vehicle_type=vehicle_type,
+    #             vehicle_no=vehicle_no
+    #         )
             
-#             # Send email to the deliveryman
-#             subject = 'Welcome to the Delivery Service'
-#             message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
-#             send_mail(subject, message, 'your_email@example.com', [email])
+    #         # Send email to the deliveryman
+    #         subject = 'Welcome to the Delivery Service'
+    #         message = f"Hello {name},\n\nWelcome to the Delivery Service. Your login credentials are:\nUsername: {email}\nPassword: {random_password}\n\nLogin here: [http://127.0.0.1:8000/]\n\nThank you."
+    #         send_mail(subject, message, 'your_email@example.com', [email])
 
-#             # Redirect to a success page after saving the delivery man
-#             return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
+    #         # Redirect to a success page after saving the delivery man
+    #         return redirect('Delivery_successfully_registerd')  # Provide the name of your success URL
 
-#         except Exception as e:
-#             # Handle any exceptions
-#             print(f"Error: {e}")
-#             # Redirect to an error page or display an error message
-#             return redirect('Delivery_successfully_registerd') 
+    #     except Exception as e:
+    #         # Handle any exceptions
+    #         print(f"Error: {e}")
+    #         # Redirect to an error page or display an error message
+    #         return redirect('Delivery_successfully_registerd') 
 
-#     return render(request, 'add_delivery_man.html')
+    # return render(request, 'add_delivery_man.html')
 
 import csv
 import traceback
@@ -1722,6 +1722,8 @@ def add_delivery_man(request):
                 error_message = str(e)
                 return render(request, 'add_delivery_man.html', {'error_message': error_message})
         else:  # If form submission
+
+
             name = request.POST.get('name')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
@@ -1769,7 +1771,7 @@ def add_delivery_man(request):
                 traceback.print_exc()  # Print the traceback for detailed error information
                 error_message = str(e)
                 # Render the form page with the error message
-                return render(request, 'add_delivery_man.html', {'error_message': error_message})
+                return render(request, 'Delivery_unsuccessfully_registerd.html', {'error_message': error_message})
 
     return render(request, 'add_delivery_man.html')
 
