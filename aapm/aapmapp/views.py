@@ -118,6 +118,7 @@ def user_login(request):
 
 
 
+
 def user_logout(request):
     # Perform logout logic here
     # For example, you can clear session data
@@ -595,6 +596,9 @@ def usercustomer(request):
 
 
 
+
+
+
 @never_cache
 def customer_account(request):
     # Fetch all pets from the database
@@ -609,15 +613,66 @@ def customer_account(request):
     # Fetch all aquariums from the database
     aquariums = Aquarium.objects.all()
 
-
     # Check if any of the aquariums are already sold
     for aquarium in aquariums:
         if Userpayment_aquarium.objects.filter(item=aquarium).exists():
             aquarium.status = 'sold'
             aquarium.save()
 
+    # Try to fetch user profile information
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        full_name = user_profile.fullname
+        if user_profile.photo:
+            photo_url = user_profile.photo.url
+        else:
+            # Provide a default photo URL or handle it accordingly
+            photo_url = '/path/to/default/photo.jpg'  # Adjust this path as needed
+    except UserProfile.DoesNotExist:
+        # Handle the case where no UserProfile object is found for the user
+        full_name = ''
+        photo_url = ''
+    except UserProfile.MultipleObjectsReturned:
+        # Handle the case where multiple UserProfile objects are found for the user
+        # You might want to log this error or handle it differently based on your application's requirements
+        full_name = ''
+        photo_url = ''
+    
+    context = {
+        'full_name': full_name,
+        'photo_url': photo_url,
+        'pets': pets,
+        'aquariums': aquariums
+    }
+
     # Render the template with the updated pet and aquarium status
-    return render(request, 'customer_account.html', {'pets': pets, 'aquariums': aquariums})
+    return render(request, 'customer_account.html', context)
+
+
+
+# def customer_account(request):
+#     # Fetch all pets from the database
+#     pets = Pet.objects.all()
+
+#     # Check if any of the pets are already sold
+#     for pet in pets:
+#         if Userpayment.objects.filter(item=pet).exists():
+#             pet.status = 'sold'
+#             pet.save()
+
+#     # Fetch all aquariums from the database
+#     aquariums = Aquarium.objects.all()
+
+
+#     # Check if any of the aquariums are already sold
+#     for aquarium in aquariums:
+#         if Userpayment_aquarium.objects.filter(item=aquarium).exists():
+#             aquarium.status = 'sold'
+#             aquarium.save()
+
+#     # Render the template with the updated pet and aquarium status
+            
+#     return render(request, 'customer_account.html', {'pets': pets, 'aquariums': aquariums})
 
 @never_cache
 def dealer_account(request):
@@ -1186,9 +1241,9 @@ def payment_successful(request):
         # Invalid request method
         return HttpResponse(status=400)
     
-def deliveryman_account(request):
-    # Your view logic here
-     return render(request, 'deliveryman_account.html')
+# def deliveryman_account(request):
+#     # Your view logic here
+#      return render(request, 'deliveryman_account.html')
     
    
 
@@ -1582,21 +1637,123 @@ def submit_review_aqu(request, aquarium_id):
 
 
 
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.models import User
+# from django.core.mail import send_mail
+# from django.conf import settings
+# import csv
+# from .models import DeliveryMan, dealer
+# import random
+# import string
+# from django.contrib.auth.tokens import PasswordResetTokenGenerator
+# from django.utils.http import urlsafe_base64_encode
+# from django.utils.encoding import force_bytes
+# from django.urls import reverse
+# from django.core.mail import send_mail
+# from django.conf import settings
+# from django.urls import reverse
+
+# # Define a function to generate a temporary password
+# def generate_temporary_password():
+#     # Generate a random password of length 10
+#     temporary_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+#     return temporary_password
+
+# class CustomTokenGenerator(PasswordResetTokenGenerator):
+#     def _make_hash_value(self, user, timestamp):
+#         return (
+#             str(user.pk) + str(timestamp) + str(user.email)
+#         )
+
+# def send_login_email(delivery_man, temporary_password, request):
+#     subject = 'Your account has been created'
+#     # Generate unique token for login link using custom token generator
+#     token_generator = CustomTokenGenerator()
+#     token = token_generator.make_token(delivery_man)
+#     uid = urlsafe_base64_encode(force_bytes(delivery_man.pk))
+#     # Construct login link
+#     login_link = request.build_absolute_uri(reverse('login')) + f'?uid={uid}&token={token}'
+#     message = f'Hi {delivery_man.name},\n\nYour account has been created successfully. You can login using the following link:\n{login_link}\n\nUsername: {delivery_man.email}\nTemporary Password: {temporary_password}\n\nPlease login to your account and change your password.\n\nBest regards,\nYour Company Name'
+#     email_from = settings.EMAIL_HOST_USER
+#     recipient_list = [delivery_man.email]
+#     send_mail(subject, message, email_from, recipient_list)
+
+
+# def add_delivery_man(request):
+#     if request.method == 'POST':
+#         if 'csvFile' in request.FILES:  # If CSV file is uploaded
+#             csv_file = request.FILES['csvFile']
+#             decoded_file = csv_file.read().decode('utf-8').splitlines()
+#             csv_reader = csv.reader(decoded_file)
+#             for row in csv_reader:
+#                 name, email, phone, house_name, district, city, pincode, vehicle_type, vehicle_no = row
+#                 delivery_man = DeliveryMan.objects.create(
+#                     name=name,
+#                     email=email,
+#                     phone=phone,
+#                     house_name=house_name,
+#                     district=district,
+#                     city=city,
+#                     pincode=pincode,
+#                     vehicle_type=vehicle_type,
+#                     vehicle_no=vehicle_no
+#                 )
+#                 temporary_password = generate_temporary_password()  # Generate temporary password
+#                 send_login_email(delivery_man, temporary_password, request)  # Send login email with temporary password
+#             return redirect('admin_dashboard')
+#         else:  # If form is submitted
+#             name = request.POST.get('name')
+#             email = request.POST.get('email')
+#             phone = request.POST.get('phone')
+#             house_name = request.POST.get('house_name')
+#             district = request.POST.get('district')
+#             city = request.POST.get('city')
+#             pincode = request.POST.get('pincode')
+#             vehicle_type = request.POST.get('vehicle_type')
+#             vehicle_no = request.POST.get('vehicle_no')
+#             # Check if dealer with same email already exists
+#             existing_dealer = dealer.objects.filter(email=email).first()
+#             if existing_dealer:
+#                 # Update existing dealer object
+#                 existing_dealer.fullname = name
+#                 existing_dealer.save()
+#             else:
+#                 # Create new dealer object
+#                 dealer_obj = dealer.objects.create(
+#                     email=email,
+#                     username=email,
+#                     fullname=name,
+#                     role="deliveryman"
+#                 )
+#                 dealer_obj.set_password('temporary_password')  # Set temporary password
+#                 dealer_obj.save()
+#             delivery_man = DeliveryMan.objects.create(
+#                 name=name,
+#                 email=email,
+#                 phone=phone,
+#                 house_name=house_name,
+#                 district=district,
+#                 city=city,
+#                 pincode=pincode,
+#                 vehicle_type=vehicle_type,
+#                 vehicle_no=vehicle_no
+#             )
+#             temporary_password = generate_temporary_password()  # Generate temporary password
+#             send_login_email(delivery_man, temporary_password, request)  # Send login email with temporary password
+#             return redirect('admin_dashboard')
+#     return render(request, 'add_delivery_man.html')
+
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.conf import settings
-import csv
-from .models import DeliveryMan, dealer
-import random
-import string
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
-from django.urls import reverse
+import csv
+import random
+import string
+from .models import DeliveryMan, dealer
 
 # Define a function to generate a temporary password
 def generate_temporary_password():
@@ -1623,7 +1780,6 @@ def send_login_email(delivery_man, temporary_password, request):
     recipient_list = [delivery_man.email]
     send_mail(subject, message, email_from, recipient_list)
 
-
 def add_delivery_man(request):
     if request.method == 'POST':
         if 'csvFile' in request.FILES:  # If CSV file is uploaded
@@ -1632,6 +1788,21 @@ def add_delivery_man(request):
             csv_reader = csv.reader(decoded_file)
             for row in csv_reader:
                 name, email, phone, house_name, district, city, pincode, vehicle_type, vehicle_no = row
+                # Check if dealer with same email already exists
+                existing_dealer = dealer.objects.filter(email=email).first()
+                if existing_dealer:
+                    # Update existing dealer object
+                    existing_dealer.fullname = name
+                    existing_dealer.save()
+                else:
+                    # Create new dealer object
+                    dealer_obj = dealer.objects.create(
+                        email=email,
+                        username=email,
+                        fullname=name,
+                        role="deliveryman"
+                    )
+
                 delivery_man = DeliveryMan.objects.create(
                     name=name,
                     email=email,
@@ -1656,22 +1827,17 @@ def add_delivery_man(request):
             pincode = request.POST.get('pincode')
             vehicle_type = request.POST.get('vehicle_type')
             vehicle_no = request.POST.get('vehicle_no')
-            # Check if dealer with same email already exists
-            existing_dealer = dealer.objects.filter(email=email).first()
-            if existing_dealer:
+
+            dealer_obj, created = dealer.objects.get_or_create(
+                email=email,
+                defaults={'username': email, 'fullname': name, 'role': "deliveryman"}
+            )
+            if not created:
                 # Update existing dealer object
-                existing_dealer.fullname = name
-                existing_dealer.save()
-            else:
-                # Create new dealer object
-                dealer_obj = dealer.objects.create(
-                    email=email,
-                    username=email,
-                    fullname=name,
-                    role="deliveryman"
-                )
-                dealer_obj.set_password('temporary_password')  # Set temporary password
+                dealer_obj.fullname = name
                 dealer_obj.save()
+
+            # Create DeliveryMan object
             delivery_man = DeliveryMan.objects.create(
                 name=name,
                 email=email,
@@ -1683,10 +1849,32 @@ def add_delivery_man(request):
                 vehicle_type=vehicle_type,
                 vehicle_no=vehicle_no
             )
-            temporary_password = generate_temporary_password()  # Generate temporary password
-            send_login_email(delivery_man, temporary_password, request)  # Send login email with temporary password
+
+            # Generate temporary password
+            temporary_password = generate_temporary_password()
+
+            # Set temporary password for dealer object
+            dealer_obj.set_password(temporary_password)
+            dealer_obj.save()
+
+            # Send login email with temporary password
+            send_login_email(delivery_man, temporary_password, request)
+
             return redirect('admin_dashboard')
+
     return render(request, 'add_delivery_man.html')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1751,3 +1939,54 @@ def change_password(request):
         return redirect('deliveryman_account')  # Redirect to the appropriate URL after password change
 
     return render(request, 'change_password.html')
+
+from django.shortcuts import render
+from django.http import JsonResponse
+
+# Placeholder function for simulating fish species prediction
+def predict_fish_species(image):
+    # Simulate prediction result
+    return "Simulated Fish Species"
+
+# Placeholder function for simulating grouping of compatible species
+def group_compatible_species(species):
+    # Simulate grouping of compatible species
+    return ["Simulated Species 1", "Simulated Species 2", "Simulated Species 3"]
+
+def home(request):
+    return render(request, 'home.html')
+
+def predict(request):
+    if request.method == 'POST' and request.FILES['image']:
+        image = request.FILES['image']
+        
+        # Simulate prediction using the placeholder function
+        predicted_species = predict_fish_species(image)
+        
+        # Return the simulated predicted species as JSON response
+        return JsonResponse({'predicted_species': predicted_species})
+    else:
+        return JsonResponse({'error': 'No image file uploaded'})
+
+def group_species(request):
+    if request.method == 'POST' and 'species' in request.POST:
+        species = request.POST['species']
+        
+        # Simulate grouping of compatible species using the placeholder function
+        grouped_species = group_compatible_species(species)
+        
+        # Return the simulated grouped species as JSON response
+        return JsonResponse({'grouped_species': grouped_species})
+    else:
+        return JsonResponse({'error': 'No species provided'})
+    
+def upload_csv(request):
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        # Handle the uploaded CSV file here
+        csv_file = request.FILES['csv_file']
+        # Process the CSV file data
+        
+        # Render success message or perform other operations
+        return render(request, 'upload_csv.html', {'success_message': 'CSV file uploaded successfully'})
+    else:
+        return render(request, 'upload_csv.html')

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Identification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: white; /* Change header text color to white */
+        }
+
+        .go-back-home {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .go-back-home:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-button {
+            display: block;
+            width: 100%;
+            padding: 8px 0;
+            background-color: #4CAF50; /* Green for "Upload Image" button */
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .upload-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .upload-text {
+            margin-right: 20px;
+        }
+
+        .identify-button {
+            display: block;
+            width: calc(50% ); /* Reduced length of "Identify Fish" button */
+            margin: 8px auto; /* Center the button */
+            padding: 8px 0;
+            background-color: #FF0000; /* Red for "Identify Fish" button */
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .identify-button:hover {
+            background-color: #e60000; /* Darker red on hover */
+        }
+
+        .group-button {
+            display: block;
+            width: calc(50% ); /* Reduced length of "Group Species" button */
+            margin: 8px auto; /* Center the button */
+            padding: 8px 0;
+            background-color: #007bff; /* Blue for "Group Species" button */
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .group-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        #result {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        .error-message {
+            color: #ff0000;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <center><h1>Fish Identification</h1></center>
+        <button class="go-back-home" onclick="window.location.href='{% url 'customer_account' %}'">Go Back Home</button>
+    </div>
+    <div class="container">
+        <form id="uploadForm">
+            <!-- Hidden file input -->
+            <input type="file" id="imageInput" accept="image/*" required>
+            <!-- Visible upload button text, clicking on this will trigger file input -->
+            <label for="imageInput" class="upload-button">
+                <span class="upload-text">Upload Image</span>
+                <span class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></span>
+            </label>
+            <div class="error-message" id="errorMessage"></div>
+            <button type="submit" class="identify-button">Identify Fish</button>
+            <button type="button" class="group-button">Group the Identified Species With</button>
+        </form>
+        <div id="result"></div>
+        <img id="imagePreview" src="#" alt="Preview">
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var fileInput = document.getElementById('imageInput');
+            var errorMessage = document.getElementById('errorMessage');
+            var imagePreview = document.getElementById('imagePreview');
+            var resultDiv = document.getElementById('result');
+
+            // Check if a file is selected
+            if (!fileInput.files || !fileInput.files[0]) {
+                errorMessage.innerText = 'Please select an image file.';
+                return;
+            }
+
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+
+                // Perform prediction
+                // You can send the image to your backend server for prediction using AJAX or fetch API
+                // Here you can display the result received from the server
+                resultDiv.innerText = 'Predicted fish species: ...'; // Update this line with actual prediction result
+            }
+
+            reader.readAsDataURL(file);
+            errorMessage.innerText = ''; // Clear any previous error messages
+        });
+    </script>
+</body>
+</html>

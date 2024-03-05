@@ -111,7 +111,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu'),
      path('add_to_cart/<str:category>/<int:item_id>/',views. add_to_cart, name='add_to_cart'),
 
-
+    path('upload_csv', views.upload_csv, name='upload_csv'),
     # path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
      path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
     # path('import_delivery_men/', views.import_delivery_men, name='import_delivery_men'),
@@ -119,8 +119,11 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('deliveryman_list/', views.deliveryman_list, name='deliveryman_list'),
     path('change_password/', views.change_password, name='change_password'),
     path('Delivery_unsuccessfully_registerd/', views.Delivery_unsuccessfully_registerd, name='Delivery_unsuccessfully_registerd'),
-
-
+    path('home/', views.home, name='home'),
+    path('predict/', views.predict, name='predict'),
+    path('group_species/', views.group_species, name='group_species')
+    
+    
 
  
 
