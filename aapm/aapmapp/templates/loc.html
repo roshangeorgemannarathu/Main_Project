@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geolocation Map</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="details"></div>
+
+    <script>
+        var reqcount = 0;
+        var details = document.getElementById("details");
+        var map;
+
+        function initializeMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 0, lng: 0}, // Initial center at (0, 0)
+                zoom: 8 // Initial zoom level
+            });
+
+            // Call successCallback after map initialization
+            successCallback();
+        }
+
+        function loadGoogleMapsScript() {
+            var script = document.createElement("script");
+            script.src = "https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initializeMap";
+            script.defer = true;
+            script.async = true;
+            document.body.appendChild(script);
+        }
+
+        function successCallback(position) {
+            if (position) {
+                const { accuracy, latitude, longitude, altitude, heading, speed } = position.coords;
+                reqcount++;
+                details.innerHTML = "Accuracy: " + accuracy + "<br>";
+                details.innerHTML += "Latitude: " + latitude + " | Longitude: " + longitude + "<br>";
+                details.innerHTML += "Altitude: " + altitude + "<br>";
+                details.innerHTML += "Heading: " + heading + "<br>";
+                details.innerHTML += "Speed: " + speed + "<br>";
+                details.innerHTML += "reqcount: " + reqcount;
+
+                // Update map center to the received coordinates
+                var location = new google.maps.LatLng(latitude, longitude);
+                map.setCenter(location);
+
+                // Optionally, you can add a marker at the received coordinates
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+
+                // Fetch location name using APIIP
+                fetchLocationName(latitude, longitude);
+            } else {
+                // Handle error or default behavior
+            }
+        }
+
+        function errorCallback(error) {
+            // Handle errors here if needed
+            console.error("Geolocation error:", error);
+        }
+
+        function fetchLocationName(latitude, longitude) {
+            // Fetch location name using APIIP
+            fetch("https://api.ipapi.com/api/" + latitude + "," + longitude + "?access_key=f5645d36-7b19-408c-92f2-79510abcd4fd")
+            .then(response => response.json())
+            .then(data => {
+                var locationName = data.city; // You can use other properties as needed
+                if (locationName) {
+                    details.innerHTML += "Location Name: " + locationName + "<br>";
+                } else {
+                    details.innerHTML += "Location Name: Not Available<br>";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching location name:", error);
+                details.innerHTML += "Location Name: Not Available<br>";
+            });
+        }
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        navigator.geolocation.watchPosition(successCallback, errorCallback, options);
+
+        // Load Google Maps asynchronously
+        loadGoogleMapsScript();
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliveryman Account</title>
+    <style>
+        /* Header styles */
+        header {
+            background-color: #232f3e;
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header .home-btn {
+            background-color: #ff9900;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        header .home-btn:hover {
+            background-color: #e68a00;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Action button styles */
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-btn.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .action-btn.unselected {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Orders</h1>
+        <button class="home-btn" onclick="goHome()">Go Back Home</button>
+    </header>
+
+    <!-- User Payments table -->
+    <h2>Delivery for Pets</h2>
+    <table>
+        <form id="selected-items-form" action="{% url 'process_selected_items' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="selected_items" id="selected-items-input">
+        
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Order ID</th>
+                <th>Item</th>
+                <th>Status</th> <!-- New column -->
+                <th>Action</th> <!-- New column for action button -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in user_payments %}
+            <tr>
+                <td>{{ payment.user.fullname }}</td>
+                <td>{{ payment.user.address }}</td>
+                <td>{{ payment.user.phone_number }}</td>
+                <td>{{ payment.user.email }}</td>
+                <td>{{ payment.order_id_data }}</td>
+                <td>{{ payment.item }}</td>
+                <td>{{ payment.status }}</td> <!-- Display status -->
+                <td><button class="action-btn unselected" onclick="toggleSelection(this)">&#10007;</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </form>
+
+    </table>
+
+    <!-- User Aquarium Payments table -->
+    <h2>Delivery for Aquarium</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Order ID</th>
+                <th>Item</th>
+                <th>Status</th> <!-- New column -->
+                <th>Action</th> <!-- New column for action button -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in user_aquarium_payments %}
+            <tr>
+                <td>{{ payment.user.fullname }}</td>
+                <td>{{ payment.user.address }}</td>
+                <td>{{ payment.user.phone_number }}</td>
+                <td>{{ payment.user.email }}</td>
+                <td>{{ payment.order_id_data }}</td>
+                <td>{{ payment.item }}</td>
+                <td>{{ payment.status }}</td> <!-- Display status -->
+                <td><button class="action-btn unselected" onclick="toggleSelection(this)">&#10007;</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button onclick="submitSelectedItems()">Process Selected Items</button>
+
+    <script>
+        // JavaScript function to go back home
+        function goHome() {
+            window.location.href = "{% url 'deliveryman_account' %}"; // Replace "/" with the URL of your home page
+        }
+
+        // Function to toggle selection of action button
+        function toggleSelection(button) {
+            if (button.classList.contains('selected')) {
+                button.innerHTML = '&#10007;'; // Change to X mark
+                button.classList.remove('selected');
+                button.classList.add('unselected');
+            } else {
+                button.innerHTML = '&#10003;'; // Change to tick mark
+                button.classList.remove('unselected');
+                button.classList.add('selected');
+            }
+        }
+
+        // Function to submit selected items
+        function submitSelectedItems() {
+            // Get all selected action buttons
+            var selectedButtons = document.querySelectorAll('.action-btn.selected');
+            // Prepare selected items as a comma-separated string
+            var selectedItems = Array.from(selectedButtons).map(button => {
+                var row = button.closest('tr');
+                var orderId = row.querySelector('td:nth-child(5)').textContent;
+                var itemName = row.querySelector('td:nth-child(6)').textContent;
+                var status = row.querySelector('td:nth-child(7)').textContent;
+                return `${orderId},${itemName},${status}`;
+            }).join(';');
+            // Set the value of selected-items-input to selectedItems
+            document.getElementById('selected-items-input').value = selectedItems;
+            // Submit the form
+            document.getElementById('selected-items-form').submit();
+        }
+    </script>
+</body>
+</html>

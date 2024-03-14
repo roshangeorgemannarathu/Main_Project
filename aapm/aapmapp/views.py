@@ -946,8 +946,12 @@ def add_to_cart(request, category, item_id):
     return redirect('pet_details', pet_id=item_id)
 
 
+from django.shortcuts import render, get_object_or_404
+from django.conf import settings
+from .models import Pet
+
 def pet_details(request, pet_id):
-    request.session['pet_id'] = pet_id
+    # Assuming you have a Pet model with a location field
     pet = get_object_or_404(Pet, id=pet_id)
     currency = 'INR'
 
@@ -968,7 +972,10 @@ def pet_details(request, pet_id):
     context['currency'] = currency
     context['callback_url'] = callback_url
     context['pet'] = pet
+    context['location'] = pet.location  # Add location to context
+    
     return render(request, 'pet_details.html', context=context)
+
 
 
 
@@ -1310,25 +1317,28 @@ from .models import UserProfile
 
 @login_required
 def deliveryman_account(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
+    user_profiles = UserProfile.objects.filter(user=request.user)
+    if user_profiles.exists():
+        # If there are multiple UserProfile objects, get the first one
+        user_profile = user_profiles.first()
         full_name = user_profile.fullname
         if user_profile.photo:
             photo_url = user_profile.photo.url
         else:
             # Provide a default photo URL or handle it accordingly
             photo_url = '/path/to/default/photo.jpg'  # Adjust this path as needed
-    except UserProfile.DoesNotExist:
+    else:
         # Handle the case where the user has no profile
         full_name = ''
         photo_url = ''
-    
+
     context = {
         'full_name': full_name,
         'photo_url': photo_url
     }
-    
+
     return render(request, 'deliveryman_account.html', context)
+
 
 
 
@@ -1990,3 +2000,119 @@ def upload_csv(request):
         return render(request, 'upload_csv.html', {'success_message': 'CSV file uploaded successfully'})
     else:
         return render(request, 'upload_csv.html')
+    
+
+    # views.py
+
+from django.shortcuts import render
+from .models import Pet, Aquarium
+
+def search_results(request):
+    # Retrieve the search query from the GET parameters
+    query = request.GET.get('query')
+
+    # Perform the search logic
+    pets = Pet.objects.filter(pet_breed__icontains=query) | Pet.objects.filter(pet_description__icontains=query)
+    aquariums = Aquarium.objects.filter(name__icontains=query) | Aquarium.objects.filter(description__icontains=query)
+
+    # Pass the search results to the template
+    context = {
+        'query': query,
+        'pets': pets,
+        'aquariums': aquariums,
+    }
+    
+    return render(request, 'customer_account.html', context)
+
+
+@never_cache
+@login_required
+def chatbot_redirect(request):
+    if request.method == 'POST':
+        message = request.POST.get('message')
+
+        # Check if the message is a greeting
+        if message.lower() in ['hello', 'hai', 'hi', 'hola']:
+            response_message = "How can I help you?"
+            return JsonResponse({'response_message': response_message})
+
+        # Check if the message contains the word 'packages' or 'package'
+        if 'packages' in message.lower() or 'package' in message.lower():
+            # If 'packages' is found in the message, construct the response with a link to view packages
+            view_packages_link = reverse('matdest:view_packages')
+            booked_packages_link = reverse('matdest:my_packages')
+
+            response_message = "Here are some matching links:<br>"
+            response_message += f"<a href='{view_packages_link}'>View Packages</a><br>"
+            response_message += f"<a href='{booked_packages_link}'>Show Booked Packages</a>"
+            return JsonResponse({'response_message': response_message})
+
+        # Implement your logic here to determine the redirect URL based on the message
+        if message.lower() == 'premium':
+            response_message = "Click to get more details of premium: <a href='{}'>Premium</a>".format(reverse('matpayment:view_premium'))
+            return JsonResponse({'response_message': response_message})
+        
+        if message.lower() == 'booking':
+            response_message = "Click to get more details of booked packages: <a href='{}'>My Bookings</a>".format(reverse('matdest:my_packages'))
+            return JsonResponse({'response_message': response_message})
+        
+        if 'chat' in message.lower() or 'chats' in message.lower() or 'message' in message.lower():
+            response_message = "Click to get mychats: <a href='{}'>Chats</a>".format(reverse('matchat:mychats'))
+            return JsonResponse({'response_message': response_message})
+        else:
+            redirect_url = '/path/to/default/view/'  # Replace with the default URL
+
+        # If the message doesn't match any predefined responses, construct a default response
+        default_response = "Sorry, your query didn't match any of our options."
+        return JsonResponse({'response_message': default_response})
+    else:
+        # If the request method is not POST, return an error response
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+@never_cache
+def location(request):
+        return render(request, 'location.html')
+
+@never_cache
+def loc(request):
+        return render(request, 'loc.html')
+
+from django.shortcuts import render
+from .models import Userpayment, Userpayment_aquarium
+
+def del_orders(request):
+    # Fetch data from both models along with customer details
+    user_payments = Userpayment.objects.select_related('user').all()
+    user_aquarium_payments = Userpayment_aquarium.objects.select_related('user').all()
+
+    context = {
+        'user_payments': user_payments,
+        'user_aquarium_payments': user_aquarium_payments
+    }
+    return render(request, 'del_orders.html', context)
+
+@never_cache
+def your_deliveries(request):
+        return render(request, 'your_deliveries.html')
+
+
+from .models import SelectedItem
+
+def process_selected_items(request):
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('selected_items')
+        # Save selected items to the database
+        for item in selected_items:
+            user, order_id, item_name, status = item.split(',')
+            SelectedItem.objects.create(
+                user=request.user,
+                order_id=order_id,
+                item=item_name,
+                status=status
+            )
+        # Redirect to a new page or render a new template
+        return redirect('your_deliveries')  # Change 'selected_items_page' to the name of the view for the new page
+    else:
+        return redirect('deliveryman_account')  # Redirect to the deliveryman account page if request method is not POST
+

@@ -121,6 +121,7 @@ class Userpayment_aquarium(models.Model):
     order_id_data = models.TextField(default="empty")
     payment_id_data = models.TextField(default="empty")
     item = models.ForeignKey(Aquarium,on_delete=models.CASCADE, null=False) 
+    status = models.TextField(default="active") 
 
     def __str__(self):
         return f"Payment {self.id} - {self.user_profile.fullname}"  # Assuming UserProfile has a 'fullname' field
@@ -179,3 +180,11 @@ class DeliveryMan(models.Model):
 
      def __str__(self):
         return self.name   
+     
+
+
+class SelectedItem(models.Model):
+    user = models.ForeignKey(DeliveryMan, on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=100)
+    item = models.CharField(max_length=255)
+    status = models.CharField(max_length=100)

@@ -128,11 +128,13 @@
                 <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="product-img">
                 <p>Category: {{ pet.get_category_display }}</p>
                 <p>Breed: {{ pet.pet_breed }}</p>
-                <p>Age: {{ pet.pet_age }}</p>
+                {% comment %} <p>Age: {{ pet.pet_age }}</p> {% endcomment %}
                 <p>Description: {{ pet.pet_description }}</p>
                 <p>Price: Rs{{ pet.price }}</p>
                 <p>Quantity: {{ pet.quantity }}</p>
                 <p>Location: {{ pet.location }}</p>
+                <button id="showMapBtn" class="btn btn-primary" {% if pet.location %} onclick="showMap()" {% else %} disabled {% endif %}>Show Location on Map</button>
+
 
                 <div class="btn-container">
                     <form method="post" action="{% url 'add_to_cart' category='pet' item_id=pet.id %}" style="margin-right: 5px;">
@@ -202,6 +204,24 @@
                 window.history.back();
             });
         });
+
+
+        function showMap() {
+            var location = "{{ pet.location }}"; // Get the location from your Django template
+            console.log("Location:", location); // Log the location variable
+            
+            // Encode the location for URL
+            var encodedLocation = encodeURIComponent(location);
+            console.log("Encoded Location:", encodedLocation); // Log the encoded location
+            
+            // Construct the URL for Google Maps
+            var mapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedLocation;
+            console.log("Map URL:", mapUrl); // Log the constructed map URL
+            
+            // Open the map in a new tab
+            window.open(mapUrl, '_blank');
+        }
+        
     </script>
 </body>
 

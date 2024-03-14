@@ -121,9 +121,15 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('Delivery_unsuccessfully_registerd/', views.Delivery_unsuccessfully_registerd, name='Delivery_unsuccessfully_registerd'),
     path('home/', views.home, name='home'),
     path('predict/', views.predict, name='predict'),
-    path('group_species/', views.group_species, name='group_species')
-    
-    
+    path('group_species/', views.group_species, name='group_species'),
+    path('search/', views.search_results, name='search_results'),
+    path('chatbot/', views.chatbot_redirect, name='chatbot_redirect'),
+    path('location/', views.location, name='location'),
+    path('loc/', views.loc, name='loc'),
+    path('del_orders/', views.del_orders, name='del_orders'),
+    path('your_deliveries/', views.your_deliveries, name='your_deliveries'),
+    path('process_selected_items/', views.process_selected_items, name='process_selected_items'),
+
 
  
 

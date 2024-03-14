@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'aapmapp'
+    
 ]
 
 MIDDLEWARE = [
@@ -143,6 +144,7 @@ EMAIL_HOST_PASSWORD = 'mndl sjyz dybm ezbd'
 
 RAZOR_KEY_ID  = 'rzp_test_KPliOP7waiGNR8'
 RAZOR_KEY_SECRET = 'ehsJBVnmAmuDFkFbXIsi2Gm3'
+
 
 
  

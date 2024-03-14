@@ -5,6 +5,8 @@
 
 <head>
 
+    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -62,6 +64,18 @@ https://templatemo.com/tm-571-hexashop
             height: 100%;
             object-fit: cover;
         }
+
+       
+        .product-item {
+            position: relative; /* Add position relative to the product item */
+        }
+        .search-bar{
+            
+        }
+       
+       
+        
+       
     </style>
 </head>
 
@@ -110,11 +124,34 @@ https://templatemo.com/tm-571-hexashop
                 </div>
             </div>
         </div>
+        <!-- ***** Search Bar Start ***** -->
+<div class="search-bar">
+    <form action="{% url 'search_results' %}" method="GET">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+</div>
+<!-- ***** Search Bar End ***** -->
+
     </header>
     <!-- ***** Header Area End ***** -->
+
+
+    <!-- ***** Search Bar Start ***** -->
+    {% comment %} <div class="search-bar">
+        <form action="{% url 'search_results' %}" method="GET">
+            <input type="text" name="query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div> {% endcomment %}
+    <!-- ***** Search Bar End ***** -->
    
 
     <!-- ***** Main Banner Area Start ***** -->
+
+   
+
+    
 
     <div class="main-banner" id="Home">
         <div class="container-fluid">
@@ -126,7 +163,7 @@ https://templatemo.com/tm-571-hexashop
                                 <h1>Aquarium</h1>
                                 <span>" Dive into a world of exquisite aquariums, where you can find the perfect aquatic haven for your finned friends. "</span>
                                 <div class="main-border-button">
-                                    <a href="#">Purchase Now</a>
+                                    <a href="#"></a>
                                 </div>
                             </div>
                             <img src="{% static 'aapmapp/images/aqua2.jpg' %}" alt="">
@@ -148,7 +185,7 @@ https://templatemo.com/tm-571-hexashop
                                                 <h4>Cats</h4>
                                                 <p>"Explore our avian collection, offering a delightful range of feathered friends to brighten your home and life."</p>
                                                 <div class="main-border-button">
-                                                    <a href="#">Purchase Now</a>
+                                                    <a href="#"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,7 +205,7 @@ https://templatemo.com/tm-571-hexashop
                                                 <h4>Fish</h4>
                                                 <p>"Discover a diverse selection of vibrant and healthy fish for your aquarium, carefully curated to bring aquatic beauty to your home."</p>
                                                 <div class="main-border-button">
-                                                    <a href="#">Purchase Now</a>
+                                                    <a href="#"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -188,7 +225,7 @@ https://templatemo.com/tm-571-hexashop
                                                 <h4>Dogs</h4>
                                                 <p>"Explore our avian collection, offering a delightful range of feathered friends to brighten your home and life."</p>
                                                 <div class="main-border-button">
-                                                    <a href="#">Purchase Now</a>
+                                                    <a href="#"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,7 +247,7 @@ https://templatemo.com/tm-571-hexashop
                                                 <h4>Birds</h4>
                                                 <p>"Find your furry family member among our charming domestic animals, ready to bring joy and companionship to your home."</p>
                                                 <div class="main-border-button">
-                                                    <a href="#">Purchse Now</a>
+                                                    <a href="#"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -255,8 +292,8 @@ https://templatemo.com/tm-571-hexashop
                                 {% csrf_token %}
                                 <input type="hidden" name="item_id" value="{{ pet.id }}">
                                 <input type="hidden" name="item_type" value="pet">
-                                <button type="submit">Purchase Now</button>
-                            </form>
+                                <button type="submit" class="purchase-now">Purchase Now</button>
+                            </form><br><br>
                             {% endif %}
                         </div>
                     </div>
@@ -266,7 +303,7 @@ https://templatemo.com/tm-571-hexashop
         </div>
     </section>
     <!-- ***** Pets Area Ends ***** -->
-
+<br><br>
     <!-- ***** Aquarium Area Starts ***** -->
     <section class="section" id="Aquarium">
         <div class="container">
@@ -300,7 +337,7 @@ https://templatemo.com/tm-571-hexashop
                                 {% csrf_token %}
                                 <input type="hidden" name="item_id" value="{{ aquarium.id }}">
                                 <input type="hidden" name="item_type" value="aquarium">
-                                <button type="submit">Purchase Now</button>
+                                <button type="submit" class="purchase-now">Purchase Now</button>
                             </form>
                             {% endif %}
                         </div>
@@ -362,6 +399,27 @@ https://templatemo.com/tm-571-hexashop
     </section>
     <!-- ***** Explore Area Ends ***** -->
 
+
+<!-- Chatbot Interface -->
+<div class="chat-icon">
+    <img src='{% static 'aapmapp/images/chatbot.png' %}' alt="Chatbot Icon" id="chat-icon">
+</div>
+<div class="chat-box" id="chat-box">
+    <div class="chat-container" id="chat-container">
+        <!-- Chat messages will be appended here -->
+    </div>
+    <input type="text" id="user-input" placeholder="Type a message...">
+    <button id="send-btn">Send</button>
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+<!-- Your existing script imports -->
+<script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+
+
+
     <!-- ***** Footer Start ***** -->
     <footer>
 
@@ -422,6 +480,48 @@ https://templatemo.com/tm-571-hexashop
                 };
             }
         }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var chatIcon = document.getElementById('chat-icon');
+            var chatBox = document.getElementById('chat-box');
+            var userInput = document.getElementById('user-input');
+            var sendButton = document.getElementById('send-btn');
+            var chatContainer = document.getElementById('chat-container');
+
+            // Toggle chat box visibility when the chat icon is clicked
+            chatIcon.addEventListener('click', function () {
+                chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Function to append user and bot messages to the chat container
+            function appendMessage(sender, message) {
+                var messageElement = document.createElement('div');
+                messageElement.className = sender === 'user' ? 'user-message' : 'bot-message';
+                messageElement.textContent = message;
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+            }
+
+            // Send user message to chatbot when Send button is clicked
+            sendButton.addEventListener('click', function () {
+                var message = userInput.value.trim();
+                if (message !== '') {
+                    appendMessage('user', message);
+                    // Here you can send the user message to your chatbot backend for processing
+                    // After receiving the response, append it to the chat container as a bot message
+                    userInput.value = ''; // Clear input field after sending message
+                }
+            });
+
+            // Handle Enter key press to send message
+            userInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+        });
+
     </script>
 
 </body>
