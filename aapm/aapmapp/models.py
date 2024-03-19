@@ -182,9 +182,13 @@ class DeliveryMan(models.Model):
         return self.name   
      
 
-
-class SelectedItem(models.Model):
+class AcceptedOrder(models.Model):
     user = models.ForeignKey(DeliveryMan, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=100)
-    item = models.CharField(max_length=255)
+    item_name = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
+    accepted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Accepted Order - {self.order_id}"
+

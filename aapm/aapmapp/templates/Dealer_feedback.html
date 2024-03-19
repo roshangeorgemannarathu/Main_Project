@@ -1,10 +1,26 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,10 +46,14 @@
         .rating-item p {
             margin-bottom: 10px;
         }
-        .rating-item img {
-            max-width: 100%;
-            border-radius: 8px;
+        .rating-item .image-container {
+            max-width: 200px; /* Adjust as needed */
             margin-top: 10px;
+            overflow: hidden;
+        }
+        .rating-item img {
+            width: 100%;
+            border-radius: 8px;
         }
         .rating-item strong {
             color: #007bff;
@@ -46,59 +66,137 @@
             margin-bottom: 20px;
         }
     </style>
+
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Admin Dashboard</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Go Back Home</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
     <div class="container">
-        <h1>Feedback</h1>
-        
-        <div class="rating-section">
-            <h3>Pet Ratings</h3>
-            {% for review in pet_reviews %}
-            <div class="rating-item">
-                <p><strong>Pet Name:</strong> {{ review.pet.pet_breed }}</p>
-                <p><strong>Rating:</strong> {{ review.get_rating_display }}</p>
-                <p><strong>Review:</strong> {{ review.review_text }}</p>
-                <p><strong>Dealer ID:</strong> {{ review.dealer.id }}</p>
-                <p><strong>Pet ID:</strong> {{ review.pet.id }}</p>
-                <p><strong>Created At:</strong> {{ review.created_at }}</p>
-                <img src="{{ review.pet.image.url }}" alt="{{ review.pet.name }}">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="" class="logo">
+                        <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <h2>Pet Paradise Cart</h2><br><br><br>
+                        <li class="scroll-to-section"><a href="{% url 'admin_dashboard' %}">home</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'customers' %}">Customers</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'dealers' %}">Dealers</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'deliveryman_list' %}">Delivery Man</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'adminviewitem' %}">View DB</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'payment_details' %}">Payments</a></li>
+                        {% comment %} <li class="scroll-to-section"><a href="{% url 'Dealer_feedback' %}">Feedback</a></li> {% endcomment %}
+                        {% comment %} <li class="scroll-to-section"><a href="{% url 'add_delivery_man' %}">Add Delivery Man</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'upload_csv' %}">Add Data</a></li> {% endcomment %}
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
             </div>
-            {% endfor %}
-        </div>
-
-        <div class="rating-section">
-            <h3>Aquarium Ratings</h3>
-            {% for review in aquarium_reviews %}
-            <div class="rating-item">
-                <p><strong>Aquarium Name:</strong> {{ review.aquarium.name }}</p>
-                <p><strong>Rating:</strong> {{ review.get_rating_aqu_display }}</p>
-                <p><strong>Review:</strong> {{ review.review_text_aqu }}</p>
-                <p><strong>Dealer ID:</strong> {{ review.dealer_aqu.id }}</p>
-                <p><strong>Aquarium ID:</strong> {{ review.aquarium.id }}</p>
-                <p><strong>Created At:</strong> {{ review.created_at_aqu }}</p>
-                <img src="{{ review.aquarium.image.url }}" alt="{{ review.aquarium.name }}">
-            </div>
-            {% endfor %}
         </div>
     </div>
+</header><br><br><br><br>
+<!-- ***** Header Area End ***** -->
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Admin Dashboard. All rights reserved.</p>
+<div class="container">
+    <h1>Feedback</h1>
+    
+    <div class="rating-section">
+        <h3>Pet Ratings</h3>
+        {% for review in pet_reviews %}
+        <div class="rating-item">
+            <p><strong>Pet Name:</strong> {{ review.pet.pet_breed }}</p>
+            <p><strong>Rating:</strong> {{ review.get_rating_display }}</p>
+            <p><strong>Review:</strong> {{ review.review_text }}</p>
+            <p><strong>Dealer ID:</strong> {{ review.dealer.id }}</p>
+            <p><strong>Pet ID:</strong> {{ review.pet.id }}</p>
+            <p><strong>Created At:</strong> {{ review.created_at }}</p>
+            <div class="image-container">
+                <img src="{{ review.pet.image.url }}" alt="{{ review.pet.name }}">
+            </div>
         </div>
-    </footer>
+        {% endfor %}
+    </div>
+
+    <div class="rating-section">
+        <h3>Aquarium Ratings</h3>
+        {% for review in aquarium_reviews %}
+        <div class="rating-item">
+            <p><strong>Aquarium Name:</strong> {{ review.aquarium.name }}</p>
+            <p><strong>Rating:</strong> {{ review.get_rating_aqu_display }}</p>
+            <p><strong>Review:</strong> {{ review.review_text_aqu }}</p>
+            <p><strong>Dealer ID:</strong> {{ review.dealer_aqu.id }}</p>
+            <p><strong>Aquarium ID:</strong> {{ review.aquarium.id }}</p>
+            <p><strong>Created At:</strong> {{ review.created_at_aqu }}</p>
+            <div class="image-container">
+                <img src="{{ review.aquarium.image.url }}" alt="{{ review.aquarium.name }}">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- ***** Footer Start ***** --><br><br><br><br><br><br><br>
+<footer>
+
+    <div class="col-lg-12">
+        <div class="under-footer">
+            <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+
+        </div>
+    </div>
+</footer>
+
+
+<!-- jQuery -->
+<script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'aapmapp/js/popper.js' %}"></script>
+<script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+<!-- Plugins -->
+<script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+<script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+<script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+<script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/slick.js' %}"></script>
+<script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+<script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+<!-- Global Init -->
+<script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var logoutButton = document.getElementById("logout-link");
+        logoutButton.addEventListener("click", function () {
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        });
+    });
+</script>
+
 </body>
 </html>

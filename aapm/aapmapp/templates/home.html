@@ -1,180 +1,191 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fish Identification</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+    <!--
+
+TemplateMo 571 Hexashop
+
+https://templatemo.com/tm-571-hexashop
+
+
+-->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background-color: black;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            margin: 0;
-            color: white; /* Change header text color to white */
-        }
-
-        .go-back-home {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .go-back-home:hover {
-            background-color: #0056b3;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
         h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
+            color: black;
         }
 
-        img {
-            display: block;
-            margin: 0 auto 20px;
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        h4 {
+            color: black;
         }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .upload-button {
-            display: block;
+    </style>
+    <style>
+        .product-img {
             width: 100%;
-            padding: 8px 0;
-            background-color: #4CAF50; /* Green for "Upload Image" button */
-            color: #fff;
-            font-size: 16px;
-            text-align: center;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            position: relative;
+            /* Set the width as needed */
+            height: auto;
+            /* Maintain aspect ratio */
+            max-height: 200px;
+            /* Set the maximum height if needed */
+            object-fit: cover;
+            /* Ensure the image covers the container */
+        }
+    </style>
+    <style>
+        .product-item {
+            height: 300px;
+            /* Set the desired height for the product container */
             overflow: hidden;
+            /* Hide overflowing content */
         }
 
-        .upload-button:hover {
-            background-color: #45a049; /* Darker green on hover */
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .upload-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
+        .product-item {
+            position: relative; /* Add position relative to the product item */
+        }
+        .search-bar{
+
         }
 
-        .upload-text {
-            margin-right: 20px;
+        .table {
+            border-collapse: collapse;
+            width: 100%;
         }
 
-        .identify-button {
-            display: block;
-            width: calc(50% ); /* Reduced length of "Identify Fish" button */
-            margin: 8px auto; /* Center the button */
-            padding: 8px 0;
-            background-color: #FF0000; /* Red for "Identify Fish" button */
-            color: #fff;
-            font-size: 16px;
-            text-align: center;
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .identify-button:hover {
-            background-color: #e60000; /* Darker red on hover */
-        }
-
-        .group-button {
-            display: block;
-            width: calc(50% ); /* Reduced length of "Group Species" button */
-            margin: 8px auto; /* Center the button */
-            padding: 8px 0;
-            background-color: #007bff; /* Blue for "Group Species" button */
-            color: #fff;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
             font-size: 16px;
-            text-align: center;
-            border: none;
-            border-radius: 4px;
+            margin: 4px 2px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            border-radius: 8px;
         }
 
-        .group-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
-
-        #result {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 20px;
-            color: #007bff;
-        }
-
-        .error-message {
-            color: #ff0000;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 10px;
+        .button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <center><h1>Fish Identification</h1></center>
-        <button class="go-back-home" onclick="window.location.href='{% url 'customer_account' %}'">Go Back Home</button>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        
+                        <!-- ***** Logo Start ***** -->
+                        
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <h1>Pet Paradise Cart </h1>
+                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <br><br><br><br><br><br>
     <div class="container">
-        <form id="uploadForm">
-            <!-- Hidden file input -->
-            <input type="file" id="imageInput" accept="image/*" required>
-            <!-- Visible upload button text, clicking on this will trigger file input -->
-            <label for="imageInput" class="upload-button">
-                <span class="upload-text">Upload Image</span>
-                <span class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></span>
-            </label>
-            <div class="error-message" id="errorMessage"></div>
-            <button type="submit" class="identify-button">Identify Fish</button>
-            <button type="button" class="group-button">Group the Identified Species With</button>
-        </form>
-        <div id="result"></div>
-        <img id="imagePreview" src="#" alt="Preview">
-    </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="2">Fish Identification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <form id="uploadForm">
+                            <!-- Hidden file input -->
+                            <input type="file" id="imageInput" accept="image/*" required>
+                            <!-- Visible upload button text, clicking on this will trigger file input -->
+                            <label for="imageInput" class="upload-button">
+                                <span class="upload-text">Upload Image</span>
+                                <span class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></span>
+                            </label>
+                            <div class="error-message" id="errorMessage"></div>
+                            <button type="submit" class="button">Identify Fish</button>
+                            <button type="button" class="button" style="background-color: #f44336;">Group the Identified Species With</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="result"></div>
+                        <img id="imagePreview" src="#" alt="Preview">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div><br><br><br><br>
 
     <script>
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
@@ -206,5 +217,59 @@
             errorMessage.innerText = ''; // Clear any previous error messages
         });
     </script>
+
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ***** Footer End ***** -->
+
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        $(function() {
+            var selectedClass = "";
+            $("p").click(function() {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function() {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+
+            });
+        });
+    </script>
+
 </body>
+
 </html>

@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+    <title>Aquarium Details</title>
+
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
@@ -16,60 +19,113 @@
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
     <style>
-        h1 {
-            color: black;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
         }
 
-        h4 {
-            color: black;
+        .container-box {
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+
+        h1, h4 {
+            color: #212529;
+        }
+
+        .product-img {
+            max-width: 300px; /* Fixed width for the photo */
+            max-height: 200px; /* Fixed height for the photo */
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-primary,
+        .btn-pay {
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: black;
+            color: white;
+        }
+
+        .btn-pay {
+            background-color: #dc3545; /* Red color for Pay button */
+            color: #fff;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+            color: #212529;
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
     <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky" style="background-color: #F6F2E3; margin-bottom: 20px;">
+    <header class="header-area header-sticky">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <a href="" class="logo">
-                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
-                        </a>
-                        <ul class="nav">
-                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                    </nav>
-                </div>
-            </div>
+            <nav class="main-nav">
+                <!-- ***** Logo Start ***** -->
+                <a href="" class="logo">
+                    <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                </a>
+                <!-- ***** Logo End ***** -->
+                <!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                    <!-- Remove the 'Home' and 'Logout' links -->
+                    <h3>Pet Paradise Cart</h3>
+                    <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li>
+                    <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+                <!-- ***** Menu End ***** -->
+            </nav>
         </div>
-    </header>
+    </header><br><br><br><br><br>
     <!-- ***** Header Area End ***** -->
 
     {% block content %}
-    <br><br>
-    <!-- Your HTML content for displaying details of the aquarium goes here -->
-    <center>
-        <img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}">
-        <h2>{{ aquarium.name }}</h2>
+    <div class="container-box">
+        <h3>{{ aquarium.name }}</h3>
+        <img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}" class="product-img">
         <p>Price: Rs{{ aquarium.price }}</p>
         <p>Quantity: {{ aquarium.quantity }}</p>
-        <p>Location: {{ aquarium.location }}</p>
+        
         <p>Description: {{ aquarium.description }}</p>
-
-        <!-- Add To Cart and Buy Now buttons here -->
-
+        <p>Location: {{ aquarium.location }}</p>
+        <button id="showMapBtn" class="btn btn-primary" {% if aquarium.location %} onclick="showMap()" {% else %} disabled {% endif %}>Show Location on Map</button>
         <div class="btn-container">
             <form method="post" action="{% url 'add_to_cart' category='aquarium' item_id=aquarium.id %}">
                 {% csrf_token %}
-                <button type="submit" style="background-color: black; color: white;">Add To Cart</button>
+                <button type="submit" class="btn btn-primary">Add To Cart</button>
             </form>
-        </div>
-        <div class="btn-container">
             <button id="razorpay-btn" class="btn btn-pay">Buy Now</button>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
@@ -87,20 +143,133 @@
                     e.preventDefault();
                 };
             </script>
+
         </div>
-    </center>
+    </div>
+    <!-- Display map here -->
+    <div id="map"></div>
     {% endblock %}
 
-    <!-- Your footer content here -->
-    <footer>
+     <!-- ***** Footer Start ***** -->
+     <footer>
+
         <div class="col-lg-12">
             <div class="under-footer">
-                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
             </div>
+        </div>
+        </div>
         </div>
     </footer>
 
-    <!-- Additional JavaScript and script tags here -->
+
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        $(function () {
+            var selectedClass = "";
+            $("p").click(function () {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function () {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+
+            });
+        });
+    </script>
+    <script>
+        window.onload = function () {
+            if (window.history && window.history.pushState) {
+                // Prevent user from going back to restricted pages
+                window.history.pushState('forward', null, './#no-back');
+                window.onhashchange = function () {
+                    window.history.pushState('forward', null, './#no-back');
+                };
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var chatIcon = document.getElementById('chat-icon');
+            var chatBox = document.getElementById('chat-box');
+            var userInput = document.getElementById('user-input');
+            var sendButton = document.getElementById('send-btn');
+            var chatContainer = document.getElementById('chat-container');
+
+            // Toggle chat box visibility when the chat icon is clicked
+            chatIcon.addEventListener('click', function () {
+                chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Function to append user and bot messages to the chat container
+            function appendMessage(sender, message) {
+                var messageElement = document.createElement('div');
+                messageElement.className = sender === 'user' ? 'user-message' : 'bot-message';
+                messageElement.textContent = message;
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+            }
+
+            // Send user message to chatbot when Send button is clicked
+            sendButton.addEventListener('click', function () {
+                var message = userInput.value.trim();
+                if (message !== '') {
+                    appendMessage('user', message);
+                    // Here you can send the user message to your chatbot backend for processing
+                    // After receiving the response, append it to the chat container as a bot message
+                    userInput.value = ''; // Clear input field after sending message
+                }
+            });
+
+            // Handle Enter key press to send message
+            userInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+        });
+
+        
+        function showMap() {
+            var location = "{{ pet.location }}"; // Get the location from your Django template
+            console.log("Location:", location); // Log the location variable
+            
+            // Encode the location for URL
+            var encodedLocation = encodeURIComponent(location);
+            console.log("Encoded Location:", encodedLocation); // Log the encoded location
+            
+            // Construct the URL for Google Maps
+            var mapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedLocation;
+            console.log("Map URL:", mapUrl); // Log the constructed map URL
+            
+            // Open the map in a new tab
+            window.open(mapUrl, '_blank');
+        }
+
+    </script>
 
 </body>
 

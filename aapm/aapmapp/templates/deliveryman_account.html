@@ -62,26 +62,21 @@
             <div class="row">
                 <div class="col-12">
                     <nav class="main-nav">
-                        
-                        
-                        
                         <!-- ***** Logo Start ***** -->
-                        <a href="" class="logo">
-                            <span>Welcome,{{ full_name }}</span>
-                        </a>
+                        <h2>Pet Paradise Cart</h2>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
+                            <li><a href="{% url 'location' %}">Your Location</a></li>
+                            <li><a href={% url 'del_orders' %}>Orders</a></li>
+                            <li><a href={% url 'selected_deliveries' %}>Your Deliveries</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    {{ full_name }}
-                                    <img src="{{ photo_url }}" alt="Welcome{{ full_name }}" class="user-photo">
+                                    Welcome {{ full_name }}
+                                    <img src="{{ photo_url }}" alt="Welcome {{ full_name }}" class="user-photo">
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="scroll-to-section"><a href="{% url 'location' %}">Your Location</a></li>
-                                    <li class="scroll-to-section"><a href={% url 'del_orders' %}>orders</a></li>
-                                    <li class="scroll-to-section"><a href={% url 'your_deliveries' %}>Your Deliveries</a></li>
                                     <li><a href="{% url 'profile' %}">Profile</a></li>
                                     <li><a href="{% url 'change_password' %}">Change Password</a></li>
                                     <li><a href="{% url 'logout' %}">Logout</a></li>
@@ -97,8 +92,7 @@
     <!-- ***** Header Area End ***** -->
     
 
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     
 
     <!-- ***** Footer Start ***** -->

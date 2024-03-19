@@ -1,79 +1,183 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dealer Sales</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+
+    <!-- Template Styles -->
     <style>
-        /* Header styles */
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            color: black;
+        }
+
+        h4 {
+            color: black;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border-spacing: 0;
             text-align: center;
         }
-        .go-back-home {
-            float: right;
-            margin-right: 10px;
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-            border: 1px solid #fff;
-            border-radius: 5px;
-        }
-        /* Footer styles */
-        footer {
-            background-color: #333;
-            color: #fff;
+
+        th,
+        td {
             padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img.product-img {
+            max-width: 100px;
+            height: auto;
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <a href="{% url 'dealer_account' %}" class="go-back-home">Go Back Home</a>
-        <h1>Sales Data for Dealer: {{ dealer.fullname }}</h1>
-    </header>
 
-    <!-- Main Content -->
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <h1>Pet Paradise Cart </h1><br>
+                            <li class="scroll-to-section"><a  href="{% url 'dealer_account' %}">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'addpets' %}">Add Aquarium / Pets</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'viewdatabase' request.user.id %}">View Your Database</a></li>
+                           
+                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <br><br><br><br><br><br>
+    <!-- ***** Header Area End ***** -->
+
     <main>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Customer Name</th>
-                    <th>Product ID</th>
-                    <!-- <th>Product Name</th> -->
-                    <th>Image</th>
-                    <th>Payment ID</th>
-                    <th>Order ID</th>
-                    <th>Date Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for payment in payments %}
-                <tr>
-                    <td>{{ payment.user.fullname }}</td>
-                    <td>{{ payment.item.id }}</td>
-                    <!-- <td>{{ payment.item.name }}</td> -->
-                    <td><img src="{{ payment.item.image.url }}" alt="{{ payment.item.name }}" height="100"></td>
-                    <td>{{ payment.payment_id_data }}</td>
-                    <td>{{ payment.order_id_data }}</td>
-                    <td>{{ payment.datetime }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="container">
+            {% comment %} <h2 style="text-align: center;">Order History</h2> {% endcomment %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Product ID</th>
+                        <th>Image</th>
+                        <th>Payment ID</th>
+                        <th>Order ID</th>
+                        <th>Date Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.user.fullname }}</td>
+                        <td>{{ payment.item.id }}</td>
+                        <td><img src="{{ payment.item.image.url }}" alt="{{ payment.item.name }}" class="product-img"></td>
+                        <td>{{ payment.payment_id_data }}</td>
+                        <td>{{ payment.order_id_data }}</td>
+                        <td>{{ payment.datetime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
 
-    <!-- Footer -->
+    <!-- ***** Footer Start ***** -->
     <footer>
-        Footer Content
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+            </div>
+        </div>
     </footer>
+
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var logoutButton = document.getElementById("logout-link");
+            logoutButton.addEventListener("click", function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            });
+        });
+    </script>
+
 </body>
+
 </html>

@@ -2,184 +2,173 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Pet and Aquarium Data</title>
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
     <style>
-        /* Your CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        h1 {
+            color: black;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #000;
+        h4 {
+            color: black;
         }
 
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        table {
+        .product-img {
             width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            width: 150px;
-        }
-
-        img {
-            max-width: 100px;
-        }
-
-        a {
-            color: #007BFF;
-            text-decoration: none;
-            margin-left: 10px;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        header {
-            text-align: center;
-            background-color: #e2d9cf;
-            color: #000;
-            padding: 30px;
-            margin-bottom: 20px;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logout-button {
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-        }
-
-        .go-back-button {
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #e2d9cf;
-            color: #000;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h2>Your Aquarium / Pets</h2>
-        <a href="javascript:history.back()" class="go-back-button">Go Back</a>
-        {% comment %} <a href="{% url 'logout' %}" class="logout-button">Logout</a> {% endcomment %}
-    </header>
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
 
-<div class="container">
-   
-    <center><h2>Aquariums</h2></center>
-    <table>
-        <thead>
-            <tr>
-                <th>Name Of The Aquarium</th>
-                <th>Aquarium Description</th>
-                <th>Price</th>
-                <th>Location</th>
-                <th>Image</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            {% for aquarium in user_aquariums %}
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <ul class="nav">
+                            <h1>Pet Paradise Cart </h1>
+                            <li class="scroll-to-section"><a href="{% url 'dealer_account' %}">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'addpets' %}">Add Aquarium / Pets</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'dealer_sales' %}">Order Management</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header><br><br><br><br><br>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="container">
+        {% comment %} <center>
+            <h2>Aquariums</h2>
+        </center> {% endcomment %}
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    
+                    <th>Name Of The Aquarium</th>
+                    <th>Aquarium Description</th>
+                    <th>Price</th>
+                    <th>Location</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aquarium in user_aquariums %}
+                <tr>
                     <td>{{ aquarium.name }}</td>
-                    <td>{{ aquarium.description}}</td>
-                    <td>Rs{{ aquarium.price }}</td>
+                    <td>{{ aquarium.description }}</td>
+                    <td>Rs {{ aquarium.price }}</td>
                     <td>{{ aquarium.location }}</td>
-                    <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.image.url }}" style="width: 100px; height: 100px;"></td>
-                    
+                    <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}" style="width: 100px; height: 100px;"></td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table><br>
 
-    <center><h2>Pets</h2></center>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                
-                <th>Breed</th>
-                <th>Pet Age</th>
-                <th>Price</th>
-                <th>Pet Description</th>
-                <th>Location</th>
-                <th>Image</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            {% for pet in user_pets %}
+        {% comment %} <center>
+            <h2>Pets</h2>
+        </center> {% endcomment %}
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    
-                    <td>{{ pet.category }}</td>
-                    
-                    <td>{{ pet.pet_breed }}</td>
-                    <td>{{ pet.pet_age}}</td>
-                    <td>Rs{{ pet.price }}</td>
-                    <td>{{ pet.pet_description}}</td>
-                    <td>{{ pet.location }}</td>
-                    <td><img src="{{ pet.image.url }}" alt="{{ pet.category }} - {{ pet.id }}" width="100"></td>
-                    
-                    </td>
-                  
+                    <th>Pet Category</th>
+                    <th>Breed</th>
+                    <th>Pet Age</th>
+                    <th>Price</th>
+                    <th>Pet Description</th>
+                    <th>Location</th>
+                    <th>Image</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                {% for pet in user_pets %}
+                <tr>
+                    <td>{{ pet.category }}</td>
+                    <td>{{ pet.pet_breed }}</td>
+                    <td>{{ pet.pet_age }}</td>
+                    <td>Rs {{ pet.price }}</td>
+                    <td>{{ pet.pet_description }}</td>
+                    <td>{{ pet.location }}</td>
+                    <td><img src="{{ pet.image.url }}" alt="{{ pet.category }} - {{ pet.id }}" style="width: 100px; height: 100px;"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<footer>
-    &copy; 2023 Your Pet and Aquarium Data. All rights reserved.
-</footer>
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-<!-- Include Bootstrap JS scripts if needed -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var logoutButton = document.getElementById("logout-link");
+            logoutButton.addEventListener("click", function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            });
+        });
+    </script>
 </body>
+
 </html>

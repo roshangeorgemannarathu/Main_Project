@@ -129,7 +129,8 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('del_orders/', views.del_orders, name='del_orders'),
     path('your_deliveries/', views.your_deliveries, name='your_deliveries'),
     path('process_selected_items/', views.process_selected_items, name='process_selected_items'),
-
+    path('selected_deliveries/', views.selected_deliveries, name='selected_deliveries'),
+    path('success/', views.success, name='success'),
 
  
 

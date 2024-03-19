@@ -1,129 +1,223 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>View User Data</title>
-    <style>
-        /* Add your CSS styles for viewing data here */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f4f4f4;
-        }
 
-        header {
-            background-color: #e2d9cf;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center; /* Center items vertically */
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+    rel="stylesheet">
 
-        header h1 {
-            margin: 0;
-            flex-grow: 1; /* Allow the title to grow and take available space */
-        }
+  <title>Aquarium and Petshop Management system HTML CSS Template</title>
 
-        .logout-btn {
-            background-color: #2980b9;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+  <!--
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+TemplateMo 571 Hexashop
 
-        th {
-            background-color: #f2f2f2;
-        }
+https://templatemo.com/tm-571-hexashop
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+-->
+  <style>
+    .card-img-top {
+      max-width: 50%;
+      height: auto;
+      margin: 0 auto; /* Center the image horizontally */
+      display: block; /* Ensure the image is displayed as a block element */
+    }
 
-        footer {
-            background-color: #ebf171
+    .header-area {
+      text-align: center;
+      padding: 20px 0;
+      position: relative;
+    }
 
-            color: #ebf171;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    .header-area .logo {
+      display: inline-block;
+    }
+
+    .header-area .main-nav {
+      display: inline-block;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .header-area .main-nav ul li {
+      display: inline-block;
+      margin-left: 20px;
+    }
+
+    .header-area .main-nav ul li:first-child {
+      margin-left: 0;
+    }
+
+    @media (max-width: 768px) {
+      .header-area .main-nav {
+        position: static;
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .header-area .main-nav ul li {
+        display: block;
+        margin: 10px 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <h1>Profile</h1>
-        <button class="go-back-btn" onclick="goBack()">Go Back</button>
-        {% comment %} <a href="{% url 'logout' %}" class="logout-btn">Logout</a> {% endcomment %}
-    </header>
 
-    <table>
-        <tr>
-            <td>Full Name</td>
-            <td>{{ fullname }}</td>
-        </tr>
-        <tr>
-            <td>Date of Birth</td>
-            <td>{{ dateofbirth }}</td>
-        </tr>
-        {% comment %} <tr>
-            <td>Gender</td>
-            <td>{{ gender }}</td>
-        </tr> {% endcomment %}
-        <tr>
-            <td>Phone Number</td>
-            <td>{{ phone }}</td>
-        </tr>
-        <tr>
-            <td>House Name</td>
-            <td>{{ housename }}</td>
-        </tr>
-        <tr>
-            <td>PIN Code</td>
-            <td>{{ pincode }}</td>
-        </tr>
-        <tr>
-            <td>District</td>
-            <td>{{ district }}</td>
-        </tr>
-        <tr>
-            <td>Photo ID</td>
-            <td><a href="{{ photoid }}" target="_blank">View Photo ID</a></td>
-        </tr>
-        <tr>
-            <td>Photo</td>
-            <td style=""><img src="{{ photo }}" alt="User Photo" width="200"></td>
-        </tr>
-    </table>
+  <!-- ***** Preloader Start ***** -->
+  <div id="preloader">
+    <div class="jumper">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
 
-    <footer>
-        &copy; Pet Paradise Cart
-    </footer>
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+   <!-- ***** Header Area Start ***** -->
+   <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <center><h1>Pet Paradise Cart </h1></center>
+                    <!-- ***** Logo Start ***** -->
+                    
+                    <a href="" class="logo">
+                        <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <h1>Pet Paradise Cart </h1>
+                        <li class="scroll-to-section"><a href="#" onclick="goBack()">Home</a></li>
+                        <!-- Other menu items -->
+                        <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+
+</header>
+
+  <!-- ***** Space for Table Start ***** -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <h2 class="text-center mb-4">Profile</h2>
+        <div class="card">
+          <img src="{{ photo }}" class="card-img-top mx-auto d-block" alt="User Photo"> <!-- Center the image -->
+          <div class="card-body">
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <th scope="row">Full Name</th>
+                  <td>{{ fullname }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Date of Birth</th>
+                  <td>{{ dateofbirth }}</td>
+                </tr>
+                <!--
+                <tr>
+                    <th scope="row">Gender</th>
+                    <td>{{ gender }}</td>
+                </tr>
+                -->
+                <tr>
+                  <th scope="row">Phone Number</th>
+                  <td>{{ phone }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">House Name</th>
+                  <td>{{ housename }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">PIN Code</th>
+                  <td>{{ pincode }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">District</th>
+                  <td>{{ district }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Photo ID</th>
+                  <td><a href="{{ photoid }}" target="_blank">View Photo ID</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Space for Table End ***** -->
+
+
+  <!-- ***** Footer Start ***** -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="under-footer">
+            <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- jQuery -->
+  <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+  <!-- Bootstrap -->
+  <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+  <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+  <!-- Plugins -->
+  <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+  <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+  <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+  <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+  <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+  <!-- Global Init -->
+  <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
 </body>
+
 </html>

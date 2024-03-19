@@ -109,12 +109,20 @@
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
                     <!-- Remove the 'Home' and 'Logout' links -->
-                    <li class="scroll-to-section"><a href="#" id="goBackHome">Go Back Home</a></li>
+                    <h3>Pet Paradise Cart </h3>
+                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="#Aquarium">Aquarium</a></li>
+                            <li class="scroll-to-section"><a href="#Pets">Pets</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li>
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                 </ul>
                 <!-- ***** Menu End ***** -->
             </nav>
         </div>
-    </header>
+    </header><br><br><br><br>
     <!-- ***** Header Area End ***** -->
 
     <div class="container">

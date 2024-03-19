@@ -1,87 +1,172 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload CSV File</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        h1 {
+            color: black;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f3f3f3;
+
+        h4 {
+            color: black;
+        }
+
+        .product-img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        /* Styling the box */
+        .box-container {
+            background-color: #f0f0f0; /* Change this color as desired */
+            border: 1px solid #ccc;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto; /* Center the box horizontally */
+            max-width: 500px; /* Adjust the width of the box */
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            border-bottom: 1px solid #ddd;
-        }
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-            text-align: center;
-        }
-        .go-back-home {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .go-back-home:hover {
-            background-color: #0056b3;
-        }
-        form {
-            margin-top: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="file"] {
-            margin-top: 10px;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+
+        /* Centering the table */
+        .center-table {
+            margin: 0 auto;
         }
     </style>
+
 </head>
+
 <body>
-    <div class="header">
-        <h1>Admin Panel - Upload CSV File</h1>
-        <button class="go-back-home" onclick="window.location.href='{% url 'admin_dashboard' %}'">Go Back Home</button>
+
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
     <div class="container">
-        {% if success_message %}
-        <p>{{ success_message }}</p>
-        {% endif %}
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="csv_file">Choose a CSV file:</label><br>
-            <input type="file" id="csv_file" name="csv_file" accept=".csv"><br><br>
-            <input type="submit" value="Upload">
-        </form>
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="" class="logo">
+
+                        <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                    </a>
+
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <h1>Pet Paradise Cart</h1><br><br><br>
+                        <li class="scroll-to-section"><a href="{% url 'admin_dashboard' %}">home</a></li>
+                        
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
     </div>
+</header><br><br><br><br><br><br><br>
+<!-- ***** Header Area End ***** -->
+
+<!-- Styling the box with a different color -->
+<div class="box-container">
+    <!-- Centering the table -->
+    <div class="center-table">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        
+                        {% if success_message %}
+                        <p>{{ success_message }}</p>
+                        {% endif %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="csv_file">Choose a CSV file:</label><br>
+                            <input type="file" id="csv_file" name="csv_file" accept=".csv" style="background-color: orange; color: white; padding: 10px; border-radius: 5px;"><br><br>
+                            <input type="submit" value="Upload" style="background-color: blue; color: white; padding: 10px; border-radius: 5px;">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ***** Footer Start ***** --><br><br><br><br><br><br><br>
+<footer>
+
+    <div class="col-lg-12">
+        <div class="under-footer">
+            <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+
+        </div>
+    </div>
+</footer>
+
+
+<!-- jQuery -->
+<script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'aapmapp/js/popper.js' %}"></script>
+<script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+<!-- Plugins -->
+<script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+<script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+<script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+<script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/slick.js' %}"></script>
+<script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+<script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+<!-- Global Init -->
+<script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var logoutButton = document.getElementById("logout-link");
+        logoutButton.addEventListener("click", function () {
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        });
+    });
+</script>
+
 </body>
 </html>

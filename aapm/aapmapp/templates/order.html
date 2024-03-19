@@ -1,175 +1,351 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Orders</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Add Font Awesome for star icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Your CSS styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .order-item {
-            display: flex;
-            margin-bottom: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .item-details {
-            display: flex;
-            padding: 20px;
-            width: 100%;
-        }
-        .item-image {
-            width: 160px;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: 20px;
-        }
-        .item-info {
-            flex-grow: 1;
-        }
-        .item-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .item-meta {
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .rating {
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .rating label {
-            font-size: 24px;
-            color: #000; /* Change default star color to black */
-            cursor: pointer;
-        }
-        .rating input[type="radio"] {
-            display: none;
-        }
-        .rating label:hover,
-        .rating label:hover ~ label,
-        .rating input[type="radio"]:checked ~ label {
-            color: #ffc107; /* Hovered and checked star color */
-        }
-        .review-form textarea {
-            width: 100%;
-            height: 100px;
-            resize: vertical;
-            margin-top: 10px;
-        }
-        .back-button {
-            margin-top: 20px;
-        }
-        .rating i.active {
-            color: #ffc107; /* Active star color */
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <title>Aquarium and Petshop Management system HTML CSS Template</title>
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+  <!--
+  TemplateMo 571 Hexashop
+  https://templatemo.com/tm-571-hexashop
+  -->
+  <style>
+    /* Custom CSS styles */
+    /* Add any custom CSS styles here */
+    .spacer {
+      margin-top: 20px;
+    }
+    .item-image {
+      max-width: 100px; /* Adjust the maximum width as needed */
+      height: auto; /* Maintain aspect ratio */
+    }
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      background-color: #fff;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd; /* Add right border */
+    }
+    th {
+      background-color: #f0f0f0;
+      color: #333;
+      font-weight: bold;
+      border-top: 1px solid #ddd; /* Add top border */
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tbody tr:last-child td {
+      border-bottom: none; /* Remove bottom border for last row */
+    }
+    tbody tr td:last-child {
+      border-right: none; /* Remove right border for last column */
+    }
+    /* Amazon-like rating stars */
+    .rating {
+      display: inline-block;
+      unicode-bidi: bidi-override;
+      color: #e4e5e9;
+      font-size: 20px;
+      height: 30px;
+      width: auto;
+      margin-top: 5px;
+      position: relative;
+    }
+    .rating > label {
+      float: right;
+      display: inline-block;
+      position: relative;
+      width: 1.1em;
+      cursor: pointer;
+    }
+    .rating > label:hover,
+    .rating > label:hover ~ label,
+    .rating > input:checked ~ label {
+      color: #ffa500;
+    }
+    .rating > label:hover:before,
+    .rating > label:hover ~ label:before,
+    .rating > input:checked ~ label:before,
+    .rating > input:checked ~ label:before {
+      content: "\2605";
+      position: absolute;
+    }
+    /* Green submit review button */
+    .review-form button[type="submit"] {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .review-form button[type="submit"]:hover {
+      background-color: #218838;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Your Orders</h1>
 
-        <h2>User Payments</h2>
-        {% for payment in user_payments %}
-        <!-- Display user payments from Userpayment model -->
-        <div class="order-item">
-            <!-- Your order item details for Userpayment -->
-            <div class="item-details">
-                <img src="{{ payment.item.image.url }}" alt="Product Image" class="item-image">
-                <div class="item-info">
-                    <div class="item-name">{{ payment.item.pet_breed }}</div>
-                    <div class="item-meta">Order ID: {{ payment.order_id_data }}</div>
-                    <div class="item-meta">Amount: Rs {{ payment.amount }}</div>
-                    <div class="item-meta">Datetime: {{ payment.datetime }}</div>
-                    <div class="item-meta">Payment ID: {{ payment.payment_id_data }}</div>
-                    <div class="item-meta">Type: Pet</div>
-                    <div class="item-meta">Location: {{ payment.item.location }}</div>
-                    <div class="review-form">
-                        <form method="post" action="{% url 'submit_review' payment.item.id %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="payment_id" value="{{ payment.id }}">
-                            <label for="product_rating">Product Rating:</label>
-                            <div class="rating">
-                                <input type="radio" id="star5_{{ payment.id }}" name="product_rating" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star4_{{ payment.id }}" name="product_rating" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star3_{{ payment.id }}" name="product_rating" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star2_{{ payment.id }}" name="product_rating" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star1_{{ payment.id }}" name="product_rating" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
-                            </div>
-                            <textarea name="product_review" placeholder="Write your review here...">{{ payment.review }}</textarea>
-                            <button type="submit">Submit Review</button>
-                        </form>
-                    </div>
-                    <!-- You can add more details here -->
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-
-        <h2>User Payments for Aquarium</h2>
-        {% for payment in user_payments_aquarium %}
-        <!-- Display user payments from Userpayment_aquarium model -->
-        <div class="order-item">
-            <!-- Your order item details for Userpayment_aquarium -->
-            <div class="item-details">
-                <img src="{{ payment.item.image.url }}" alt="Product Image" class="item-image">
-                <div class="item-info">
-                    <div class="item-name">{{ payment.item.name }}</div>
-                    <div class="item-meta">Order ID: {{ payment.order_id_data }}</div>
-                    <div class="item-meta">Amount: Rs {{ payment.amount }}</div>
-                    <div class="item-meta">Datetime: {{ payment.datetime }}</div>
-                    <div class="item-meta">Payment ID: {{ payment.payment_id_data }}</div>
-                    <div class="item-meta">Type: Aquarium</div>
-                    <div class="item-meta">Location: {{ payment.item.location }}</div>
-                    <div class="review-form">
-                        <form method="post" action="{% url 'submit_review_aqu' payment.item.id %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="payment_id" value="{{ payment.id }}">
-                            <label for="product_rating_aqu">Product Rating:</label>
-                            <div class="rating">
-                                <input type="radio" id="star5_aqu_{{ payment.id }}" name="product_rating_aqu" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star4_aqu_{{ payment.id }}" name="product_rating_aqu" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star3_aqu_{{ payment.id }}" name="product_rating_aqu" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star2_aqu_{{ payment.id }}" name="product_rating_aqu" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
-                                <input type="radio" id="star1_aqu_{{ payment.id }}" name="product_rating_aqu" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
-                            </div>
-                            <textarea name="product_review_aqu" placeholder="Write your review here...">{{ payment.review }}</textarea>
-                            
-                            <button type="submit">Submit Review</button>
-                        </form>
-                    </div>
-                    <!-- You can add more details here -->
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-
-        <div class="back-button">
-            <!-- Replace the URL with the appropriate URL name from your project -->
-            <a href="{% url 'customer_account' %}" class="btn btn-secondary">Go Back to Home</a>
-        </div>
+  <!-- ***** Preloader Start ***** -->
+  <div id="preloader">
+    <div class="jumper">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="" class="logo">
+              <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            
+            <ul class="nav">
+                <h1>Pet Paradise Cart </h1>
+                <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                        
+                <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
+                {% comment %} <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li> {% endcomment %}
+                <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li>
+                <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <!-- ***** Spacer Start ***** -->
+  <div class="spacer"></div>
+  <!-- ***** Spacer End ***** -->
+
+  <!-- ***** Container Start ***** -->
+  <div class="container"><br><br>
+
+    <!-- Add a gap between the header and the table -->
+    <div class="spacer"></div><br>
+
+    <!-- Text for aquarium orders -->
+    <h2>Your Orders For Aquarium</h2><br>
+
+    <!-- Table for user orders for aquarium -->
+    
+        <table class="table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Order ID</th>
+                <th>Amount</th>
+                <th>Datetime</th>
+                {% comment %} <th>Payment ID</th>
+                <th>Type</th> {% endcomment %}
+                <th>Location</th>
+                <th>Status</th>
+                <th>Review</th>
+              </tr>
+            </thead>
+            <tbody>
+        {% for payment in user_payments_aquarium %}
+        <tr>
+          <td>
+            <!-- Order details for aquarium -->
+            <div class="order-details">
+              <img src="{{ payment.item.image.url }}" alt="Product Image" class="item-image">
+              <div class="item-info">
+                <div class="item-name">{{ payment.item.name }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ payment.order_id_data }}</td>
+          <td>Rs {{ payment.amount }}</td>
+          <td>{{ payment.datetime }}</td>
+          {% comment %} <td>{{ payment.payment_id_data }}</td>
+          <td>Aquarium</td> {% endcomment %}
+          <td>{{ payment.item.location }}</td>
+          <td></td> <!-- Status -->
+          <td>
+            <!-- Review form -->
+            <div class="review-form">
+              <form method="post" action="{% url 'submit_review_aqu' payment.item.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                <!-- Rating stars -->
+                <div class="rating">
+                  <input type="radio" id="star5_aqu_{{ payment.id }}" name="product_rating_aqu" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
+                  <!-- Add more rating stars if needed -->
+                  <input type="radio" id="star4_aqu_{{ payment.id }}" name="product_rating_aqu" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star3_aqu_{{ payment.id }}" name="product_rating_aqu" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star2_aqu_{{ payment.id }}" name="product_rating_aqu" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star1_aqu_{{ payment.id }}" name="product_rating_aqu" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_aqu_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
+                </div>
+                <!-- Review textarea -->
+                <textarea name="product_review_aqu" placeholder="Write your review here...">{{ payment.review }}</textarea>
+                <!-- Submit button -->
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table><br><br>
+
+    <!-- Add space between the aquarium and pet tables -->
+    <div class="spacer"></div>
+
+    <!-- Text for pet orders -->
+    <h2>Your Orders For Pets</h2><br>
+
+    <!-- Table for user orders for pets -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Order ID</th>
+          <th>Amount</th>
+          <th>Datetime</th>
+          {% comment %} <th>Payment ID</th>
+          <th>Type</th> {% endcomment %}
+          <th>Location</th>
+          <th>Status</th>
+          <th>Review</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for payment in user_payments %}
+        <tr>
+          <td>
+            <!-- Order details for pets -->
+            <div class="order-details">
+              <img src="{{ payment.item.image.url }}" alt="Product Image" class="item-image">
+              <div class="item-info">
+                <div class="item-name">{{ payment.item.pet_breed }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ payment.order_id_data }}</td>
+          <td>Rs {{ payment.amount }}</td>
+          <td>{{ payment.datetime }}</td>
+          {% comment %} <td>{{ payment.payment_id_data }}</td>
+          <td>Pet</td> {% endcomment %}
+          <td>{{ payment.item.location }}</td>
+          <td></td> <!-- Status -->
+          <td>
+            <!-- Review form -->
+            <div class="review-form">
+              <form method="post" action="{% url 'submit_review' payment.item.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                <!-- Rating stars -->
+                <div class="rating">
+                  <input type="radio" id="star5_{{ payment.id }}" name="product_rating" value="5" {% if payment.rating == 5 %}checked{% endif %}><label for="star5_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 5 %}active{% endif %}"></i></label>
+                  <!-- Add more rating stars if needed -->
+                  <input type="radio" id="star4_{{ payment.id }}" name="product_rating" value="4" {% if payment.rating == 4 %}checked{% endif %}><label for="star4_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 4 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star3_{{ payment.id }}" name="product_rating" value="3" {% if payment.rating == 3 %}checked{% endif %}><label for="star3_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 3 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star2_{{ payment.id }}" name="product_rating" value="2" {% if payment.rating == 2 %}checked{% endif %}><label for="star2_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 2 %}active{% endif %}"></i></label>
+                  <input type="radio" id="star1_{{ payment.id }}" name="product_rating" value="1" {% if payment.rating == 1 %}checked{% endif %}><label for="star1_{{ payment.id }}"><i class="fas fa-star {% if payment.rating >= 1 %}active{% endif %}"></i></label>
+                </div>
+                <!-- Review textarea -->
+                <textarea name="product_review" placeholder="Write your review here...">{{ payment.review }}</textarea>
+                <!-- Submit button -->
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+  <!-- ***** Container End ***** -->
+
+  <!-- ***** Footer Start ***** -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="under-footer">
+            <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- ***** Footer End ***** -->
+
+  <!-- jQuery -->
+  <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+  <!-- Bootstrap -->
+  <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+  <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+  <!-- Plugins -->
+  <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+  <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+  <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+  <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+  <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+  <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+  <!-- Global Init -->
+  <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+  <script>
+    $(function() {
+      var selectedClass = "";
+      $("p").click(function() {
+        selectedClass = $(this).attr("data-rel");
+        $("#portfolio").fadeTo(50, 0.1);
+        $("#portfolio div").not("." + selectedClass).fadeOut();
+        setTimeout(function() {
+          $("." + selectedClass).fadeIn();
+          $("#portfolio").fadeTo(50, 1);
+        }, 500);
+
+      });
+    });
+  </script>
+
 </body>
+
 </html>

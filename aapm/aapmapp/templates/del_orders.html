@@ -1,50 +1,58 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deliveryman Account</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
     <style>
-        /* Header styles */
-        header {
-            background-color: #232f3e;
-            color: #ffffff;
-            padding: 10px 20px;
+        h1,
+        h4 {
+            color: black;
+        }
+
+        .dropdown-menu li {
+            white-space: nowrap; /* Prevent line breaks */
+        }
+
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        .user-info {
             display: flex;
-            justify-content: space-between;
             align-items: center;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
+        .user-photo {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
         }
 
-        header .home-btn {
-            background-color: #ff9900;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        header .home-btn:hover {
-            background-color: #e68a00;
-        }
-
-        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            border-spacing: 0;
+            margin-bottom: 20px;
         }
 
         th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
+            border: 1px solid #ddd;
             padding: 8px;
+            text-align: left;
         }
 
         th {
@@ -55,121 +63,196 @@
             background-color: #f2f2f2;
         }
 
-        /* Action button styles */
+        tr:hover {
+            background-color: #ddd;
+        }
+
         .action-btn {
             padding: 5px 10px;
-            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        .action-btn.selected {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .action-btn.unselected {
-            background-color: #f44336;
-            color: white;
+        .action-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>Orders</h1>
-        <button class="home-btn" onclick="goHome()">Go Back Home</button>
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <h2>Pet Paradise Cart</h2>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{% url 'location' %}">Your Location</a></li>
+                            <li><a href={% url 'del_orders' %}>Orders</a></li>
+                            <li><a href={% url 'selected_deliveries' %}>Your Deliveries</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Welcome {{ full_name }}
+                                    <img src="{{ photo_url }}" alt="Welcome {{ full_name }}" class="user-photo">
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                                    <li><a href="{% url 'change_password' %}">Change Password</a></li>
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
     </header>
+    <!-- ***** Header Area End ***** -->
+    
+    <br><br><br><br>
 
-    <!-- User Payments table -->
-    <h2>Delivery for Pets</h2>
-    <table>
-        <form id="selected-items-form" action="{% url 'process_selected_items' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="selected_items" id="selected-items-input">
+    <div class="container">
+        <!-- User Payments table -->
+        <h2>Delivery for Pets</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Customer Address</th>
+                    <th>Customer Ph No</th>
+                    <th>Customer Email</th>
+                    <th>Dealer Name</th>
+                    <th>Dealer Address</th>
+                    <th>Dealer Ph No</th>
+                    <th>Dealer Email</th>
+                    <th>Order ID</th>
+                    <th>Item</th>
+                    <th>Status</th> <!-- New column -->
+                    <th>Action</th> <!-- New column for action button -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in user_payments %}
+                <tr>
+                    <td>{{ payment.user.fullname }}</td>
+                    <td>{{ payment.user.address }}</td>
+                    <td>{{ payment.user.phone }}</td>
+                    <td>{{ payment.user.email }}</td>
+                    <td>{{ payment.item.dealer.fullname }}</td>
+                    <td>{{ payment.item.dealer.housename }}, {{ payment.item.dealer.pincode }}, {{ payment.item.dealer.district }}</td>
+                    <td>{{ payment.item.dealer.phone }}</td>
+                    <td>{{ payment.item.dealer.email }}</td>
+                    <td>{{ payment.order_id_data }}</td>
+                    <td>{{ payment.item }}</td>
+                    <td>{{ payment.status }}</td> <!-- Display status -->
+                    <td><button class="action-btn unselected" onclick="acceptOrder('{{ payment.order_id_data }}')">Accept</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         
-        <thead>
-            <tr>
-                <th>Customer Name</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Order ID</th>
-                <th>Item</th>
-                <th>Status</th> <!-- New column -->
-                <th>Action</th> <!-- New column for action button -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for payment in user_payments %}
-            <tr>
-                <td>{{ payment.user.fullname }}</td>
-                <td>{{ payment.user.address }}</td>
-                <td>{{ payment.user.phone_number }}</td>
-                <td>{{ payment.user.email }}</td>
-                <td>{{ payment.order_id_data }}</td>
-                <td>{{ payment.item }}</td>
-                <td>{{ payment.status }}</td> <!-- Display status -->
-                <td><button class="action-btn unselected" onclick="toggleSelection(this)">&#10007;</button></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </form>
+        <!-- User Aquarium Payments table -->
+        <h2>Delivery for Aquarium</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Customer Address</th>
+                    <th>Customer Ph no</th>
+                    <th>Customer Email</th>
+                    <th>Dealer Name</th>
+                    <th>Dealer Address</th>
+                    <th>Dealer Ph No</th>
+                    <th>Dealer Email</th>
+                    <th>Order ID</th>
+                    <th>Item</th>
+                    <th>Status</th> <!-- New column -->
+                    <th>Action</th> <!-- New column for action button -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in user_aquarium_payments %}
+                <tr>
+                    <td>{{ payment.user.fullname }}</td>
+                    <td>{{ payment.user.address }}</td>
+                    <td>{{ payment.user.phone }}</td>
+                    <td>{{ payment.user.email }}</td>
+                    <td>{{ payment.item.dealer.fullname }}</td>
+                    <td>{{ payment.item.dealer.housename }}, {{ payment.item.dealer.pincode }}, {{ payment.item.dealer.district }}</td>
+                    <td>{{ payment.item.dealer.phone }}</td>
+                    <td>{{ payment.item.dealer.email }}</td>
+                    <td>{{ payment.order_id_data }}</td>
+                    <td>{{ payment.item }}</td>
+                    <td>{{ payment.status }}</td> <!-- Display status -->
+                    <td><button class="action-btn unselected" onclick="acceptOrder('{{ payment.order_id_data }}')">Accept</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    </table>
+        <button onclick="submitSelectedItems()">Process Selected Items</button>
+    </div>
 
-    <!-- User Aquarium Payments table -->
-    <h2>Delivery for Aquarium</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Customer Name</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Order ID</th>
-                <th>Item</th>
-                <th>Status</th> <!-- New column -->
-                <th>Action</th> <!-- New column for action button -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for payment in user_aquarium_payments %}
-            <tr>
-                <td>{{ payment.user.fullname }}</td>
-                <td>{{ payment.user.address }}</td>
-                <td>{{ payment.user.phone_number }}</td>
-                <td>{{ payment.user.email }}</td>
-                <td>{{ payment.order_id_data }}</td>
-                <td>{{ payment.item }}</td>
-                <td>{{ payment.status }}</td> <!-- Display status -->
-                <td><button class="action-btn unselected" onclick="toggleSelection(this)">&#10007;</button></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-    <button onclick="submitSelectedItems()">Process Selected Items</button>
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
 
     <script>
-        // JavaScript function to go back home
+        // Function to go back home
         function goHome() {
-            window.location.href = "{% url 'deliveryman_account' %}"; // Replace "/" with the URL of your home page
+            window.location.href = "{% url 'deliveryman_account' %}"; // Replace with your home URL
         }
 
-        // Function to toggle selection of action button
-        function toggleSelection(button) {
-            if (button.classList.contains('selected')) {
-                button.innerHTML = '&#10007;'; // Change to X mark
-                button.classList.remove('selected');
-                button.classList.add('unselected');
-            } else {
-                button.innerHTML = '&#10003;'; // Change to tick mark
-                button.classList.remove('unselected');
-                button.classList.add('selected');
-            }
+        // Function to accept order
+        function acceptOrder(orderId) {
+            // You can perform any necessary actions here when an order is accepted
+            alert('Order Accepted: ' + orderId);
         }
 
         // Function to submit selected items
@@ -179,9 +262,9 @@
             // Prepare selected items as a comma-separated string
             var selectedItems = Array.from(selectedButtons).map(button => {
                 var row = button.closest('tr');
-                var orderId = row.querySelector('td:nth-child(5)').textContent;
-                var itemName = row.querySelector('td:nth-child(6)').textContent;
-                var status = row.querySelector('td:nth-child(7)').textContent;
+                var orderId = row.querySelector('td:nth-child(9)').textContent;
+                var itemName = row.querySelector('td:nth-child(10)').textContent;
+                var status = row.querySelector('td:nth-child(11)').textContent;
                 return `${orderId},${itemName},${status}`;
             }).join(';');
             // Set the value of selected-items-input to selectedItems
@@ -190,5 +273,7 @@
             document.getElementById('selected-items-form').submit();
         }
     </script>
+
 </body>
+
 </html>

@@ -2070,49 +2070,157 @@ def chatbot_redirect(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
+# @never_cache
+# def location(request):
+#         return render(request, 'location.html')
 @never_cache
+@login_required
 def location(request):
-        return render(request, 'location.html')
+    # Retrieve user's full name and photo
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    if user_profile:
+        full_name = user_profile.fullname
+        photo_url = user_profile.photo.url if user_profile.photo else '/path/to/default/photo.jpg'
+    else:
+        full_name = ''
+        photo_url = ''
+
+    context = {
+        'full_name': full_name,
+        'photo_url': photo_url
+    }
+    return render(request, 'location.html', context)
 
 @never_cache
 def loc(request):
         return render(request, 'loc.html')
 
-from django.shortcuts import render
-from .models import Userpayment, Userpayment_aquarium
 
+# 
+
+from django.shortcuts import render, redirect
+from .models import Userpayment, Userpayment_aquarium
+from .models import AcceptedOrder  # Import the AcceptedOrder model if not already imported
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+
+@login_required
 def del_orders(request):
-    # Fetch data from both models along with customer details
+    user_profiles = UserProfile.objects.filter(user=request.user)
+    if user_profiles.exists():
+        # If there are multiple UserProfile objects, get the first one
+        user_profile = user_profiles.first()
+        full_name = user_profile.fullname
+        if user_profile.photo:
+            photo_url = user_profile.photo.url
+        else:
+            # Provide a default photo URL or handle it accordingly
+            photo_url = '/path/to/default/photo.jpg'  # Adjust this path as needed
+    else:
+        # Handle the case where the user has no profile
+        full_name = ''
+        photo_url = ''
+
     user_payments = Userpayment.objects.select_related('user').all()
     user_aquarium_payments = Userpayment_aquarium.objects.select_related('user').all()
 
     context = {
+        'full_name': full_name,
+        'photo_url': photo_url,
         'user_payments': user_payments,
         'user_aquarium_payments': user_aquarium_payments
     }
     return render(request, 'del_orders.html', context)
 
+
+
+
+
+
+
+
+
+
 @never_cache
 def your_deliveries(request):
         return render(request, 'your_deliveries.html')
 
+from django.http import HttpResponse, HttpResponseRedirect
 
-from .models import SelectedItem
+from django.shortcuts import redirect
 
 def process_selected_items(request):
-    if request.method == 'POST':
-        selected_items = request.POST.getlist('selected_items')
-        # Save selected items to the database
-        for item in selected_items:
-            user, order_id, item_name, status = item.split(',')
-            SelectedItem.objects.create(
-                user=request.user,
-                order_id=order_id,
-                item=item_name,
-                status=status
-            )
-        # Redirect to a new page or render a new template
-        return redirect('your_deliveries')  # Change 'selected_items_page' to the name of the view for the new page
-    else:
-        return redirect('deliveryman_account')  # Redirect to the deliveryman account page if request method is not POST
+     if request.method == 'POST':
+        selected_items_list = request.POST.getlist('selected_items')
+        # Convert the selected items to a list of dictionaries
+        selected_deliveries = []
+        for item_str in selected_items_list:
+            parts = item_str.split(',')
+            if len(parts) >= 3:
+                order_id, item_name, status = parts
+                selected_deliveries.append({
+                    'order_id': order_id,
+                    'item_name': item_name,
+                    'status': status
+                })
+        # Store selected items in session
+        request.session['selected_deliveries'] = selected_deliveries
+        return redirect('selected_deliveries')
+     else:
+        return redirect('error')  
+
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+
+@login_required
+def selected_deliveries(request):
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    full_name = user_profile.fullname if user_profile else ''
+    photo_url = user_profile.photo.url if user_profile and user_profile.photo else '/path/to/default/photo.jpg'
+
+    selected_deliveries_pets = []
+    selected_deliveries_aquarium = []
+
+    # Retrieve selected deliveries from session
+    selected_items_list = request.session.get('selected_deliveries', [])
+    for item_dict in selected_items_list:
+        if isinstance(item_dict, dict):
+            order_id = item_dict.get('order_id')
+            item_name = item_dict.get('item_name')
+            status = item_dict.get('status')
+            # Depending on item type, retrieve relevant data and append to the respective list
+            if item_name.startswith('pet'):
+                # Assuming you have logic to fetch data for pets
+                selected_deliveries_pets.append({
+                    'order_id': order_id,
+                    'item': item_name,
+                    'status': status,
+                    # Add more fields as needed
+                })
+            elif item_name.startswith('aquarium'):
+                # Assuming you have logic to fetch data for aquariums
+                selected_deliveries_aquarium.append({
+                    'order_id': order_id,
+                    'item': item_name,
+                    'status': status,
+                    # Add more fields as needed
+                })
+        else:
+            # Handle the case where the session data is not in the expected format
+            pass
+
+    context = {
+        'full_name': full_name,
+        'photo_url': photo_url,
+        'selected_deliveries_pets': selected_deliveries_pets,
+        'selected_deliveries_aquarium': selected_deliveries_aquarium
+    }
+
+    return render(request, 'selected_deliveries.html', context)
+
+
+
 
