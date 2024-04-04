@@ -96,6 +96,21 @@ class CartItem(models.Model):
     aquarium = models.ForeignKey(Aquarium, on_delete=models.CASCADE, null=True, blank=True)
 
 
+class Wishlist(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    item_category = models.CharField(max_length=255)  # 'pet' or 'aquarium'
+    item_id = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # Add a foreign key to the respective item model (Pet or Aquarium)
+    # You may need to adjust these fields based on your actual models
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, null=True, blank=True)
+    aquarium = models.ForeignKey(Aquarium, on_delete=models.CASCADE, null=True, blank=True)
+
+    
+
+
 
  #payment table
         

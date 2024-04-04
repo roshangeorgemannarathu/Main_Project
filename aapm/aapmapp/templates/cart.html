@@ -1,83 +1,156 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
+    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <title>Aquarium and Petshop Management System</title>
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}>
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+    <!--
+
+TemplateMo 571 Hexashop
+
+https://templatemo.com/tm-571-hexashop
+
+
+-->
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
+        h1 {
+            color: black;
         }
-        header {
-            background-color: #007BFF;
-            padding: 20px 0;
-            color: #fff;
-            text-align: center;
+
+        h4 {
+            color: black;
         }
-        header h1 {
-            font-size: 24px;
-        }
-        .content {
-            padding: 20px 0;
-        }
-        .product-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .product-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        .product-item img {
-            max-width: 100%;
+    </style>
+    <style>
+        .product-img {
+            width: 100%;
+            /* Set the width as needed */
             height: auto;
+            /* Maintain aspect ratio */
+            max-height: 200px;
+            /* Set the maximum height if needed */
+            object-fit: cover;
+            /* Ensure the image covers the container */
         }
-        .product-item h6 {
-            margin-top: 10px;
-            font-weight: bold;
+    </style>
+    <style>
+        .product-item {
+            height: 300px;
+            /* Set the desired height for the product container */
+            overflow: hidden;
+            /* Hide overflowing content */
         }
-        .product-item p {
-            font-size: 18px;
-            color: #007BFF;
-            font-weight: bold;
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        .product-item a {
-            display: block;
-            padding: 10px 0;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
+
+        .product-item {
+            position: relative; /* Add position relative to the product item */
+        }
+        .search-bar{
+
+        }
+
+        .table {
+            border-collapse: collapse;
             width: 100%;
         }
-        .product-item a:hover {
-            background-color: #0056b3;
+
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-        footer {
-            background-color: #007BFF;
-            padding: 10px 0;
-            color: #fff;
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 24px;
             text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
         }
-        h1 {
-            color: red;
+
+        .button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        
+                        <!-- ***** Logo Start ***** -->
+                        
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <h1>Pet Paradise Cart </h1>
+                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
 <body>
     <!-- ***** Header Area Start ***** -->
     <!-- ***** Header Area End ***** -->
@@ -113,19 +186,26 @@
         </div>
     </div>
     <!-- ***** Content End ***** -->
-    <!-- ***** Footer Start ***** -->
     <footer>
-        <div class="col-lg-12">
-            <div class="under-footer">
-                <p>Copyright © Pet Paradise Cart, Ltd. All Rights Reserved.</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+    <!-- ***** Footer End ***** -->
+
     <!-- jQuery -->
     <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
     <!-- Bootstrap -->
     <script src="{% static 'aapmapp/js/popper.js' %}"></script>
     <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
     <!-- Plugins -->
     <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
     <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
@@ -137,7 +217,26 @@
     <script src="{% static 'aapmapp/js/slick.js' %}"></script>
     <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
     <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
     <!-- Global Init -->
     <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        $(function() {
+            var selectedClass = "";
+            $("p").click(function() {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function() {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+
+            });
+        });
+    </script>
+
 </body>
+
 </html>

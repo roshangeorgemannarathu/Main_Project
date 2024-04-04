@@ -58,6 +58,8 @@
 
         .product-img {
             max-width: 100%;
+            height: 300px; /* Adjust the height as needed */
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
             border-radius: 8px;
             margin-bottom: 20px;
         }
@@ -78,7 +80,7 @@
         }
 
         .btn-primary {
-            background-color: black;
+            background-color: green; /* Change button color to green */
             color: white;
         }
 
@@ -129,8 +131,8 @@
         <div class="row">
             <div class="col-lg-8 offset-lg-2 product-details">
                 <h1>{{ pet.name }}</h1>
-                <h4>Payment Information</h4>
-                <p>Amount: {{ payment.amount }}</p>
+                <h4>Pet Information</h4>
+                {% comment %} <p>Amount: {{ payment.amount }}</p> {% endcomment %}
                 <!-- <p>Currency: {{ payment.currency }}</p> -->
 
                 <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="product-img">
@@ -145,45 +147,20 @@
 
 
                 <div class="btn-container">
-                    {% comment %} <form method="post" action="{% url 'add_to_cart' category='pet' item_id=pet.id %}" style="margin-right: 5px;">
+                    <form method="post" action="{% url 'pet_description' pet.id %}">
                         {% csrf_token %}
+                        <input type="hidden" name="pet_id" value="{{ pet.id }}">
+                        <!-- Other form fields and buttons -->
                         <button type="submit" class="btn btn-primary">Add To Cart</button>
-                    </form> {% endcomment %}
-                    <button id="razorpay-btn" class="btn btn-pay">Pay Now</button>
-
-                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-                    <script>
-                      var options = {
-                         
-                        // Enter the Key ID generated from the Dashboard
-                        key: "{{ razorpay_merchant_key }}", 
-                         
-                        // Amount is in currency subunits.
-                        // Default currency is INR. Hence, 
-                        // 50000 refers to 50000 paise
-                        amount: "{{ razorpay_amount }}", 
-                        currency: "{{ currency }}",
-                         
-                        // Your/store name.
-                        name: "Roshan", 
-                         
-                        // Pass the `id` obtained in the response of Step 1
-                        order_id: "{{ razorpay_order_id }}", 
-                        callback_url: "{{ callback_url }}",
-                      };
-                       
-                      // initialise razorpay with the options.
-                      var rzp1 = new Razorpay(options);
-                       
-                      // add event listener to the payment button.
-                      document.getElementById("razorpay-btn").onclick = function (e) {
-                        rzp1.open();
-                        e.preventDefault();
-                      };
-                    </script>
-
-
-                
+                    </form>
+                    
+                    
+                    
+                    
+                    <form method="post" action="{% url 'add_to_cart' category='pet' item_id=pet.id %}" style="margin-right: 5px;">
+                       {% csrf_token %}
+                       <button type="submit" class="btn btn-primary">wishlist</button>
+                   </form> 
                 </div>
             </div>
         </div>

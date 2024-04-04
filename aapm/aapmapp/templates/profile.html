@@ -107,7 +107,7 @@ https://templatemo.com/tm-571-hexashop
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <h1>Pet Paradise Cart </h1>
-                        <li class="scroll-to-section"><a href="#" onclick="goBack()">Home</a></li>
+                        <li class="scroll-to-section"><a href="#" onclick="goBack()">Go Back</a></li>
                         <!-- Other menu items -->
                         <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                     </ul>
@@ -137,10 +137,10 @@ https://templatemo.com/tm-571-hexashop
                   <th scope="row">Full Name</th>
                   <td>{{ fullname }}</td>
                 </tr>
-                <tr>
+                {% comment %} <tr>
                   <th scope="row">Date of Birth</th>
                   <td>{{ dateofbirth }}</td>
-                </tr>
+                </tr> {% endcomment %}
                 <!--
                 <tr>
                     <th scope="row">Gender</th>

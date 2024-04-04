@@ -1,0 +1,32 @@
+<!-- out_for_delivery.html -->
+{% extends "Delivery/deliveryboybase.html" %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        {% for assignment in pending_assignments %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        {% for address in assignment.user.address_set.all %}
+                            <h5 class="card-title">Order ID: {{ assignment.order.order_id_data }}</h5>
+                            <p class="card-text">Product Name: {{ assignment.product.product_name }}</p>
+                            <p class="card-text">Customer Name: {{ address.name }}</p>
+                            <p class="card-text">Address: {{ address.address }}</p>
+                            <p class="card-text">Pincode: {{ address.pincode }}</p>
+                            <p class="card-text">Locality: {{ address.locality }}</p>
+                            <form action="{% url 'out_for_delivery' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="delivery_assignment_id" value="{{ assignment.pk }}">
+                                <button type="submit" class="btn btn-primary">Start Delivery</button>
+                            </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% if otp_sent %}
+    <p>OTP has been sent to the customer's email.</p>
+{% endif %}
+{% endblock body %}

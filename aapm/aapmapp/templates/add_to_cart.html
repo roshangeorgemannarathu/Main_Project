@@ -4,6 +4,8 @@
 
 <head>
 
+    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -35,41 +37,175 @@ https://templatemo.com/tm-571-hexashop
         h4 {
             color: black;
         }
-
-        .go-back-home-button {
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            margin-right: 20px;
+    </style>
+    <style>
+        .product-img {
+            width: 100%;
+            /* Set the width as needed */
+            height: auto;
+            /* Maintain aspect ratio */
+            max-height: 200px;
+            /* Set the maximum height if needed */
+            object-fit: cover;
+            /* Ensure the image covers the container */
         }
     </style>
+    <style>
+        .product-item {
+            height: 300px;
+            /* Set the desired height for the product container */
+            overflow: hidden;
+            /* Hide overflowing content */
+        }
 
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
+        .product-item {
+            position: relative; /* Add position relative to the product item */
+        }
+        .search-bar{
+
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    
 </head>
+<style>
+    /* Add your custom CSS styles for the table here */
+    .table-container {
+        overflow-x: auto;
+    }
 
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid #ddd;
+    }
+
+    .table th,
+    .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:hover {
+        background-color: #ddd;
+    }
+
+    .table img {
+        max-width: 80px;
+        max-height: 80px;
+        vertical-align: middle;
+    }
+
+    .purchase-now {
+        background-color: #ff9900;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .purchase-now:hover {
+        background-color: #e68a00;
+    }
+</style>
 <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
     <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky" style="background-color: #F6F2E3; margin-bottom: 20px;">
+    <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <nav class="main-nav">
-                        <h1> Your Cart</h1>
+                        
                         <!-- ***** Logo Start ***** -->
+                        
                         <a href="" class="logo">
                             <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
                         </a>
                         <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <h1>Pet Paradise Cart </h1>
+                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="">Wishlist</a></li>
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
                     </nav>
-                </div>
-                <div class="col-6 text-right">
-                    <a href="{% url 'customer_account' %}" class="go-back-home-button">Go Back Home</a>
                 </div>
             </div>
         </div>
     </header>
+    <!-- ***** Header Area End ***** -->
     <!-- ***** Header Area End ***** -->
     <!-- Content for My Cart page -->
    <!-- Content for My Cart page -->
@@ -138,7 +274,7 @@ https://templatemo.com/tm-571-hexashop
                             <form method="post" action="{% url 'purchase_item' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="item_id" value="{{ item.id }}">
-                                <button type="submit" class="btn btn-primary">Buy Now</button>
+                                <button type="submit" class="purchase-now">Buy Now</button>
                             </form>
                         </td>
                     </tr>
@@ -153,14 +289,57 @@ https://templatemo.com/tm-571-hexashop
     </div>
 </div>
 
-    <footer>
-
-        <div class="col-lg-12">
-            <div class="under-footer">
-                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="under-footer">
+                    <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+<!-- ***** Footer End ***** -->
+
+<!-- jQuery -->
+<script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'aapmapp/js/popper.js' %}"></script>
+<script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+<!-- Plugins -->
+<script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+<script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+<script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+<script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/slick.js' %}"></script>
+<script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+<script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+<!-- Global Init -->
+<script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+<script>
+    $(function() {
+        var selectedClass = "";
+        $("p").click(function() {
+            selectedClass = $(this).attr("data-rel");
+            $("#portfolio").fadeTo(50, 0.1);
+            $("#portfolio div").not("." + selectedClass).fadeOut();
+            setTimeout(function() {
+                $("." + selectedClass).fadeIn();
+                $("#portfolio").fadeTo(50, 1);
+            }, 500);
+
+        });
+    });
+</script>
+
 </body>
 
 </html>

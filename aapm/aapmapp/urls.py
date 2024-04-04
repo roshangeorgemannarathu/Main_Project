@@ -109,7 +109,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('payment-details/', views.payment_details_view, name='payment_details'),
     #  path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu')
     path('submit_review_aqu/<int:aquarium_id>/', views.submit_review_aqu, name='submit_review_aqu'),
-     path('add_to_cart/<str:category>/<int:item_id>/',views. add_to_cart, name='add_to_cart'),
+    #  path('add_to_cart/<str:category>/<int:item_id>/',views. add_to_cart, name='add_to_cart'),
 
     path('upload_csv', views.upload_csv, name='upload_csv'),
     # path('add_delivery_man/', views.add_delivery_man, name='add_delivery_man'),
@@ -131,8 +131,20 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('process_selected_items/', views.process_selected_items, name='process_selected_items'),
     path('selected_deliveries/', views.selected_deliveries, name='selected_deliveries'),
     path('success/', views.success, name='success'),
+    # path('pet_describtion/', views.pet_describtion, name='pet_describtion'),
+    # path('aquarium_describtion/', views.aquarium_describtion, name='aquarium_describtion'),
+    path('aquarium_describtion/<int:aquarium_id>/', views.aquarium_describtion, name='aquarium_describtion'),
+    path('aquarium/add_to_wishlist/<int:aquarium_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('pet_describtion/<int:pet_id>/', views.pet_describtion, name='pet_describtion'),
 
- 
+    path('wishlist/', views.wishlist, name='wishlist'),
+    path('purchase/', views.purchase, name='purchase'),
+    path('trackmyorder/', views.trackmyorder, name='trackmyorder'),
+    path('ship_order/',views.ship_order,name='ship_order'),
+    path('mark-shipped/<int:assignment_id>/', views.mark_as_shipped, name='mark_shipped'),
+    path('new_orders/',views.new_orders,name='new_orders'),
+    path('out_for_delivery/',views.out_for_delivery,name='out_for_delivery'),
+    path('verify_otp/',views.verify_otp,name='verify_otp')
 
 ]
 

@@ -120,13 +120,13 @@
         
         <p>Description: {{ aquarium.description }}</p>
         <p>Location: {{ aquarium.location }}</p>
-        <button id="showMapBtn" class="btn btn-primary" {% if aquarium.location %} onclick="showMap()" {% else %} disabled {% endif %}>Show Location on Map</button>
+        {% comment %} <button id="showMapBtn" class="btn btn-primary" {% if aquarium.location %} onclick="showMap()" {% else %} disabled {% endif %}>Show Location on Map</button> {% endcomment %}
         <div class="btn-container">
-            <form method="post" action="{% url 'add_to_cart' category='aquarium' item_id=aquarium.id %}">
+            {% comment %} <form method="post" action="{% url 'add_to_cart' category='aquarium' item_id=aquarium.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Add To Cart</button>
-            </form>
-            <button id="razorpay-btn" class="btn btn-pay">Buy Now</button>
+            </form> {% endcomment %}
+            <button id="razorpay-btn" class="btn btn-pay">Pay Now</button>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
                 var options = {
