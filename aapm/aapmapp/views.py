@@ -815,7 +815,7 @@ def purchase_item(request):
         # Handle the purchase logic here
         # For example, you can process the purchase and redirect the user to a thank you page
         # After processing the purchase, redirect the user to the purchase.html page or any other page as needed
-        return redirect('purchase')  # Replace 'purchase' with the name of the view that renders purchase.html
+        return redirect('')  # Replace 'purchase' with the name of the view that renders purchase.html
     else:
         # Handle GET requests (optional)
         # If the request method is GET, render the purchase.html template
@@ -878,11 +878,9 @@ from .models import CartItem, UserProfile, Pet, Aquarium
 
 def mycart(request):
     if request.method == 'POST':
-        # Assuming you have a form to add items to the cart
-        # Retrieve item data from the form submission
         item_id = request.POST.get('item_id')
         item_category = request.POST.get('item_category')
-        quantity = int(request.POST.get('quantity'))
+        quantity =  request.POST.get('quantity')
         
         # Retrieve the user's profile
         user_profile_list = UserProfile.objects.filter(user=request.user)
@@ -922,7 +920,10 @@ def mycart(request):
         user_profile = user_profile_list[0]
 
         cart_items = CartItem.objects.filter(user=user_profile)
-        context = {'cart_items': cart_items}
+        det_Pet = Pet.objects.all()
+        det_aqu = Aquarium.objects.all()
+        context = {'cart_items': cart_items,
+                   'det_pet' : det_Pet}
 
         return render(request, 'add_to_cart.html', context)
 
@@ -1054,279 +1055,217 @@ def add_to_cart(request, category, item_id):
 #         error_message = f"An error occurred: {str(e)}"
 #         return render(request, 'error.html', {'error_message': error_message})
 
-
-# from django.shortcuts import render, get_object_or_404
-# from django.http import HttpResponse, HttpResponseBadRequest
-# from django.views.decorators.csrf import csrf_exempt
-# from .models import Pet, Userpayment
-# from django.utils import timezone
-# import razorpay
-
-# razorpay_client = razorpay.Client(auth=("YOUR_API_KEY", "YOUR_API_SECRET"))
-
-# @csrf_exempt
-# def paymenthandler(request):
-#     if request.method == "POST":
-#         try:
-#             # get the required parameters from post request.
-#             payment_id = request.POST.get('razorpay_payment_id', '')
-#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
-#             signature = request.POST.get('razorpay_signature', '')
-#             params_dict = {
-#                 'razorpay_order_id': razorpay_order_id,
-#                 'razorpay_payment_id': payment_id,
-#                 'razorpay_signature': signature
-#             }
-
-#             # verify the payment signature.
-#             result = razorpay_client.utility.verify_payment_signature(params_dict)
-
-#             pet_id = request.session.pop('pet_id', None)
-#             pet = get_object_or_404(Pet, id=pet_id)
-#             pet.status = "inactive"  # Set the status to "inactive"
-#             pet.save()
-
-#             if result is not None:
-#                 try:
-#                     # Save payment details to Userpayment table
-#                     current_datetime = timezone.now()
-#                     user_payment_instance = Userpayment.objects.create(
-#                         user=request.user,  # Assuming `request.user` holds the user instance
-#                         cart=1,  # Adjust as per your requirement
-#                         amount=pet.price,
-#                         datetime=current_datetime,
-#                         order_id_data=razorpay_order_id,
-#                         payment_id_data=payment_id,
-#                         item=pet 
-#                     )
-#                     # render success page on successful capture of payment
-#                     return render(request, 'payment_success.html')
-#                 except Exception as e:
-#                     # Log the exception or handle it as appropriate
-#                     print(e)  # Print the exception for debugging
-#                     return HttpResponse("fail: {}".format(str(e)))
-#             else:
-#                 # if signature verification fails.
-#                 return HttpResponse("signature fail")
-#         except Exception as e:
-#             # if we don't find the required parameters in POST data
-#             print(e)  # Print the exception for debugging
-#             return HttpResponseBadRequest()
-#     else:
-#         # if other than POST request is made.
-#         return HttpResponseBadRequest()
-# from django.shortcuts import render, get_object_or_404
-# from django.conf import settings
-# from .models import Pet
-# import razorpay
-
-# def pet_details(request, pet_id):
-#     # Retrieve the pet object using the provided pet_id
-#     pet = get_object_or_404(Pet, id=pet_id)
-#     currency = 'INR'
-
-#     amount = int(pet.price * 100)  # Convert to integer
-
-#     # Initialize Razorpay client with your API key
-#     razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-
-#     try:
-#         # Create Razorpay order
-#         razorpay_order = razorpay_client.order.create(dict(amount=amount,
-#                                                            currency=currency,
-#                                                            payment_capture='0'))
-        
-#         # Order ID of the newly created order
-#         razorpay_order_id = razorpay_order['id']
-#         callback_url = '/paymenthandler/'
-        
-#         # Pass necessary details to the frontend including pet_id
-#         context = {
-#             'razorpay_order_id': razorpay_order_id,
-#             'razorpay_merchant_key': settings.RAZOR_KEY_ID,
-#             'razorpay_amount': amount,
-#             'currency': currency,
-#             'callback_url': callback_url,
-#             'pet': pet,
-#             'pet_id': pet_id,  # Pass pet_id to template
-#         }
-        
-#         return render(request, 'pet_details.html', context=context)
-    
-#     except Exception as e:
-#         # Handle exceptions, such as authentication errors
-#         error_message = f"An error occurred: {str(e)}"
-#         return render(request, 'error.html', {'error_message': error_message})
-
-    
-# @csrf_exempt
-# def paymenthandler(request):
-#     if request.method == "POST":
-#         try:
-#             # get the required parameters from post request.
-#             payment_id = request.POST.get('razorpay_payment_id', '')
-#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
-#             signature = request.POST.get('razorpay_signature', '')
-#             pet_id = request.POST.get('pet_id', '')  # Retrieve pet_id from POST data
-            
-#             # Ensure that pet_id is not empty
-#             if not pet_id:
-#                 return HttpResponseBadRequest("Pet ID is missing.")
-            
-#             # Verify the payment signature.
-#             result = razorpay_client.utility.verify_payment_signature({
-#                 'razorpay_order_id': razorpay_order_id,
-#                 'razorpay_payment_id': payment_id,
-#                 'razorpay_signature': signature
-#             })
-
-#             # Retrieve the pet object using the pet_id
-#             pet = get_object_or_404(Pet, id=pet_id)
-#             pet.status = "inactive"  # Set the status to "inactive"
-#             pet.save()
-
-#             # Rest of your payment handling logic...
-
-
-#             if result is not None:
-#                 try:
-#                     # Save payment details to Userpayment table
-#                     current_datetime = timezone.now()
-#                     user_payment_instance = Userpayment.objects.create(
-#                         user=request.user,  # Assuming `request.user` holds the user instance
-#                         cart=1,  # Adjust as per your requirement
-#                         amount=pet.price,
-#                         datetime=current_datetime,
-#                         order_id_data=razorpay_order_id,
-#                         payment_id_data=payment_id,
-#                         item=pet 
-#                     )
-#                     # Render success page on successful capture of payment
-#                     return render(request, 'payment_success.html')
-#                 except Exception as e:
-#                     # Log the exception or handle it as appropriate
-#                     print(e)  # Print the exception for debugging
-#                     return HttpResponse("fail: {}".format(str(e)))
-#             else:
-#                 # If signature verification fails.
-#                 return HttpResponse("Signature verification failed")
-#         except Exception as e:
-#             # If we don't find the required parameters in POST data
-#             print(e)  # Print the exception for debugging
-#             return HttpResponseBadRequest()
-#         else:
-#         # If other than POST request is made.
-#          return HttpResponseBadRequest()
-
-
-
-
-
-# @csrf_exempt
-# def paymenthandler(request):
-#     if request.method == "POST":
-#         try:
-#             # get the required parameters from post request.
-#             payment_id = request.POST.get('razorpay_payment_id', '')
-#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
-#             signature = request.POST.get('razorpay_signature', '')
-#             params_dict = {
-#                 'razorpay_order_id': razorpay_order_id,
-#                 'razorpay_payment_id': payment_id,
-#                 'razorpay_signature': signature
-#             }
-
-#             # verify the payment signature.
-#             result = razorpay_client.utility.verify_payment_signature(params_dict)
-
-#             pet_id = request.session.pop('pet_id', None)
-#             pet = get_object_or_404(Pet, id=pet_id)
-#             pet.status = "inactive"  # Set the status to "inactive"
-#             pet.save()
-
-#             if result is not None:
-#                 try:
-#                     # Save payment details to Userpayment table
-#                     current_datetime = timezone.now()
-#                     user_payment_instance = Userpayment.objects.create(
-#                         user=request.user,  # Adjust as per your user model
-#                         cart=1,  # Adjust as per your requirement
-#                         amount=pet.price,
-#                         datetime=current_datetime,
-#                         order_id_data=razorpay_order_id,
-#                         payment_id_data=payment_id,
-#                         item=pet 
-#                     )
-#                     # render success page on successful capture of payment
-#                     return render(request, 'payment_success.html')
-#                 except Exception as e:
-#                     # Log the exception or handle it as appropriate
-#                     print(e)  # Print the exception for debugging
-#                     return HttpResponse("fail: {}".format(str(e)))
-#             else:
-#                 # if signature verification fails.
-#                 return HttpResponse("signature fail")
-#         except Exception as e:
-#             # if we don't find the required parameters in POST data
-#             print(e)  # Print the exception for debugging
-#             return HttpResponseBadRequest()
-#     else:
-#         # if other than POST request is made.
-#         return HttpResponseBadRequest()
-# 
-
-
-
-
-
-
+from django.shortcuts import render, get_object_or_404
+from django.conf import settings
+from .models import Pet
+import razorpay
 
 def pet_details(request, pet_id):
+    
     request.session['pet_id'] = pet_id
+    print(pet_id)
+
+
     pet = get_object_or_404(Pet, id=pet_id)
     currency = 'INR'
-
     amount = int(pet.price * 100)  # Convert to integer
-    razorpay_order = razorpay_client.order.create(dict(amount=amount,
-                                                       currency=currency,
-                                                       payment_capture='0'))
+    razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+    try:
+        razorpay_order = razorpay_client.order.create(dict(amount=amount, currency=currency, payment_capture='0'))
+        razorpay_order_id = razorpay_order['id']
+        callback_url = '/paymenthandler/'
+        context = {
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+            'razorpay_amount': amount,
+            'currency': currency,
+            'callback_url': callback_url,
+            'pet': pet,
+            'location': pet.location
+        }
+        return render(request, 'pet_details.html', context=context)
+    except Exception as e:
+        error_message = f"An error occurred: {str(e)}"
+        return render(request, 'error.html', {'error_message': error_message})
+
+
+
+
+
+
+
+# from django.shortcuts import render
+# import razorpay
+# from django.conf import settings
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import HttpResponseBadRequest
  
-    # order id of newly created order.
-    razorpay_order_id = razorpay_order['id']
-    callback_url = '/paymenthandler/'
- 
-    # we need to pass these details to frontend.
-    context = {}
-    context['razorpay_order_id'] = razorpay_order_id
-    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-    context['razorpay_amount'] = amount
-    context['currency'] = currency
-    context['callback_url'] = callback_url
-    context['pet'] = pet
-    return render(request, 'pet_details.html', context=context)
+# from django.http import HttpResponse, HttpResponseBadRequest
+# from django.views.decorators.csrf import csrf_exempt
+# from django.shortcuts import get_object_or_404
+# from .models import Pet
+# from django.utils import timezone
+
+
+
+# @csrf_exempt
+# def paymenthandler(request):
+#     if request.method == "POST":
+#         try:
+#             # Initialize Razorpay client with your API key
+#             razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+#             # get the required parameters from post request.
+#             payment_id = request.POST.get('razorpay_payment_id', '')
+#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
+#             signature = request.POST.get('razorpay_signature', '')
+#             params_dict = {
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature
+#             }
+
+#             # Log the received parameters for debugging
+#             print("Received POST data:", params_dict)
+
+#             # verify the payment signature.
+#             result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+#             if result:
+#                 # Signature verification succeeded
+#                 pet_id = request.session.get('pet_id')
+#                 if pet_id:
+#                     pet = get_object_or_404(Pet, id=pet_id)
+#                     pet.status = "inactive"  # Set the status to "inactive"
+#                     pet.save()
+
+#                     try:
+#                         # Save payment details to Userpayment table
+#                         current_datetime = timezone.now()
+#                         user_payment_instance = Userpayment.objects.create(
+#                             user=request.user,  # Adjust as per your user model
+#                             cart=1,  # Adjust as per your requirement
+#                             amount=pet.price,
+#                             datetime=current_datetime,
+#                             order_id_data=razorpay_order_id,
+#                             payment_id_data=payment_id,
+#                             item=pet 
+#                         )
+#                         # render success page on successful capture of payment
+#                         return render(request, 'payment_success.html')
+#                     except Exception as e:
+#                         # Log the exception or handle it as appropriate
+#                         print(e)  # Print the exception for debugging
+#                         return HttpResponse("fail: {}".format(str(e)))
+#                 else:
+#                     # No pet_id found in session
+#                     return HttpResponseBadRequest("No pet_id found in session")
+#             else:
+#                 # Signature verification failed
+#                 return HttpResponse("Razorpay Signature Verification Failed", status=400)
+#         except Exception as e:
+#             # Log any exceptions for debugging
+#             print(e)
+#             return HttpResponseBadRequest("An error occurred: {}".format(str(e)))
+#     else:
+#         # Invalid request method
+#         return HttpResponseBadRequest("Invalid request method")
+
+
+#new
+
+# from django.shortcuts import render, get_object_or_404
+# import razorpay
+# from django.conf import settings
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import HttpResponse, HttpResponseBadRequest
+# from .models import Pet
+# from django.utils import timezone
+
+# @csrf_exempt
+# def paymenthandler(request):
+#     if request.method == "POST":
+#         try:
+#             razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+#             payment_id = request.POST.get('razorpay_payment_id', '')
+#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
+#             signature = request.POST.get('razorpay_signature', '')
+#             params_dict = {
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature
+#             }
+#             result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+#             if result:
+#                 pet_id = request.session.get('pet_id')
+
+#                 if pet_id:
+#                     pet = get_object_or_404(Pet, id=pet_id)
+#                     pet.status = "inactive"
+#                     pet.save()
+
+#                     try:
+#                         current_datetime = timezone.now()
+#                         user_payment_instance = Userpayment.objects.create(
+#                             user=request.user,
+#                             cart=1,
+#                             amount=pet.price,
+#                             datetime=current_datetime,
+#                             order_id_data=razorpay_order_id,
+#                             payment_id_data=payment_id,
+#                             item=pet 
+#                         )
+
+
+#                         user_address = UserProfile.objects.get(user=request.user) 
+#                         user=request.user
+#                         print("ppp")
+#                         print("User Address:", user_address.pincode)
+#                         delivery_boys = DeliveryMan.objects.filter(pincode=user_address.pincode)
+#                         print("qqq")
+#                         print("Delivery Boys:", delivery_boys)
+#                         selected_delivery_boy = delivery_boys.first()  
+#                         print("rrr")
+#                         print("Selected Delivery Boy:", selected_delivery_boy)
+                
+#                         delivery_assignment = DeliveryAssignment.objects.create(
+#                                  user=user,
+#                                 delivery_man=selected_delivery_boy,
+#                                product=pet
+#                            )
+
+#                         return render(request, 'payment_success.html')
+#                     except Exception as e:
+#                         print(e)
+#                         return HttpResponse("fail: {}".format(str(e)))
+#                 else:
+#                     return HttpResponseBadRequest("No pet_id found in session")
+#             else:
+#                 return HttpResponse("Razorpay Signature Verification Failed", status=400)
+#         except Exception as e:
+#             print(e)
+#             return HttpResponseBadRequest("An error occurred: {}".format(str(e)))
+#     else:
+#         return HttpResponseBadRequest("Invalid request method")
 
 
 
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
- 
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
-from .models import Pet
+from .models import Pet, Userpayment, UserProfile, DeliveryMan, DeliveryAssignment
 from django.utils import timezone
-
-
 
 @csrf_exempt
 def paymenthandler(request):
     if request.method == "POST":
         try:
-            # get the required parameters from post request.
+            razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
             payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
             signature = request.POST.get('razorpay_signature', '')
@@ -1335,88 +1274,346 @@ def paymenthandler(request):
                 'razorpay_payment_id': payment_id,
                 'razorpay_signature': signature
             }
-
-            # verify the payment signature.
             result = razorpay_client.utility.verify_payment_signature(params_dict)
 
-            pet_id = request.session.pop('pet_id', None)
-            pet = get_object_or_404(Pet, id=pet_id)
-            pet.status = "inactive"  # Set the status to "inactive"
-            pet.save()
+            if result:
+                pet_id = request.session.get('pet_id')
 
-            if result is not None:
-                try:
-                    # Save payment details to Userpayment table
+                if pet_id:
+                    pet = get_object_or_404(Pet, id=pet_id)
+                    pet.status = "inactive"
+                    pet.save()
+
                     current_datetime = timezone.now()
+                    user_address = UserProfile.objects.get(user=request.user)
+                    amount = pet.price
+
                     user_payment_instance = Userpayment.objects.create(
-                        user=request.user,  # Adjust as per your user model
-                        cart=1,  # Adjust as per your requirement
-                        amount=pet.price,
+                        user=request.user,
+                        cart=1,
+                        amount=amount,
                         datetime=current_datetime,
                         order_id_data=razorpay_order_id,
                         payment_id_data=payment_id,
-                        item=pet 
+                        item=pet
                     )
-                    # render success page on successful capture of payment
+
+                    delivery_boys = DeliveryMan.objects.filter(pincode=user_address.pincode)
+                    selected_delivery_boy = delivery_boys.first()
+
+                    if selected_delivery_boy:
+                        delivery_assignment = DeliveryAssignment.objects.create(
+                            user=request.user,
+                            delivery_man=selected_delivery_boy,
+                            product=pet,
+                            order_id=razorpay_order_id 
+                        )
+                    else:
+                        return HttpResponse("No delivery boy available for your location.")
+
                     return render(request, 'payment_success.html')
-                except Exception as e:
-                    # Log the exception or handle it as appropriate
-                    print(e)  # Print the exception for debugging
-                    return HttpResponse("fail: {}".format(str(e)))
+                else:
+                    return HttpResponseBadRequest("No pet_id found in session")
             else:
-                # if signature verification fails.
-                return HttpResponse("signature fail")
+                return HttpResponse("Razorpay Signature Verification Failed", status=400)
+        except Pet.DoesNotExist:
+            return HttpResponseBadRequest("Pet not found")
+        except UserProfile.DoesNotExist:
+            return HttpResponseBadRequest("User profile not found")
+        except DeliveryMan.DoesNotExist:
+            return HttpResponseBadRequest("No delivery boy found")
         except Exception as e:
-            # if we don't find the required parameters in POST data
-            print(e)  # Print the exception for debugging
-            return HttpResponseBadRequest()
+            print(e)
+            return HttpResponseBadRequest("An error occurred: {}".format(str(e)))
     else:
-        # if other than POST request is made.
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Invalid request method")
+
+
+
+# from django.shortcuts import render, get_object_or_404
+# from django.http import HttpResponse, HttpResponseBadRequest
+# from django.views.decorators.csrf import csrf_exempt
+# from django.utils import timezone
+# from .models import Userpayment, DeliveryAssignment
+# from .models import Pet, DeliveryMan, UserProfile
+# import razorpay
+# from django.conf import settings
+
+
+# @csrf_exempt
+# def paymenthandler(request):
+#     if request.method == "POST":
+#         try:
+#             razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+#             payment_id = request.POST.get('razorpay_payment_id', '')
+#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
+#             signature = request.POST.get('razorpay_signature', '')
+#             params_dict = {
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature
+#             }
+#             result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+#             if result:
+#                 pet_id = request.session.get('pet_id')
+
+#                 if pet_id:
+#                     pet = get_object_or_404(Pet, id=pet_id)
+#                     pet.status = "inactive"
+#                     pet.save()
+
+#                     try:
+#                         current_datetime = timezone.now()
+#                         user_payment_instance = Userpayment.objects.create(
+#                             user=request.user,
+#                             cart=1,
+#                             amount=pet.price,
+#                             datetime=current_datetime,
+#                             order_id_data=razorpay_order_id,
+#                             payment_id_data=payment_id,
+#                             item=pet 
+#                         )
+
+#                         user_address = UserProfile.objects.get(user=request.user)
+#                         delivery_boys = DeliveryMan.objects.filter(pincode=user_address.pincode)
+#                         if delivery_boys.exists():
+#                             selected_delivery_boy = delivery_boys.first()  
+#                             delivery_assignment = DeliveryAssignment.objects.create(
+#                                 user=request.user,
+#                                 delivery_man=selected_delivery_boy,
+#                                 product=pet,
+#                                 payment_id=payment_id  # Set payment_id here
+#                             )
+#                             return render(request, 'payment_success.html')
+#                         else:
+#                             return HttpResponse("No available delivery boys for this pincode.")
+#                     except Exception as e:
+#                         print(e)
+#                         return HttpResponse("fail: {}".format(str(e)))
+#                 else:
+#                     return HttpResponseBadRequest("No pet_id found in session")
+#             else:
+#                 return HttpResponse("Razorpay Signature Verification Failed", status=400)
+#         except Exception as e:
+#             print(e)
+#             return HttpResponseBadRequest("An error occurred: {}".format(str(e)))
+#     else:
+#         return HttpResponseBadRequest("Invalid request method")
+
+
+# from django.shortcuts import render, get_object_or_404
+# from django.http import HttpResponse
+# import razorpay
+
+
+# def aquarium_details(request, aquarium_id):
+#     request.session['item_id'] = aquarium_id
+#     request.session['item_type'] = 'aquarium'
+
+#     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+#     currency = 'INR'
+
+#     # Ensure amount is at least 100 paise (1 INR)
+#     amount = max(int(math.ceil(aquarium.price * 100)), 100)
+
+#     # Ensure amount is a multiple of 100 paise
+#     amount = (amount // 100) * 100
+
+#     razorpay_order =razorpay_client.order.create(dict(amount=amount, currency=currency, payment_capture='0'))
+ 
+#     # order id of newly created order.
+#     razorpay_order_id = razorpay_order['id']
+#     callback_url = '/paymenthandler1/'
+ 
+#     # we need to pass these details to frontend.
+#     context = {}
+#     context['razorpay_order_id'] = razorpay_order_id
+#     context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+#     context['razorpay_amount'] = amount
+#     context['currency'] = currency
+#     context['callback_url'] = callback_url
+#     context['aquarium'] = aquarium
+#     return render(request, 'aquarium_details.html', context=context)
+
+
+
+
+
+# from django.shortcuts import render, get_object_or_404
+# from django.conf import settings
+# from django.urls import reverse
+# from django.http import HttpResponseServerError
+# import razorpay
+
+# from .models import Aquarium
+
+# def aquarium_details(request, aquarium_id):
+#     # Retrieve the aquarium object or return a 404 error if not found
+#     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+    
+#     # Calculate the amount in the smallest currency unit (paise for INR)
+#     amount = int(aquarium.price * 100)
+#     currency = 'INR'
+    
+#     # Initialize the Razorpay client with your API keys
+#     razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+    
+#     try:
+#         # Create a Razorpay order
+#         razorpay_order = razorpay_client.order.create({
+#             'amount': amount,
+#             'currency': currency,
+#             'payment_capture': '0'  # Set to '1' for automatic capture
+#         })
+        
+#         # Extract the Razorpay order ID
+#         razorpay_order_id = razorpay_order['id']
+        
+#         # Build the callback URL for the payment handler view
+#         callback_url = request.build_absolute_uri(reverse('paymenthandler1'))
+        
+#         # Prepare the context data to pass to the template
+#         context = {
+#             'aquarium': aquarium,
+#             'amount': amount,
+#             'currency': currency,
+#             'razorpay_order_id': razorpay_order_id,
+#             'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+#             'callback_url': callback_url
+#         }
+        
+#         # Render the aquarium details template with the context data
+#         return render(request, 'aquarium_details.html', context=context)
+    
+#     except razorpay.errors.RazorpayError as e:
+#         # Handle Razorpay errors
+#         error_message = f"Razorpay error: {e}"
+#         return HttpResponseServerError(error_message)
+#     except Exception as e:
+#         # Handle other unexpected errors
+#         error_message = f"An error occurred: {e}"
+#         return HttpResponseServerError(error_message)
+
+
 
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.conf import settings
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from .models import Aquarium
 import razorpay
 
-
 def aquarium_details(request, aquarium_id):
-    request.session['item_id'] = aquarium_id
-    request.session['item_type'] = 'aquarium'
+    try:
+        aquarium = Aquarium.objects.get(id=aquarium_id)
+    except Aquarium.DoesNotExist:
+        return render(request, 'error.html', {'error_message': 'Aquarium not found'})
 
-    aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+    request.session['aquarium_id'] = aquarium_id
     currency = 'INR'
+    amount = int(aquarium.price * 100)  # Convert to integer
 
-    # Ensure amount is at least 100 paise (1 INR)
-    amount = max(int(math.ceil(aquarium.price * 100)), 100)
+    razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+    
+    try:
+        razorpay_order = razorpay_client.order.create(dict(amount=amount, currency=currency, payment_capture='0'))
+        razorpay_order_id = razorpay_order['id']
+        callback_url = reverse('paymenthandler1')  # Assuming 'paymenthandler1' is the name of your view
+        context = {
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+            'razorpay_amount': amount,
+            'currency': currency,
+            'callback_url': callback_url,
+            'aquarium': aquarium,
+            'location': aquarium.location
+        }
+        return render(request, 'aquarium_details.html', context=context)
+    except Exception as e:
+        error_message = f"An error occurred: {str(e)}"
+        return render(request, 'error.html', {'error_message': error_message})
 
-    # Ensure amount is a multiple of 100 paise
-    amount = (amount // 100) * 100
 
-    razorpay_order = razorpay_client.order.create(dict(amount=amount,
-                                                       currency=currency,
-                                                       payment_capture='0'))
- 
-    # order id of newly created order.
-    razorpay_order_id = razorpay_order['id']
-    callback_url = '/paymenthandler1/'
- 
-    # we need to pass these details to frontend.
-    context = {}
-    context['razorpay_order_id'] = razorpay_order_id
-    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-    context['razorpay_amount'] = amount
-    context['currency'] = currency
-    context['callback_url'] = callback_url
-    context['aquarium'] = aquarium
-    return render(request, 'aquarium_details.html', context=context)
 
+
+
+
+
+
+# @csrf_exempt
+# def paymenthandler1(request):
+#     if request.method == "POST":
+#         try:
+#             # get the required parameters from post request.
+#             payment_id = request.POST.get('razorpay_payment_id', '')
+#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
+#             signature = request.POST.get('razorpay_signature', '')
+#             params_dict = {
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature
+#             }
+
+#             # verify the payment signature.
+#             result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+#             item_id = request.session.pop('item_id', None)
+#             item_type = request.session.pop('item_type', None)
+
+#             if result is not None:
+#                 try:
+#                     current_datetime = timezone.now()
+#                     if item_type == 'pet':
+#                         item = get_object_or_404(Pet, id=item_id)
+#                     elif item_type == 'aquarium':
+#                         item = get_object_or_404(Aquarium, id=item_id)
+#                     else:
+#                         # Handle invalid item type
+#                         return HttpResponseBadRequest("Invalid item type")
+
+#                     # Save payment details to Userpayment_aquarium table
+#                     user_payment_instance = Userpayment_aquarium.objects.create(
+#                         user=request.user,
+#                         cart=1,
+#                         amount=item.price,
+#                         datetime=current_datetime,
+#                         order_id_data=razorpay_order_id,
+#                         payment_id_data=payment_id,
+#                         item=item  # Associate the payment with the correct item
+#                     )
+#                     # render success page on successful capture of payment
+#                     return render(request, 'payment_success.html')
+#                 except Exception as e:
+#                     # Log the exception or handle it as appropriate
+#                     print(e)
+#                     return HttpResponse("fail: {}".format(str(e)))
+#             else:
+#                 # if signature verification fails.
+#                 return HttpResponse("signature fail")
+#         except Exception as e:
+#             # if we don't find the required parameters in POST data
+#             print(e)
+#             return HttpResponseBadRequest()
+#     else:
+#         # if other than POST request is made.
+#         return HttpResponseBadRequest()
+
+
+from django.shortcuts import render, get_object_or_404
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseBadRequest
+from .models import Aquarium, Userpayment_aquarium, UserProfile, DeliveryMan, DeliveryAssignment1
+from django.utils import timezone
 
 @csrf_exempt
 def paymenthandler1(request):
     if request.method == "POST":
         try:
-            # get the required parameters from post request.
+            razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
             payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
             signature = request.POST.get('razorpay_signature', '')
@@ -1425,50 +1622,61 @@ def paymenthandler1(request):
                 'razorpay_payment_id': payment_id,
                 'razorpay_signature': signature
             }
-
-            # verify the payment signature.
             result = razorpay_client.utility.verify_payment_signature(params_dict)
 
-            item_id = request.session.pop('item_id', None)
-            item_type = request.session.pop('item_type', None)
+            if result:
+                aquarium_id = request.session.get('aquarium_id')
 
-            if result is not None:
-                try:
+                if aquarium_id:
+                    aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+                    aquarium.status = "inactive"
+                    aquarium.save()
+
                     current_datetime = timezone.now()
-                    if item_type == 'pet':
-                        item = get_object_or_404(Pet, id=item_id)
-                    elif item_type == 'aquarium':
-                        item = get_object_or_404(Aquarium, id=item_id)
-                    else:
-                        # Handle invalid item type
-                        return HttpResponseBadRequest("Invalid item type")
+                    user_address = UserProfile.objects.get(user=request.user)
+                    amount = aquarium.price
 
-                    # Save payment details to Userpayment_aquarium table
                     user_payment_instance = Userpayment_aquarium.objects.create(
                         user=request.user,
                         cart=1,
-                        amount=item.price,
+                        amount=amount,
                         datetime=current_datetime,
                         order_id_data=razorpay_order_id,
                         payment_id_data=payment_id,
-                        item=item  # Associate the payment with the correct item
+                        item=aquarium
                     )
-                    # render success page on successful capture of payment
+
+                    delivery_boys = DeliveryMan.objects.filter(pincode=user_address.pincode)
+                    selected_delivery_boy = delivery_boys.first()
+
+                    if selected_delivery_boy:
+                        delivery_assignment = DeliveryAssignment1.objects.create(
+                            user=request.user,
+                            delivery_man=selected_delivery_boy,
+                            product=aquarium,
+                            order_id=razorpay_order_id 
+                        )
+                    else:
+                        return HttpResponse("No delivery boy available for your location.")
+
                     return render(request, 'payment_success.html')
-                except Exception as e:
-                    # Log the exception or handle it as appropriate
-                    print(e)
-                    return HttpResponse("fail: {}".format(str(e)))
+                else:
+                    return HttpResponseBadRequest("No aquarium_id found in session")
             else:
-                # if signature verification fails.
-                return HttpResponse("signature fail")
+                return HttpResponse("Razorpay Signature Verification Failed", status=400)
+        except Pet.DoesNotExist:
+            return HttpResponseBadRequest("Aquarium not found")
+        except UserProfile.DoesNotExist:
+            return HttpResponseBadRequest("User profile not found")
+        except DeliveryMan.DoesNotExist:
+            return HttpResponseBadRequest("No delivery boy found")
         except Exception as e:
-            # if we don't find the required parameters in POST data
             print(e)
-            return HttpResponseBadRequest()
+            return HttpResponseBadRequest("An error occurred: {}".format(str(e)))
     else:
-        # if other than POST request is made.
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Invalid request method")
+
+
 
 
 
@@ -2080,135 +2288,7 @@ def submit_review_aqu(request, aquarium_id):
 #             return redirect('admin_dashboard')
 #     return render(request, 'add_delivery_man.html')
 
-
-
-
-
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.tokens import PasswordResetTokenGenerator
-# from django.utils.http import urlsafe_base64_encode
-# from django.utils.encoding import force_bytes
-# from django.urls import reverse
-# from django.core.mail import send_mail
-# from django.conf import settings
-# import csv
-# import random
-# import string
-# from .models import DeliveryMan, dealer
-
-# # Define a function to generate a temporary password
-# def generate_temporary_password():
-#     # Generate a random password of length 10
-#     temporary_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-#     return temporary_password
-
-# class CustomTokenGenerator(PasswordResetTokenGenerator):
-#     def _make_hash_value(self, user, timestamp):
-#         return (
-#             str(user.pk) + str(timestamp) + str(user.email)
-#         )
-
-# def send_login_email(delivery_man, temporary_password, request):
-#     subject = 'Your account has been created'
-#     # Generate unique token for login link using custom token generator
-#     token_generator = CustomTokenGenerator()
-#     token = token_generator.make_token(delivery_man)
-#     uid = urlsafe_base64_encode(force_bytes(delivery_man.pk))
-#     # Construct login link
-#     login_link = request.build_absolute_uri(reverse('login')) + f'?uid={uid}&token={token}'
-#     message = f'Hi {delivery_man.name},\n\nYour account has been created successfully. You can login using the following link:\n{login_link}\n\nUsername: {delivery_man.email}\nTemporary Password: {temporary_password}\n\nPlease login to your account and change your password.\n\nBest regards,\nYour Company Name'
-#     email_from = settings.EMAIL_HOST_USER
-#     recipient_list = [delivery_man.email]
-#     send_mail(subject, message, email_from, recipient_list)
-
-# def add_delivery_man(request):
-#     if request.method == 'POST':
-#         if 'csvFile' in request.FILES:  # If CSV file is uploaded
-#             csv_file = request.FILES['csvFile']
-#             decoded_file = csv_file.read().decode('utf-8').splitlines()
-#             csv_reader = csv.reader(decoded_file)
-#             for row in csv_reader:
-#                 name, email, phone, house_name, district, city, pincode, vehicle_type, vehicle_no = row
-#                 # Check if dealer with same email already exists
-#                 existing_dealer = dealer.objects.filter(email=email).first()
-#                 if existing_dealer:
-#                     # Update existing dealer object
-#                     existing_dealer.fullname = name
-#                     existing_dealer.save()
-#                 else:
-#                     # Create new dealer object
-#                     dealer_obj = dealer.objects.create(
-#                         email=email,
-#                         username=email,
-#                         fullname=name,
-#                         role="deliveryman"
-#                     )
-
-#                 delivery_man = DeliveryMan.objects.create(
-#                     name=name,
-#                     email=email,
-#                     phone=phone,
-#                     house_name=house_name,
-#                     district=district,
-#                     city=city,
-#                     pincode=pincode,
-#                     vehicle_type=vehicle_type,
-#                     vehicle_no=vehicle_no
-#                 )
-#                 temporary_password = generate_temporary_password()  # Generate temporary password
-#                 send_login_email(delivery_man, temporary_password, request)  # Send login email with temporary password
-#             return redirect('admin_dashboard')
-#         else:  # If form is submitted
-#             name = request.POST.get('name')
-#             email = request.POST.get('email')
-#             phone = request.POST.get('phone')
-#             house_name = request.POST.get('house_name')
-#             district = request.POST.get('district')
-#             city = request.POST.get('city')
-#             pincode = request.POST.get('pincode')
-#             vehicle_type = request.POST.get('vehicle_type')
-#             vehicle_no = request.POST.get('vehicle_no')
-
-#             dealer_obj, created = dealer.objects.get_or_create(
-#                 email=email,
-#                 defaults={'username': email, 'fullname': name, 'role': "deliveryman"}
-#             )
-#             if not created:
-#                 # Update existing dealer object
-#                 dealer_obj.fullname = name
-#                 dealer_obj.save()
-
-#             # Create DeliveryMan object
-#             delivery_man = DeliveryMan.objects.create(
-#                 name=name,
-#                 email=email,
-#                 phone=phone,
-#                 house_name=house_name,
-#                 district=district,
-#                 city=city,
-#                 pincode=pincode,
-#                 vehicle_type=vehicle_type,
-#                 vehicle_no=vehicle_no
-#             )
-
-#             # Generate temporary password
-#             temporary_password = generate_temporary_password()
-
-#             # Set temporary password for dealer object
-#             dealer_obj.set_password(temporary_password)
-#             dealer_obj.save()
-
-#             # Send login email with temporary password
-#             send_login_email(delivery_man, temporary_password, request)
-
-#             return redirect('admin_dashboard')
-
-#     return render(request, 'add_delivery_man.html')
-
-
-
 from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -2253,10 +2333,21 @@ def add_delivery_man(request):
             csv_reader = csv.reader(decoded_file)
             for row in csv_reader:
                 name, email, phone, house_name, district, city, pincode, vehicle_type, vehicle_no = row
-                dealer_obj, created = dealer.objects.get_or_create(
-                    email=email,
-                    defaults={'username': email, 'fullname': name, 'role': "deliveryman"}
-                )
+                # Check if dealer with same email already exists
+                existing_dealer = dealer.objects.filter(email=email).first()
+                if existing_dealer:
+                    # Update existing dealer object
+                    existing_dealer.fullname = name
+                    existing_dealer.save()
+                else:
+                    # Create new dealer object
+                    dealer_obj = dealer.objects.create(
+                        email=email,
+                        username=email,
+                        fullname=name,
+                        role="deliveryman"
+                    )
+
                 delivery_man = DeliveryMan.objects.create(
                     name=name,
                     email=email,
@@ -2269,8 +2360,6 @@ def add_delivery_man(request):
                     vehicle_no=vehicle_no
                 )
                 temporary_password = generate_temporary_password()  # Generate temporary password
-                dealer_obj.set_password(temporary_password)
-                dealer_obj.save()
                 send_login_email(delivery_man, temporary_password, request)  # Send login email with temporary password
             return redirect('admin_dashboard')
         else:  # If form is submitted
@@ -2319,17 +2408,7 @@ def add_delivery_man(request):
             return redirect('admin_dashboard')
 
     return render(request, 'add_delivery_man.html')
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -2730,7 +2809,7 @@ def pet_describtion(request, pet_id):
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Pet, Aquarium, CartItem
 
-def aquarium_describtion(request, aquarium_id):
+def aquarium_description(request, aquarium_id):
     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
     context = {
         'aquarium': aquarium,
@@ -2739,7 +2818,7 @@ def aquarium_describtion(request, aquarium_id):
     if request.method == 'POST':
         # Process form submission
         # Assuming you have a form field named 'quantity'
-        quantity = request.POST.get('quantity', 1)
+        quantity = request.POST.get('quantity', '1')
         user = request.user  # Assuming the user is authenticated
         cart_item = CartItem.objects.create(
             user=user,
@@ -2749,38 +2828,85 @@ def aquarium_describtion(request, aquarium_id):
         )
         # Optionally, you can add a success message here
         return redirect('cart')  # Redirect to the cart page or any other page
-    return render(request, 'aquarium_describtion.html', context=context)
+    return render(request, 'aquarium_description.html', context=context)
 
-def pet_describtion(request, pet_id):
+# def pet_description(request, pet_id):
+#     pet = get_object_or_404(Pet, id=pet_id)
+#     context = {
+#         'pet': pet,
+#         'location': pet.location
+#     }
+#     if request.method == 'POST':
+#         # Process form submission
+#         # Assuming you have a form field named 'quantity'
+#         quantity = request.POST.get('quantity', 1)
+#         user = request.user  # Assuming the user is authenticated
+#         cart_item = CartItem.objects.create(
+#             user=user,
+#             item_category='pet',
+#             item_id=pet.id,
+#             quantity=quantity
+#         )
+#         # Optionally, you can add a success message here
+#         return redirect('cart')  # Redirect to the cart page or any other page
+#     return render(request, 'pet_description.html', context=context)
+
+from django.shortcuts import redirect
+
+def pet_description(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    context = {
-        'pet': pet,
-        'location': pet.location
-    }
+    context = {'pet': pet}
+    
     if request.method == 'POST':
-        # Process form submission
-        # Assuming you have a form field named 'quantity'
+        user = UserProfile.objects.get (user=request.user)
+        item_id = pet.id
         quantity = request.POST.get('quantity', 1)
-        user = request.user  # Assuming the user is authenticated
+    
         cart_item = CartItem.objects.create(
-            user=user,
-            item_category='pet',
-            item_id=pet.id,
-            quantity=quantity
-        )
-        # Optionally, you can add a success message here
-        return redirect('cart')  # Redirect to the cart page or any other page
-    return render(request, 'pet_describtion.html', context=context)
+                user=user,
+                item_category='pet',
+                item_id=item_id,
+                quantity=quantity
+            )
+            # Optionally, you can add a success message here
+        return redirect('mycart')      
+    return render(request, 'pet_description.html', context=context)
+
+
+def add_wishlist(request,pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+
+    if request.method == 'POST':
+        user = UserProfile.objects.get (user=request.user)
+        item_id = pet.id
+        quantity = request.POST.get('quantity', 1)
+        wishlist_item = Wishlist.objects.create(
+                user=user,
+                item_category=pet.category,
+                item_id=item_id,
+                quantity=quantity
+            )
+            # Optionally, you can add a success message here
+        return redirect('wishlist')  
 
 
 
 
 
+# from .models import CartItem, UserProfile, Pet, Aquarium
+# def wishlist(request):
+#     wishlist_items = Wishlist.objects.all()
+#     return render(request, 'wishlist.html',{'wishlist_items': wishlist_items})
+    
 
-
+from django.shortcuts import render
+from .models import Wishlist
 
 def wishlist(request):
-    return render(request, 'wishlist.html',)
+    # Fetch wishlist items along with related Pet or Aquarium objects
+    wishlist_items = Wishlist.objects.select_related('pet', 'aquarium').all()
+    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
 
 # from django.shortcuts import render, redirect, get_object_or_404
 # from .models import Aquarium, Wishlist
@@ -2808,107 +2934,381 @@ def add_to_wishlist(request, aquarium_id):
     aqua = Aquarium.objects.get(id=aquarium_id)
     
     print(aqua)
-    return redirect('aquarium_describtion', aquarium_id=aquarium_id)
+    return redirect('aquarium_description', aquarium_id=aquarium_id)
 
 
 def purchase(request):
         return render(request, 'purchase.html')
 
 
+# views.py
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import CartItem
+
+def delete_item(request, item_id):
+    # Retrieve the item from the database
+    item = get_object_or_404(CartItem, id=item_id)
+    
+    # Perform deletion
+    item.delete()
+
+    # Redirect to the shopping cart page or any other appropriate page
+    return redirect('mycart')  # Replace 'cart_page' with the URL name for your cart page
+
+
+# views.py
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .models import CartItem, Userpayment, UserProfile, Pet
+import razorpay
+
+# Initialize Razorpay client
+razorpay_client = razorpay.Client(auth=("YOUR_KEY_ID", "YOUR_KEY_SECRET"))  # Replace with your Razorpay API key
+
+@login_required
+def purchase_all_items(request):
+    if request.method == "POST":
+        # Retrieve the current user
+        user = request.user
+        
+        # Retrieve all items in the user's cart
+        cart_items = UserProfile.objects.get (user=request.user)
+        
+        # Process the purchase for each item in the cart
+        for item in cart_items:
+            # Process the purchase logic for each item (similar to existing purchase logic)
+            # Example: Create a payment record, update item status, etc.
+            # This logic can be similar to the existing payment logic in your payment handler view
+
+            # Create a payment record for each item in the cart
+            # Adjust the payment logic as per your requirements
+            Userpayment.objects.create(
+                user=user,
+                cart=item.cart,
+                amount=item.pet.price,  # Assuming you are using the price of the pet
+                datetime=timezone.now(),
+                order_id_data="order_id",  # Replace with actual order ID
+                payment_id_data="payment_id",  # Replace with actual payment ID
+                item=item.pet  # Assuming the item is a Pet instance
+            )
+
+            # Mark the item as purchased or remove it from the cart
+            # Example: Update the status of the item or delete it from the cart
+            item.delete()  # Delete the item from the cart after purchase
+
+        # Redirect to a success page or back to the cart page
+        return redirect('payment_success')  # Replace 'cart_page' with the actual URL name for your cart page
+    else:
+        # Handle GET requests or other HTTP methods
+        return redirect('cart')  # Redirect back to the cart page
+
+# Other view functions...
+    
+
+
+
+    #new
+
+# user_profile.latitude = latitude
+#         user_profile.longitude = longitude
+        
+#         user_profile.save()
+
+#         deliveryagent.license_number = license
+#         deliveryagent.vechicle_type = vehicle_type
+#         deliveryagent.latitude = latitude
+#         deliveryagent.longitude = longitude
+#         deliveryagent.availability = availability
+#         deliveryagent.is_approved = DeliveryAgent.UPDATED
+        
+#         deliveryagent.save()
+#     return render(request, 'deliveryagent/agent_index.html', {'deliveryagent': deliveryagent,'orderitem_delivered_count':orderitem_delivered_count,'orderitem_pending_count':orderitem_pending_count,'allreviews':allreviews,'avg_rating':avg_rating,'orderitem_count':orderitem_count})
+   
+
+
+# def agent_loggout(request):
+#     print('Logged Out')
+#     logout(request)
+#     if 'username' in request.session:
+#         del request.session['username']
+#         request.session.clear()
+#     return redirect(loginu)
+
+# @login_required
+# def agentorders(request):
+#     deliveryagent = DeliveryAgent.objects.get(user=request.user)
+#     return render(request, 'deliveryagent/agentorders.html',{'deliveryagent': deliveryagent})
+
+# @login_required
+# def agentprofile(request):
+#     user_profile = UserProfile.objects.get(user=request.user)
+#     deliveryagent = DeliveryAgent.objects.get(user=request.user)
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+        
+#         profile_pic = request.FILES.get('profile_pic')
+#         phone_number = request.POST.get('phone_number')
+#         address = request.POST.get('address')
+#         reset_password = request.POST.get('reset_password')
+#         old_password = request.POST.get('old_password') 
+        
+
+#         if 'profile_pic' in request.FILES:
+#             profile_pic = request.FILES['profile_pic']
+#             user_profile.profile_pic = profile_pic
+#             print('got')
+#         user_profile.name = name
+#         deliveryagent.name = name
+#         user_profile.phone_number = phone_number
+#         deliveryagent.contact = phone_number
+#         user_profile.address = address
+#         deliveryagent.address=address
+        
+
+#         # Check if all three password fields are not empty
+#         if old_password and reset_password and request.POST.get('cpass') == reset_password:
+#             if request.user.check_password(old_password):
+#                 # The old password is correct, set the new password
+#                 request.user.set_password(reset_password)
+#                 request.user.save()
+#                 update_session_auth_hash(request, request.user)  # Update the session to prevent logging out
+#             else:
+#                 messages.error(request, "Incorrect old password. Password not updated.")
+#         else:
+#             print("Please fill all three password fields correctly.")
+        
+#         user_profile.reset_password = reset_password
+#         user_profile.save()
+#         request.user.save()
+#         deliveryagent.save()
+#         return redirect('agentprofile') 
+
+#     context = {
+#         'user_profile': user_profile,
+#         'deliveryagent': deliveryagent
+#     }
+#     return render(request, 'deliveryagent/agent_profile.html', context)
+
+# @login_required
+# def agentorder(request):
+#     user = request.user
+
+#     # If the user is a delivery agent, retrieve the delivery agent profile
+#     deliveryagent = DeliveryAgent.objects.get(user=user)
+
+    
+#     # Retrieve the orders for the current delivery agent where payment is not pending
+#     agent_orders = OrderItem.objects.filter(
+#         deliveryagent=deliveryagent,
+#         order__payment_status=Order.PaymentStatusChoices.SUCCESSFUL  # Filter by payment status
+#     )
+
+#     order_items = []
+#     for order in agent_orders:
+#         itemorder = order.order
+     
+#         assign = Assigndeliveryagent.objects.get(deliveryagent=deliveryagent,order=order.order)
+#         billing = assign.billingdetails
+#         order_items.append((order, itemorder, billing))
+    
+#     context = {
+#         'deliveryagent': deliveryagent,
+#         'order_items': order_items,
+#     }
+
+#     return render(request, 'deliveryagent/agentorders.html', context)    
+
+# def trackmyorder(request):
+#     user=request.user
+#     order=DeliveryAssignment.objects.filter(user=user)
+#     context={
+#         'order':order
+#     }
+#     return render (request,'trackmyorder.html',context)
+
+
+
+# from django.shortcuts import render
+# from .models import DeliveryAssignment
+
+# def trackmyorder(request):
+#     user = request.user
+#     orders = DeliveryAssignment.objects.filter(user=user)
+#     context = {
+#         'orders': orders
+#     }
+#     return render(request, 'trackmyorder.html', context)
+
+
+from django.shortcuts import render
+from .models import DeliveryAssignment, DeliveryAssignment1
+
 def trackmyorder(request):
-    user=request.user
-    order=DeliveryAssignment.objects.filter(user=user)
-    context={
-        'order':order
+    user = request.user
+    delivery_assignments = DeliveryAssignment.objects.filter(user=user)
+    delivery_assignments1 = DeliveryAssignment1.objects.filter(user=user)
+    context = {
+        'delivery_assignments': delivery_assignments,
+        'delivery_assignments1': delivery_assignments1
     }
-    return render (request,'trackmyorder.html',context)
+    return render(request, 'trackmyorder.html', context)
+
+
+
+
+
+
+# from django.shortcuts import render
+# from .models import Userpayment  # Import the UserPayment model
+# def trackmyorder(request):
+#     user = request.user
+#     user_payments = Userpayment.objects.filter(user=user)
+#     context = {
+#         'user_payments': user_payments
+#     }
+#     return render(request, 'trackmyorder.html', context)
+
+
+
+
+
+# from .models import DeliveryAssignment, UserProfile
+
+# def ship_order(request):
+#     pending_assignments = DeliveryAssignment.objects.filter(status='PENDING')
+
+#     # Fetch corresponding address details
+#     addresseswitall = []
+#     for assignment in pending_assignments:
+#         user_profile = UserProfile.objects.filter(user=assignment.user).first()
+#         if user_profile:
+#            addresseswitall.append({
+#                     'assignment': assignment,
+#                     'user_profile': user_profile,
+#                 })
+#     print(addresseswitall)
+    
+#     context = {
+#         'pending_assignments': addresseswitall ,
+#     }
+#     return render(request, 'ship_order.html', context)
+
+
+
+
+
+# def mark_as_shipped(request, assignment_id):
+#     if request.method == 'POST':
+#         assignment = DeliveryAssignment.objects.get(id=assignment_id)
+#         assignment.status = 'SHIPPED'
+#         assignment.save()
+#     return redirect('ship_order')
+
+
+
+
+
+from .models import DeliveryAssignment, DeliveryAssignment1, UserProfile
 
 def ship_order(request):
     pending_assignments = DeliveryAssignment.objects.filter(status='PENDING')
+    pending_assignments1 = DeliveryAssignment1.objects.filter(status='PENDING')
 
-    # Fetch corresponding address details
-    addresses = {}
+    addresseswitall = []
     for assignment in pending_assignments:
-        # Retrieve the address associated with the user in the delivery assignment
-        address = Address.objects.filter(user=assignment.user).first()
-        if address:
-            addresses[assignment.id] = address
+        user_profile = UserProfile.objects.filter(user=assignment.user).first()
+        if user_profile:
+            addresseswitall.append({
+                'assignment': assignment,
+                'user_profile': user_profile,
+            })
+
+    for assignment1 in pending_assignments1:
+        user_profile = UserProfile.objects.filter(user=assignment1.user).first()
+        if user_profile:
+            addresseswitall.append({
+                'assignment': assignment1,
+                'user_profile': user_profile,
+            })
 
     context = {
-        'pending_assignments': pending_assignments,
-        'addresses': addresses,
+        'pending_assignments': addresseswitall,
     }
-    return render(request, 'sellor/ship_order.html',context)
+    return render(request, 'ship_order.html', context)
 
+
+
+# from .models import DeliveryAssignment, DeliveryAssignment1
+
+# def mark_as_shipped(request, assignment_id):
+#     if request.method == 'POST':
+#         try:
+#             assignment = DeliveryAssignment.objects.get(id=assignment_id)
+#         except DeliveryAssignment.DoesNotExist:
+#             assignment = None
+        
+#         if not assignment:
+#             try:
+#                 assignment = DeliveryAssignment1.objects.get(id=assignment_id)
+#             except DeliveryAssignment1.DoesNotExist:
+#                 assignment = None
+        
+#         if assignment:
+#             assignment.status = 'SHIPPED'
+#             assignment.save()
+#     return redirect('ship_order')
+
+# from django.shortcuts import get_object_or_404, redirect
+# from .models import DeliveryAssignment, DeliveryAssignment1
+
+# def mark_as_shipped(request, assignment_id):
+#     if request.method == 'POST':
+#         # Try to get the assignment from DeliveryAssignment
+#         assignment = DeliveryAssignment.objects.filter(id=assignment_id).first()
+
+#         # If not found in DeliveryAssignment, try DeliveryAssignment1
+#         if not assignment:
+#             assignment = DeliveryAssignment1.objects.filter(id=assignment_id).first()
+
+#         # If assignment is found, mark it as shipped and redirect
+#         if assignment:
+#             assignment.status = 'SHIPPED'
+#             assignment.save()
+#             return redirect('ship_order')
+
+#     # If assignment is not found in any model, return a 404 error
+#     return redirect('ship_order')
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import DeliveryAssignment, DeliveryAssignment1
 
 def mark_as_shipped(request, assignment_id):
     if request.method == 'POST':
-        assignment = DeliveryAssignment.objects.get(id=assignment_id)
-        assignment.status = 'SHIPPED'
-        assignment.save()
-    return redirect('ship_order')
+        # Try to get the assignment from DeliveryAssignment
+        assignment = DeliveryAssignment.objects.filter(id=assignment_id).first()
 
-def new_orders(request):
-    delivery_boy = request.user.deliveryboy
-    orders = DeliveryAssignment.objects.filter(delivery_boy=delivery_boy,status='SHIPPED')
-    addresses = {}
-    for assignment in orders:
-        # Retrieve the address associated with the user in the delivery assignment
-        address = Address.objects.filter(user=assignment.user).first()
-        if address:
-            addresses[assignment.id] = address
+        # If not found in DeliveryAssignment, try DeliveryAssignment1
+        if not assignment:
+            assignment = DeliveryAssignment1.objects.filter(id=assignment_id).first()
 
-    context = {
-              'pending_assignments': orders,
-              'addresses': addresses, }
-    
-    return render(request,'Delivery/new_orders.html',context)
+        # If assignment is found, mark it as shipped and redirect
+        if assignment:
+            assignment.status = 'SHIPPED'
+            assignment.save()
+            return redirect('ship_order')
 
-# views.py
-import random
+    # If assignment is not found in any model or request is not POST, return a 404 error
+    return redirect('ship_order')  # You can handle this according to your requirements
 
-def out_for_delivery(request):
-    delivery_boy = request.user.deliveryboy
-    orders = DeliveryAssignment.objects.filter(delivery_boy=delivery_boy,status='OUT')
-    addresses = {}
-    for assignment in orders:
-        # Retrieve the address associated with the user in the delivery assignment
-        address = Address.objects.filter(user=assignment.user).first()
-        if address:
-            addresses[assignment.id] = address
 
-    context = {
-              'pending_assignments': orders,
-              'addresses': addresses }
-    if request.method == 'POST':
-        # Generate 6-digit OTP
-        otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
-        # Send email to customer
-        delivery_assignment_id = request.POST.get('delivery_assignment_id')
-        delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
-        customer_email = delivery_assignment.user.email
-        product_name = delivery_assignment.product.product_name
-
-        message = f'Your {product_name} is out for delivery.'
-        Notification.objects.create(user=delivery_assignment.user, message=message)
-        send_mail(
-            'Your Order is Out for Delivery',
-            f'Your {product_name} is out for delivery. Your OTP is: {otp}',
-            'from@example.com',  # Sender's email
-            [customer_email],  # List of recipient emails
-            fail_silently=False,
-        )
-
-        # Store OTP in the database
-        otp_instance = OTP.objects.create(delivery_assignment=delivery_assignment, otp=otp)
-        delivery_assignment.status='OUT'
-        delivery_assignment.save() 
-
-        return render(request, 'Delivery/out_for_delivery.html', {'otp_sent': True})
-    else:
-        return render(request, 'Delivery/out_for_delivery.html',context)
-    
 def verify_otp(request):
     if request.method == 'POST':
         delivery_assignment_id = request.POST.get('delivery_assignment_id')
@@ -2930,3 +3330,715 @@ def verify_otp(request):
         else:
             # OTP doesn't match
             return HttpResponse('Invalid OTP.',status=400)
+
+
+
+# def new_orders(request):
+#     delivery_boy = request.user.deliveryboy
+#     orders = DeliveryAssignment.objects.filter(delivery_boy=delivery_boy,status='SHIPPED')
+#     addresses = {}
+#     for assignment in orders:
+#         # Retrieve the address associated with the user in the delivery assignment
+#         address = Address.objects.filter(user=assignment.user).first()
+#         if address:
+#             addresses[assignment.id] = address
+
+#     context = {
+#               'pending_assignments': orders,
+#               'addresses': addresses, }
+    
+#     return render(request,'new_orders.html',context)
+
+
+# def new_orders(request):
+#     delivery_boy = request.user.deliveryman
+#     orders = DeliveryAssignment.objects.filter(delivery_boy=delivery_boy, status='SHIPPED')
+    
+#     # Fetching addresses for the orders
+#     addresses = {}
+#     for assignment in orders:
+#         address = DeliveryAssignment.objects.filter(user=assignment.user).first()
+#         if address:
+#             addresses[assignment.pk] = address
+    
+#     context = {
+#         'pending_assignments': orders,
+#         'addresses': addresses,
+#     }
+    
+#     return render(request, 'out_for_delivery.html', context)
+
+# views.py
+# views.py
+# views.py
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryMan
+
+# def new_orders(request):
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+#     orders = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+    
+#     # Fetching addresses for the orders
+#     addresses = {}
+#     for assignment in orders:
+#         addresses[assignment.pk] = assignment.user  # Assuming user attribute in DeliveryAssignment model holds UserProfile instance
+    
+#     context = {
+#         'pending_assignments': orders,
+#         'addresses': addresses,
+#     }
+    
+#     return render(request, 'out_for_delivery.html', context)
+
+
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryMan, UserProfile
+
+# def new_orders(request):
+#     # Get the delivery man based on the logged-in user's email
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED'
+#     orders = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     context = {
+#         'pending_assignments': orders,
+#     }
+
+#     return render(request, 'new_orders.html', context)
+
+
+
+
+
+# from .models import DeliveryAssignment, DeliveryMan, UserProfile, DeliveryAssignment1
+
+# def new_orders(request):
+#     # Get the delivery man based on the logged-in user's email
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED'
+#     orders = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+#     orders1 = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     context = {
+#         'pending_assignments': orders.union(orders1),
+#     }
+
+#     return render(request, 'new_orders.html', context)
+
+
+
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryAssignment1, DeliveryMan
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryAssignment1, UserProfile
+
+# def new_orders(request):
+#     # Get the delivery man based on the logged-in user's email
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED' for DeliveryAssignment (Pets)
+#     orders_delivery = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED' for DeliveryAssignment1 (Aquarium)
+#     orders_aquarium = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     context = {
+#         'pending_assignments_delivery': orders_delivery,
+#         'pending_assignments_aquarium': orders_aquarium,
+#     }
+
+#     return render(request, 'new_orders.html', context)
+
+
+
+from django.shortcuts import render
+from .models import DeliveryAssignment, DeliveryAssignment1
+from django.db.models import F, Value, IntegerField
+from django.db.models import Subquery, OuterRef
+def new_orders(request):
+    # Get the delivery man based on the logged-in user's email
+    delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+    # Get the orders assigned to the delivery man with status 'SHIPPED' for DeliveryAssignment (Pets)
+    orders_delivery = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+    # Get the orders assigned to the delivery man with status 'SHIPPED' for DeliveryAssignment1 (Aquarium)
+    orders_aquarium = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+    # Prepare a list to store the user profiles for each delivery assignment
+    user_profiles_delivery = []
+    user_profiles_aquarium = []
+
+    # Fetch the related UserProfile objects for all assignments in one go
+    user_profiles = UserProfile.objects.filter(user__in=[assignment.user for assignment in orders_delivery])
+
+    # Now iterate through the orders_delivery queryset and assign the userprofile attribute to each assignment
+    for assignment in orders_delivery:
+        # Find the corresponding UserProfile object for the current assignment
+        user_profile = user_profiles.get(user=assignment.user)
+        
+        # Assign the userprofile attribute to the current assignment
+        assignment.userprofile = user_profile
+
+    print()
+    # # Iterate through each delivery assignment to get the related user profile
+    # for assignment in orders_delivery:
+    #     assignment = assignment.annotate(
+    #         userprofile = Subquery(UserProfile.objects.get(
+    #             user=assignment.user
+    #         ))
+    #     )
+        # user_profile = UserProfile.objects.get(user=assignment.user)
+        # user_profiles_delivery.append(user_profile)
+
+    for assignment in orders_aquarium:
+        user_profile = assignment.user_profile
+        user_profiles_aquarium.append(user_profile) 
+
+    print(user_profiles_delivery)
+    context = {
+        'pending_assignments_delivery': orders_delivery,
+        'pending_assignments_aquarium': orders_aquarium,
+        'user_profiles_delivery': user_profiles_delivery,
+        'user_profiles_aquarium': user_profiles_aquarium,
+    }
+
+    return render(request, 'new_orders.html', context)
+
+
+# def new_orders(request):
+#     # Get the delivery man based on the logged-in user's email
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED' for pets
+#     orders_pets = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     # Get the orders assigned to the delivery man with status 'SHIPPED' for aquarium
+#     orders_aquarium = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='SHIPPED')
+
+#     context = {
+#         'pending_assignments_delivery': orders_pets,
+#         'pending_assignments_aquarium': orders_aquarium,
+#     }
+
+#     return render(request, 'new_orders.html', context)
+
+
+
+
+
+from django.shortcuts import render
+from .models import DeliveryAssignment, DeliveryMan,DeliveryOTP
+
+
+
+
+
+
+# # # views.py
+# import random
+# from django.contrib.auth.models import User
+# from .models import DeliveryAssignment, DeliveryMan
+# from django.http import HttpResponse
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryOTP
+
+# def out_for_delivery(request):
+#     # Get the delivery man based on the logged-in user's email
+#     user = request.user
+#     try:
+#         delivery_man = DeliveryMan.objects.get(email=user.email)
+#     except DeliveryMan.DoesNotExist:
+#         # Handle the case if the user is not a deliveryman
+#         return HttpResponse("Unauthorized access")
+
+#     # Filter orders assigned to the delivery man with status 'OUT'
+#     orders = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     addresses = {}
+#     for assignment in orders:
+#         # Retrieve the address associated with the user in the delivery assignment
+#         address = UserProfile.objects.filter(user=assignment.user).first()
+#         if address:
+#             addresses[assignment.id] = address
+
+#     context = {
+#         'pending_assignments': orders,
+#         'addresses': addresses
+#     }
+
+#     if request.method == 'POST':
+#         # Generate 6-digit OTP
+#         otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+
+#         # Send email to customer
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+#         customer_email = delivery_assignment.user.email
+#         product_name = delivery_assignment.product
+
+#         message = f'Your {product_name} is out for delivery.'
+#         send_mail(
+#             'Your Order is Out for Delivery',
+#             f'Your {product_name} is out for delivery. Your OTP is: {otp}',
+#             'roshangeorge2k66@gmail.com',  # Sender's email
+#             [customer_email],  # List of recipient emails
+#             fail_silently=False,
+#         )
+
+#         # Store OTP in the database
+#         otp_instance = DeliveryOTP.objects.create(assignment=delivery_assignment, otp=otp)
+#         # delivery_assignment.status = 'OUT'
+#         delivery_assignment.save() 
+
+#         return render(request, 'out_for_delivery.html', {'otp_sent': True})
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+
+
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryOTP, DeliveryMan, UserProfile
+
+# def out_for_delivery(request):
+#     # Assuming delivery man is authenticated and fetched properly
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Retrieve pending delivery assignments for the current delivery man
+#     pending_assignments = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     context = {
+#         'pending_assignments': pending_assignments,
+#     }
+
+#     if request.method == 'POST':
+#         # Assuming you're sending OTPs as described earlier
+#         # Generate OTP, send email, and save OTP in the database
+#         # Once the delivery status is updated, set status to 'OUT'
+#         # Update the assignment status to 'OUT'
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+#         otp = generate_otp()  # You need to implement a function to generate OTP
+#         DeliveryOTP.objects.create(assignment=delivery_assignment, otp=otp)
+#         delivery_assignment.status = 'OUT'
+#         delivery_assignment.save()
+
+#         # You can add a success message or any other logic you need
+#         return render(request, 'out_for_delivery.html', {'otp_sent': True})
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+
+
+
+
+#latest
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryOTP, DeliveryMan, UserProfile,DeliveryOTP1
+
+# def out_for_delivery(request):
+#     # Assuming delivery man is authenticated and fetched properly
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Retrieve pending delivery assignments for the current delivery man
+#     pending_assignments = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     context = {
+#         'pending_assignments': pending_assignments,
+#     }
+
+#     if request.method == 'POST':
+#         # Assuming you're sending OTPs as described earlier
+#         # Generate OTP, send email, and save OTP in the database
+#         # Once the delivery status is updated, set status to 'OUT'
+#         # Update the assignment status to 'OUT'
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+#         otp = generate_otp()  # You need to implement a function to generate OTP
+#         DeliveryOTP.objects.create(assignment=delivery_assignment, otp=otp)
+#         delivery_assignment.status = 'OUT'
+#         delivery_assignment.save()
+
+#         # You can add a success message or any other logic you need
+#         return render(request, 'out_for_delivery.html', {'otp_sent': True})
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+
+
+# from .models import DeliveryAssignment1
+
+# def out_for_deliveryaq(request):
+#     # Assuming delivery man is authenticated and fetched properly
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Retrieve pending delivery assignments for the current delivery man
+#     pending_assignmentss = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     context = {
+#         'pending_assignmentss': pending_assignmentss,
+#     }
+
+#     if request.method == 'POST':
+#         # Assuming you're sending OTPs as described earlier
+#         # Generate OTP, send email, and save OTP in the database
+#         # Once the delivery status is updated, set status to 'OUT'
+#         # Update the assignment status to 'OUT'
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         delivery_assignment = DeliveryAssignment1.objects.get(pk=delivery_assignment_id)
+#         otp = generate_otp()  # You need to implement a function to generate OTP
+#         DeliveryOTP1.objects.create(assignment=delivery_assignment, otp=otp)
+#         delivery_assignment.status = 'OUT'
+#         delivery_assignment.save()
+
+#         # You can add a success message or any other logic you need
+#         return render(request, 'out_for_delivery.html', {'otp_sent': True})
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+    
+
+
+
+
+# from django.shortcuts import render
+# from .models import DeliveryAssignment, DeliveryAssignment1
+
+# def out_for_delivery(request):
+#     # Assuming delivery man is authenticated and fetched properly
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Retrieve pending delivery assignments for the current delivery man
+#     pending_assignments = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     context = {
+#         'pending_assignments': pending_assignments,
+#     }
+
+#     if request.method == 'POST':
+#         # Assuming you're sending OTPs as described earlier
+#         # Generate OTP, send email, and save OTP in the database
+#         # Once the delivery status is updated, set status to 'OUT'
+#         # Update the assignment status to 'OUT'
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+#         otp = ''.join ([str(random.randint(0,9)) for _ in range(6)]) # You need to implement a function to generate OTP
+#         DeliveryOTP.objects.create(assignment=delivery_assignment, otp=otp)
+#         customer_email = delivery_assignment.user.email
+#         delivery_assignment.status = 'OUT'
+#         message = f'Your  is out for delivery.'
+#         # Notification.objects.create(user=delivery_assignment.user, message=message)
+#         send_mail(
+#             'Your Order is Out for Delivery',
+#             f'Your product is out for delivery. Your OTP is: {otp}',
+#             'roshangeorge2k66@gmail.com',  # Sender's email
+#             [customer_email],  # List of recipient emails
+#             fail_silently=False,
+#         )
+
+#         # Store OTP in the database
+#         otp_instance = otp.objects.create(delivery_assignment=delivery_assignment, otp=otp)
+#         delivery_assignment.status='OUT'
+#         delivery_assignment.save()
+
+#         # You can add a success message or any other logic you need
+#         return render(request, 'out_for_delivery.html', {'otp_sent': True})
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+
+from django.shortcuts import render
+from .models import DeliveryAssignment, DeliveryOTP  # Import DeliveryOTP model
+import random
+from django.core.mail import send_mail
+
+def out_for_delivery(request):
+    # Assuming delivery man is authenticated and fetched properly
+    delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+    # Retrieve pending delivery assignments for the current delivery man
+    pending_assignments = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+
+    context = {
+        'pending_assignments': pending_assignments,
+    }
+
+    if request.method == 'POST':
+        # Assuming you're sending OTPs as described earlier
+        # Generate OTP, send email, and save OTP in the database
+        # Once the delivery status is updated, set status to 'OUT'
+        # Update the assignment status to 'OUT'
+        delivery_assignment_id = request.POST.get('delivery_assignment_id')
+        delivery_assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+        generated_otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])  # Generate OTP
+        DeliveryOTP.objects.create(assignment=delivery_assignment, otp=generated_otp)  # Create DeliveryOTP object
+        customer_email = delivery_assignment.user.email
+        delivery_assignment.status = 'OUT'
+        message = f'Your order is out for delivery.'
+        # Notification.objects.create(user=delivery_assignment.user, message=message)
+        send_mail(
+            'Your Order is Out for Delivery',
+            f'Your product is out for delivery. Your OTP is: {generated_otp}',
+            'roshangeorge2k66@gmail.com',  # Sender's email
+            [customer_email],  # List of recipient emails
+            fail_silently=False,
+        )
+
+        # Update the assignment status to 'OUT'
+        delivery_assignment.status = 'OUT'
+        delivery_assignment.save()
+
+        # You can add a success message or any other logic you need
+        return render(request, 'out_for_delivery.html', {'otp_sent': True})
+    else:
+        return render(request, 'out_for_delivery.html', context)
+
+    
+
+
+
+# def verify_otp(request):
+#      if request.method == 'POST':
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         entered_otp = request.POST.get('otp')
+#         try:
+#             otp_instance = otp.objects.get(delivery_assignment_id=delivery_assignment_id)
+#         except otp.DoesNotExist:
+#             return HttpResponse('OTP not found.', status=400)
+
+#         if entered_otp == otp_instance.otp:
+#             delivery_assignment = DeliveryAssignment.objects.get(id=delivery_assignment_id)
+#             delivery_assignment.status='DELIVERED'
+#             delivery_assignment.save()
+            
+
+           
+#             # otp_instance.delete()  
+#             return HttpResponse('Delivery successful!')
+#         else:
+#             # OTP doesn't match
+#             return HttpResponse('Invalid OTP.', status=400)
+
+
+from django.shortcuts import HttpResponse
+from .models import DeliveryOTP, DeliveryAssignment
+from django.contrib import messages
+
+def verify_otp(request):
+    if request.method == 'POST':
+        delivery_assignment_id = request.POST.get('delivery_assignment_id')
+        print (delivery_assignment_id)
+        entered_otp = request.POST.get('otp')
+        try:
+            otp_instance = DeliveryOTP.objects.filter(assignment_id=delivery_assignment_id).first()
+        except DeliveryOTP.DoesNotExist:
+            #return HttpResponse('OTP not found.', status=400)
+            messages.error(request, 'This is an error message.')
+            return redirect('out_for_delivery')
+        if entered_otp == otp_instance.otp:
+            try:
+                delivery_assignment = DeliveryAssignment.objects.get(id=delivery_assignment_id)
+            except DeliveryAssignment.DoesNotExist:
+                # return HttpResponse('Delivery assignment not found.', status=400)
+                messages.success(request, 'Delivery assignment not found..')
+                return redirect('out_for_delivery')
+
+            if delivery_assignment.status != 'OUT':
+                # return HttpResponse('Delivery assignment is not out for delivery.', status=400)
+                return redirect('out_for_delivery')
+            delivery_assignment.status = 'DELIVERED'
+            delivery_assignment.save()
+            
+            otp_instance.delete()  # Delete OTP after successful verification
+            messages.success(request, 'Delivery successful!')
+            # return HttpResponse('Delivery successful!')
+            return redirect('out_for_delivery')
+        else:
+            # OTP doesn't match
+            messages.error(request, 'Invalid OTP.')
+            return redirect('out_for_delivery')
+            # return HttpResponse('Invalid OTP.', status=400)
+
+
+from django.shortcuts import render
+from .models import DeliveryMan, DeliveryAssignment1, DeliveryOTP1
+
+from django.shortcuts import render
+from .models import DeliveryAssignment1
+# from .utils import generate_otp  # Assuming you have a function to generate OTP in utils.py
+
+from django.shortcuts import render
+from .models import DeliveryAssignment1
+# from .utils import generate_otp  # Assuming you have a function to generate OTP in utils.py
+
+def out_for_deliveryaq(request):
+    # Assuming delivery man is authenticated and fetched properly
+    delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+    # Retrieve pending delivery assignments for the current delivery man
+    pending_assignments = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='OUT')
+
+    context = {
+        'pending_assignments': pending_assignments,
+    }
+
+    if request.method == 'POST':
+        # Assuming you're sending OTPs as described earlier
+        # Generate OTP, send email, and save OTP in the database
+        # Once the delivery status is updated, set status to 'OUT'
+        # Update the assignment status to 'OUT'
+        delivery_assignment_id = request.POST.get('delivery_assignment_id')
+        delivery_assignment = DeliveryAssignment1.objects.get(pk=delivery_assignment_id)
+        # otp = generate_otp()  # You need to implement a function to generate OTP
+        DeliveryOTP1.objects.create(assignment=delivery_assignment)
+        delivery_assignment.status = 'OUT'
+        delivery_assignment.save()
+
+        # You can add a success message or any other logic you need
+        context['otp_sent'] = True
+
+    return render(request, 'out_for_deliveryaq.html', context)
+
+
+
+
+
+
+
+
+
+
+
+def mark_as_shipped(request, assignment_id):
+    if request.method == 'POST':
+        assignment = DeliveryAssignment.objects.get(id=assignment_id)
+        assignment.status = 'SHIPPED'
+        assignment.save()
+    return redirect('ship_order')
+
+
+# from django.shortcuts import get_object_or_404, redirect
+# from .models import DeliveryAssignment, DeliveryAssignment1
+
+# def mark_as_shipped(request, assignment_id):
+#     if request.method == 'POST':
+#         try:
+#             # Try to get the DeliveryAssignment object
+#             assignment = DeliveryAssignment1.objects.get(id=assignment_id)
+#         except DeliveryAssignment1.DoesNotExist:
+#             try:
+#                 # If DeliveryAssignment doesn't exist, try to get DeliveryAssignment1 object
+#                 assignment = DeliveryAssignment1.objects.get(id=assignment_id)
+#             except DeliveryAssignment1.DoesNotExist:
+#                 # If neither DeliveryAssignment nor DeliveryAssignment1 exist, return a 404 error
+#                 return redirect('page_not_found')
+
+#         # If either assignment is found, mark it as shipped
+#         assignment.status = 'SHIPPED'
+#         assignment.save()
+
+#     return redirect('ship_order')
+
+
+
+
+
+
+
+
+
+
+# from django.shortcuts import render, redirect
+# from django.http import HttpResponse
+# from .models import DeliveryAssignment, DeliveryAssignment1, DeliveryMan
+
+# def out_for_delivery(request):
+#     # Assuming delivery man is authenticated and fetched properly
+#     delivery_man = DeliveryMan.objects.get(email=request.user.email)
+
+#     # Retrieve pending delivery assignments for Pets and Aquariums
+#     pending_assignments_pets = DeliveryAssignment.objects.filter(delivery_man=delivery_man, status='OUT')
+#     pending_assignments_aquariums = DeliveryAssignment1.objects.filter(delivery_man=delivery_man, status='OUT')
+
+#     context = {
+#         'pending_assignments_pets': pending_assignments_pets,
+#         'pending_assignments_aquariums': pending_assignments_aquariums,
+#     }
+
+#     if request.method == 'POST':
+#         # Handle POST request (generating OTP, updating status, etc.)
+#         delivery_assignment_id = request.POST.get('delivery_assignment_id')
+#         assignment_type = request.POST.get('assignment_type')
+
+#         if delivery_assignment_id and assignment_type:
+#             try:
+#                 if assignment_type == 'pet':
+#                     assignment = DeliveryAssignment.objects.get(pk=delivery_assignment_id)
+#                 elif assignment_type == 'aquarium':
+#                     assignment = DeliveryAssignment1.objects.get(pk=delivery_assignment_id)
+                
+#                 # Implement logic to generate OTP, update status, etc.
+#                 # For now, just mark the assignment as delivered
+#                 assignment.status = 'DELIVERED'
+#                 assignment.save()
+
+#                 return HttpResponse("Assignment marked as delivered successfully")
+#             except (DeliveryAssignment.DoesNotExist, DeliveryAssignment1.DoesNotExist):
+#                 return HttpResponse("Invalid assignment ID")
+#         else:
+#             return HttpResponse("Invalid request")
+
+#     else:
+#         return render(request, 'out_for_delivery.html', context)
+
+
+
+
+
+# import random
+# def generate_otp():
+#     # Generate a random 6-digit OTP
+#       return ''.join([str(random.randint(0, 9)) for _ in range(6)])
+
+
+# def generate_otp(request):
+#     if request.method == 'POST':
+#         out_for_delivery = request.POST.get('out_for_delivery')
+#         email = request.POST.get('email')
+
+#         # Generate OTP
+#         otp = ''.join(random.choices(string.digits, k=6))
+
+#         # Send email with OTP
+#         send_mail(
+#             'Your OTP for Delivery',
+#             f'Your OTP for the delivery is: {otp}',
+#             'roshangeorge2k66@gmail.com',  # Replace with your sender email
+#             [email],
+#             fail_silently=False,
+#         )
+
+#         # Save OTP to database with the correct assignment_id
+#         otp_instance = DeliveryOTP.objects.create(
+#             otp=otp,
+#             assignment_id=out_for_delivery,
+#         )
+
+#         assignment = DeliveryAssignment.objects.get(id=out_for_delivery)
+#         assignment.status = 'OUT_FOR_DELIVERY'
+#         assignment.save()
+
+#         return redirect('out_for_delivery')
+
+
+#         # Save OTP to database
+#         otp_instance = DeliveryOTP.objects.create(
+#             otp=otp,
+#             assignment_id=out_for_delivery,  # Replace with the correct assignment ID
+#         )
+
+#         assignment = DeliveryAssignment.objects.get(id=out_for_delivery)
+#         assignment.status = 'OUT_FOR_DELIVERY'
+#         assignment.save()
+
+#         return redirect('out_for_delivery')
+
+
+

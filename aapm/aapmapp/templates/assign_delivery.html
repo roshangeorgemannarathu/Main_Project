@@ -1,0 +1,16 @@
+<!-- assign_delivery.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Delivery</title>
+</head>
+<body>
+    <h2>Assign Delivery</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Assign</button>
+    </form>
+</body>
+</html>

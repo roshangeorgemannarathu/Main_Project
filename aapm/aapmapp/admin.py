@@ -54,4 +54,7 @@ class PetAdmin(admin.ModelAdmin):
     search_fields = ('get_category_display', 'location')
     list_per_page = 20
 
-admin.site.register(dealer)
+admin.site.register(dealer),
+admin.site.register(DeliveryMan),
+admin.site.register(DeliveryAssignment)
+

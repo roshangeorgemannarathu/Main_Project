@@ -1,18 +1,209 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
 
-{% block title %}Wishlist{% endblock %}
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
 
-{% block content %}
-<h1>Your Wishlist</h1>
+    <style>
+        h1, h4 {
+            color: black;
+        }
 
-{% if wishlist_items %}
-    <ul>
-    {% for item in wishlist_items %}
-        <li>{{ item.name }}</li>
-        <!-- Add other item details as needed -->
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Your wishlist is empty.</p>
-{% endif %}
-{% endblock %}
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #ddd;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover {
+            background-color: #ddd;
+        }
+
+        .table img {
+            max-width: 80px;
+            max-height: 80px;
+            vertical-align: middle;
+        }
+
+        .purchase-now {
+            background-color: #ff9900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .purchase-now:hover {
+            background-color: #e68a00;
+        }
+    </style>
+</head>
+
+<body>
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="" class="logo">
+                        <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <h1>Pet Paradise Cart </h1>
+                        <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
+                        
+                        <li class="scroll-to-section"><a href="{% url 'mycart' %}">Cart</a></li>
+                        <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
+                        <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header><br><br><br><br><br><br>
+<!-- ***** Header Area End ***** -->
+<div class="container">
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Item Category</th>
+                
+                <th>Item ID</th>
+                <th>Quantity</th>
+                {% comment %} <th>Location</th> {% endcomment %}
+                <th>Photo</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in wishlist_items %}
+                <tr>
+                    <td>{{ item.item_category }}</td>
+                    
+                    <td>{{ item.item_id }}</td>
+                    <td>{{ item.quantity }}</td>
+                    {% comment %} <td>{{ item.location }}</td> {% endcomment %}
+                    <td>
+                        <img src="{{ item.photo.url }}" alt="Item Photo">
+                    </td>
+                    <td>
+                        <a href="{% url 'pet_description' item.item_id %}" class="purchase-now">Action</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="under-footer">
+                    <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- ***** Footer End ***** -->
+
+
+<!-- jQuery -->
+<script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'aapmapp/js/popper.js' %}"></script>
+<script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+<!-- Plugins -->
+<script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+<script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+<script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+<script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+<script src="{% static 'aapmapp/js/slick.js' %}"></script>
+<script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+<script src="{% static 'aapmapp/js/isotope.js' %}"></script
+    !-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+    
+    <script>
+        $(function() {
+            var selectedClass = "";
+            $("p").click(function() {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function() {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+    
+            });
+        });
+    </script>
+    
+    </body>
+    
+    </html>
+    

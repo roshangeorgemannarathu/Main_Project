@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+
+    <style>
+        h1 {
+            color: black;
+        }
+
+        h4 {
+            color: black;
+        }
+
+        .product-img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <a href="" class="logo">
+                            <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                        </a>
+                        <ul class="nav">
+                            <h2>Pet Paradise Cart</h2>
+                            <li class="scroll-to-section"><a href="{% url 'dealer_account' %}">Home</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'addpets' %}">Add Aquarium / Pets</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'dealer_sales' %}">order_management</a>
+                            </li>
+                            <li class="scroll-to-section"><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <br><br><br><br><br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="order-form">
+                    <table class="table">
+                        <tbody>
+                            {% for assignment_data in pending_assignments %}
+                                <tr>
+                                    <th>Order ID:</th>
+                                    <td>{{ assignment_data.assignment.order_id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Delivery Man:</th>
+                                    <td>{{ assignment_data.assignment.delivery_man }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Delivery Man Phone No:</th>
+                                    <td>{{ assignment_data.assignment.delivery_man.phone}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Product Name:</th>
+                                    <td>{{ assignment_data.assignment.product }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Customer Name:</th>
+                                    <td>{{ assignment_data.user_profile }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address:</th>
+                                    <td>{{ assignment_data.user_profile.housename }}</td>
+                                    <td>{{ assignment_data.user_profile.district }}</td>
+                                    <td>{{ assignment_data.user_profile.pincode }}</td>
+                                    <td>{{ assignment_data.user_profile.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pincode:</th>
+                                    <td>{{ assignment_data.user_profile.pincode }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Locality:</th>
+                                    <td>{{ assignment_data.user_profile.district }}</td>
+                                </tr>
+                                {% for item_with_price in order_items_with_prices %}
+                                    {% if item_with_price.assignment.id == assignment_data.assignment.id %}
+                                        <tr>
+                                            <th>Price:</th>
+                                            <td>{{ item_with_price.price }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                <form method="post" action="{% url 'mark_as_shipped' assignment_data.assignment.id %}">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="submit" class="btn btn-primary">Mark as Shipped</button>
+                                        </td>
+                                    </tr>
+                                </form>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="col-lg-12">
+            <div class="under-footer">
+                <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="{% static 'aapmapp/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'aapmapp/js/popper.js' %}"></script>
+    <script src="{% static 'aapmapp/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'aapmapp/js/owl-carousel.js' %}"></script>
+    <script src="{% static 'aapmapp/js/accordions.js' %}"></script>
+    <script src="{% static 'aapmapp/js/datepicker.js' %}"></script>
+    <script src="{% static 'aapmapp/js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/imgfix.min.js' %}"></script>
+    <script src="{% static 'aapmapp/js/slick.js' %}"></script>
+    <script src="{% static 'aapmapp/js/lightbox.js' %}"></script>
+    <script src="{% static 'aapmapp/js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script src="{% static 'aapmapp/js/custom.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var logoutButton = document.getElementById("logout-link");
+            logoutButton.addEventListener("click", function () {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

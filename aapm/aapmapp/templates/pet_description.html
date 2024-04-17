@@ -80,9 +80,11 @@
         }
 
         .btn-primary {
-            background-color: green; /* Change button color to green */
+            background-color: red; /* Change button color to red */
             color: white;
         }
+    
+        
 
         .btn-pay {
             background-color: #dc3545; /* Red color for Pay button */
@@ -118,7 +120,10 @@
                             <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
                             {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
                             <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li>
+                            <li class="scroll-to-section"><a href="">Wishlist</a></li>
+
+                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                 </ul>
                 <!-- ***** Menu End ***** -->
@@ -157,7 +162,7 @@
                     
                     
                     
-                    <form method="post" action="{% url 'add_to_cart' category='pet' item_id=pet.id %}" style="margin-right: 5px;">
+                    <form method="post" action="{% url 'add_wishlist' pet.id %}" style="margin-right: 5px;">
                        {% csrf_token %}
                        <button type="submit" class="btn btn-primary">wishlist</button>
                    </form> 

@@ -190,10 +190,10 @@ https://templatemo.com/tm-571-hexashop
                             <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
                             <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
                             {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
-                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
                             <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
                             {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li> {% endcomment %}
-                            <li class="scroll-to-section"><a href="">Wishlist</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'wishlist' %}">Wishlist</a></li>
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                         <a class='menu-trigger'>
@@ -204,7 +204,7 @@ https://templatemo.com/tm-571-hexashop
                 </div>
             </div>
         </div>
-    </header>
+    </header><br><br><br>
     <!-- ***** Header Area End ***** -->
     <!-- ***** Header Area End ***** -->
     <!-- Content for My Cart page -->
@@ -226,16 +226,50 @@ https://templatemo.com/tm-571-hexashop
                         <th>Location</th>
                         <th>Image</th>
                         <th>Buy now</th>
+                        <th> Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in cart_items %}
                     <tr>
-                        <td>
-                            {% if item.item_category == 'pet' %}
+                        {% if item.item_category == 'pet' %}
+                                {% for dit in det_pet %}
+                                  {% if dit.id == item.item_id %}
+                                  <td>{{dit.pet_breed}}</td>
+                                  <td>{{ item.quantity }}</td>
+                                  <td>₹{{dit.price}}</td>
+                                  <td>{{dit.pet_description}}</td>
+                                  <td>{{dit.location}}</td>
+                                  <td><img src="{{dit.image.url}}"></td>
+                                  {% endif %}
+                                {% endfor %}
                             {{ item.pet.pet_breed }}
                             {% elif item.item_category == 'aquarium' %}
                             {{ item.aquarium.name }}
+                                {% for det_aqu in det_aqu %}
+                                  {% if det_aqu.id == item.item_id %}
+                                  {{det_aqu.name}}
+                                  {% endif %}
+                                {% endfor %}
+
+                            {% endif %}
+                        {% comment %} <td>
+                            
+                            {% if item.item_category == 'pet' %}
+                                {% for dit in det_pet %}
+                                  {% if dit.id == item.item_id %}
+                                  {{dit.pet_breed}}
+                                  {% endif %}
+                                {% endfor %}
+                            {{ item.pet.pet_breed }}
+                            {% elif item.item_category == 'aquarium' %}
+                            {{ item.aquarium.name }}
+                                {% for det_aqu in det_aqu %}
+                                  {% if det_aqu.id == item.item_id %}
+                                  {{det_aqu.name}}
+                                  {% endif %}
+                                {% endfor %}
+
                             {% endif %}
                         </td>
                         <td>{{ item.quantity }}</td>
@@ -268,19 +302,33 @@ https://templatemo.com/tm-571-hexashop
                             <img src="{{ item.aquarium.image.url }}" alt="{{ item.aquarium.name }}"
                                 style="max-width: 100px; max-height: 100px;">
                             {% endif %}
-                        </td>
+                        </td> {% endcomment %}
                         <td>
                             <!-- Assuming you have a form to handle purchase -->
-                            <form method="post" action="{% url 'purchase_item' %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <form method="get" action="{% url 'pet_details' item.item_id %}">
                                 <button type="submit" class="purchase-now">Buy Now</button>
                             </form>
                         </td>
+                        <!-- Inside the table body where you iterate through cart items -->
+                        <td>
+                         <!-- Assuming you have a form to handle item deletion -->
+                         <form method="post" action="{% url 'delete_item' item.id %}">
+                        {% csrf_token %}
+                       <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        </td>
+
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <td colspan="7">
+    <!-- Assuming you have a form to handle purchasing all items -->
+    <form method="post" action="{% url 'purchase_all_items' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Buy All</button>
+    </form>
+</td>
 
             {% else %}
             <p>Your cart is empty.</p>

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import buy_now, razorpay_payment
 from django.urls import path
+from .views import mark_as_shipped
 
 
 
@@ -81,7 +82,7 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
      path('deliveryman_account/', views.deliveryman_account, name='deliveryman_account'),
      path('pet_details/<int:pet_id>/', views.pet_details, name='pet_details'),
      
-     path('aquarium_details/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
+    #  path('aquarium_details/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
      path('buy_now/<str:category>/<int:item_id>/', views.buy_now, name='buy_now'),
    
     path('razorpay-payment/', razorpay_payment, name='razorpay_payment'),
@@ -133,19 +134,29 @@ path('usercustomer/', views.usercustomer, name='usercustomer'),
     path('success/', views.success, name='success'),
     # path('pet_describtion/', views.pet_describtion, name='pet_describtion'),
     # path('aquarium_describtion/', views.aquarium_describtion, name='aquarium_describtion'),
-    path('aquarium_describtion/<int:aquarium_id>/', views.aquarium_describtion, name='aquarium_describtion'),
+    path('aquarium_description/<int:aquarium_id>/', views.aquarium_description, name='aquarium_description'),
     path('aquarium/add_to_wishlist/<int:aquarium_id>/', views.add_to_wishlist, name='add_to_wishlist'),
-    path('pet_describtion/<int:pet_id>/', views.pet_describtion, name='pet_describtion'),
+    path('pet_description/<int:pet_id>/', views.pet_description, name='pet_description'),
+    path('add_wishlist/<int:pet_id>/', views.add_wishlist, name='add_wishlist'),
 
     path('wishlist/', views.wishlist, name='wishlist'),
     path('purchase/', views.purchase, name='purchase'),
+    path('delete_item/<int:item_id>/', views.delete_item, name='delete_item'),
+    path('purchase_all_items/', views.purchase_all_items, name='purchase_all_items'),
+
     path('trackmyorder/', views.trackmyorder, name='trackmyorder'),
     path('ship_order/',views.ship_order,name='ship_order'),
-    path('mark-shipped/<int:assignment_id>/', views.mark_as_shipped, name='mark_shipped'),
+    # path('mark_shipped/<int:assignment_id>/', views.mark_as_shipped, name='mark_shipped'),
+    path('mark_as_shipped/<int:assignment_id>/', views.mark_as_shipped, name='mark_as_shipped'),
     path('new_orders/',views.new_orders,name='new_orders'),
     path('out_for_delivery/',views.out_for_delivery,name='out_for_delivery'),
-    path('verify_otp/',views.verify_otp,name='verify_otp')
+    path('out_for_deliveryaq/',views.out_for_deliveryaq,name='out_for_deliveryaq'),
 
+    path('verify_otp/',views.verify_otp,name='verify_otp'),
+    path('aquarium/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
+    
+    # path('your_view/',views.your_view, name='your_view'),
+    
 ]
 
 

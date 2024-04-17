@@ -1,21 +1,15 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
-    
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
     <title>Aquarium and Petshop Management system HTML CSS Template</title>
-
-
     <!-- Additional CSS Files -->
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
@@ -65,17 +59,13 @@ https://templatemo.com/tm-571-hexashop
             object-fit: cover;
         }
 
-       
         .product-item {
-            position: relative; /* Add position relative to the product item */
+            position: relative;
+            /* Add position relative to the product item */
         }
-        .search-bar{
-            
-        }
-       
-       
-        
-       
+
+        .search-bar {}
+
     </style>
 </head>
 
@@ -98,24 +88,20 @@ https://templatemo.com/tm-571-hexashop
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        
-                        
+
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <h3>Pet Paradise Cart </h3>
-                            {% comment %} <li class="scroll-to-section"><a href="#Home" class="active">Home</a></li> {% endcomment %}
+                            <h5>Pet Paradise Cart </h5>
                             <li class="scroll-to-section"><a href="#Aquarium">Aquarium</a></li>
                             <li class="scroll-to-section"><a href="#Pets">Pets</a></li>
                             <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'mycart' %}">Cart</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
                             <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
-                            <li class="scroll-to-section"><a href="">Wishlist</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'trackmyorder' %}">Track My Order</a></li>
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
-
-                            
-                            
                         </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
@@ -125,34 +111,20 @@ https://templatemo.com/tm-571-hexashop
                 </div>
             </div>
         </div><br>
+
         <!-- ***** Search Bar Start ***** -->
-<div class="search-bar">
-    <form action="{% url 'search_results' %}" method="GET">
-        <input type="text" name="query" placeholder="Search...">
-        <button type="submit">Search</button>
-    </form>
-</div>
-<!-- ***** Search Bar End ***** -->
+        <div class="search-bar">
+            <form action="{% url 'search_results' %}" method="GET">
+                <input type="text" name="query" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <!-- ***** Search Bar End ***** -->
 
     </header>
     <!-- ***** Header Area End ***** -->
 
-
-    <!-- ***** Search Bar Start ***** -->
-    {% comment %} <div class="search-bar">
-        <form action="{% url 'search_results' %}" method="GET">
-            <input type="text" name="query" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
-    </div> {% endcomment %}
-    <!-- ***** Search Bar End ***** -->
-   
-
     <!-- ***** Main Banner Area Start ***** -->
-
-   
-
-    
 
     <div class="main-banner" id="Home">
         <div class="container-fluid">
@@ -234,8 +206,6 @@ https://templatemo.com/tm-571-hexashop
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="col-lg-6">
                                 <div class="right-first-image">
                                     <div class="thumb">
@@ -277,34 +247,33 @@ https://templatemo.com/tm-571-hexashop
             <div class="product-container">
                 <div class="row">
                     {% for pet in pets %}
+                    {% if pet.status != 'sold' %}
                     <div class="col-lg-3 col-md-6">
                         <div class="product-item">
                             <a href="">
-                                <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}"
-                                    class="product-img">
+                                <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}" class="product-img">
                             </a>
                             <h6>{{ pet.category }}</h6>
-                            <p>Breed: {{ pet.pet_breed }}</p>
+                            <p>Breed: {{ pet.pet_breed }} <small><a href="{% url 'pet_description' pet_id=pet.id %}">Description</a></small></p>
                             <p>Rs{{ pet.price }}</p>
-                            {% if pet.status == 'sold' %}
-                            <p>Sold Out</p>
-                            {% else %}
                             <form action="{% url 'pet_details' pet.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="item_id" value="{{ pet.id }}">
                                 <input type="hidden" name="item_type" value="pet">
-                                <button type="submit" class="purchase-now">Purchase Now</button>
-                            </form><br><br>
-                            {% endif %}
+                                {% comment %} <button type="submit" class="purchase-now" style="background-color: blue;">Purchase Now</button> {% endcomment %}
+                                <button type="submit" class="purchase-now" style="background-color: #ff0000;">Purchase Now</button>
+
+                            </form>
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </div>
     </section>
     <!-- ***** Pets Area Ends ***** -->
-<br><br>
+    <br><br>
     <!-- ***** Aquarium Area Starts ***** -->
     <section class="section" id="Aquarium">
         <div class="container">
@@ -322,6 +291,7 @@ https://templatemo.com/tm-571-hexashop
             <div class="product-container">
                 <div class="row">
                     {% for aquarium in aquariums %}
+                    {% if aquarium.status != 'sold' %}
                     <div class="col-lg-3 col-md-6">
                         <div class="product-item">
                             <!-- Link to details page when clicking on the image -->
@@ -331,18 +301,17 @@ https://templatemo.com/tm-571-hexashop
                             <h6>{{ aquarium.name }}</h6>
                             <p>Rs{{ aquarium.price }}</p>
                             <!-- Add a form for Buy Now -->
-                            {% if aquarium.status == 'sold' %}
-                            <p>Sold Out</p>
-                            {% else %}
                             <form action="{% url 'aquarium_details' aquarium.id %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="item_id" value="{{ aquarium.id }}">
+                                <input type="hidden" name="item_id" value="{{ aquarium.id }}"><small><a href="{% url 'aquarium_description' aquarium_id=aquarium.id %}">Description</a></small>
                                 <input type="hidden" name="item_type" value="aquarium">
-                                <button type="submit" class="purchase-now">Purchase Now</button>
+                                {% comment %} <button type="submit" class="purchase-now" style="background-color: blue;">Purchase Now</button> {% endcomment %}
+                                <button type="submit" class="purchase-now" style="background-color: #4CAF50;">Purchase Now</button>
+
                             </form>
-                            {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>

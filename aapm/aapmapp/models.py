@@ -1,6 +1,8 @@
+from datetime import timezone
 from django.contrib.auth.models import Group
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 class dealer(AbstractUser):
@@ -206,4 +208,48 @@ class AcceptedOrder(models.Model):
 
     def __str__(self):
         return f"Accepted Order - {self.order_id}"
+    
+from django.db import models
+from .models import DeliveryMan
 
+class Delivery(models.Model):
+    delivery_man = models.ForeignKey(DeliveryMan, on_delete=models.CASCADE)
+    address = models.CharField(max_length=100)
+    delivery_time = models.DateTimeField()
+    
+class DeliveryAssignment(models.Model):
+    user = models.ForeignKey(dealer, on_delete=models.CASCADE)
+    delivery_man = models.ForeignKey(DeliveryMan, on_delete=models.CASCADE)
+    product = models.ForeignKey(Pet, on_delete=models.CASCADE)  # Assuming Product model exists
+    assigned_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20, default='PENDING')
+    order_id = models.TextField(default="empty")
+
+
+
+    def _str_(self):
+        return f"DeliveryAssignment - {self.order} - {self.delivery_boy} - {self.status}"
+
+class DeliveryAssignment1(models.Model):
+    user = models.ForeignKey(dealer, on_delete=models.CASCADE)
+    delivery_man = models.ForeignKey(DeliveryMan, on_delete=models.CASCADE)
+    product = models.ForeignKey(Aquarium, on_delete=models.CASCADE)  # Assuming Product model exists
+    assigned_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20, default='PENDING')
+    order_id = models.TextField(default="empty")
+
+    def _str_(self):
+        return f"DeliveryAssignment - {self.order} - {self.delivery_boy} - {self.status}"
+    
+
+class Order(models.Model):
+    user = models.ForeignKey(dealer, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class DeliveryOTP(models.Model):
+    assignment = models.ForeignKey(DeliveryAssignment, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)  # A
+
+class DeliveryOTP1(models.Model):
+    assignment = models.ForeignKey(DeliveryAssignment1, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)

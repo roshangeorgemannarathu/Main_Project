@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Species Prediction</title>
+</head>
+<body>
+    <h1>Fish Species Prediction</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="csv_file">Upload CSV File:</label>
+        <input type="file" name="csv_file" id="csv_file">
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if predictions %}
+    <h2>Predictions:</h2>
+    <table border="1">
+        <tr>
+            <th>Fish Species</th>
+            <th>Grouping</th>
+        </tr>
+        {% for species, grouping in predictions.items %}
+        <tr>
+            <td>{{ species }}</td>
+            <td>{{ grouping }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
