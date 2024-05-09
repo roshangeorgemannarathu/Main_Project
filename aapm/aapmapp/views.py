@@ -226,9 +226,9 @@ def a(request):
 def success(request):
     return render(request, 'success.html')  # Create a success template
 
-def add_pets(request):
-    # Your view logic for the addpets page
-    return render(request, 'addpets.html')
+# def add_pets(request):
+#     # Your view logic for the addpets page
+#     return render(request, 'addpets.html')
 
 
 @login_required
@@ -461,7 +461,7 @@ def addpets(request):
             # Process the Aquarium form
             name = request.POST.get('aquarium_name')
             price = request.POST.get('aquarium_price')
-            quantity = request.POST.get('pet_quantity')
+            quantity = request.POST.get('aquarium_quantity')
             description = request.POST.get('aquarium_description')
             location = request.POST.get('aquarium_location')
             image = request.FILES.get('aquarium_image')
@@ -1061,14 +1061,31 @@ from .models import Pet
 import razorpay
 
 def pet_details(request, pet_id):
-    
+    print(f"Request Method: {request.method}")
     request.session['pet_id'] = pet_id
-    print(pet_id)
+    print(f"Session Pet ID: {request.session['pet_id']}")
 
-
+    # if request.method == 'POST':
+    #     quantity = request.POST.get('quantity', 1)
+    #     request.session['quantity'] = int(quantity)
+    #     print(f"Pet ID: {pet_id}, Quantity: {quantity}")
+    #     return redirect('pets_detail', pet_id=pet_id)
+    
     pet = get_object_or_404(Pet, id=pet_id)
+    return render(request, 'pet_details.html', {'pet': pet})
+
+def payment_suport(request,pet_id):
+    quan =1
+    if request.method == 'POST':
+        quan = int( request.POST.get('quantity', 1))
+        request.session['quantity'] = int(quan)
+        print (quan)
+    pet = get_object_or_404(Pet, id=pet_id)
+    # quan = request.session.get('quantity', 1)
     currency = 'INR'
     amount = int(pet.price * 100)  # Convert to integer
+    amount = amount * quan
+    total = pet.price * quan
     razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
     try:
@@ -1082,16 +1099,15 @@ def pet_details(request, pet_id):
             'currency': currency,
             'callback_url': callback_url,
             'pet': pet,
+            'quan':quan,
+            'total': total,
             'location': pet.location
         }
-        return render(request, 'pet_details.html', context=context)
+        print(context)
+        return render(request, 'pet_details1.html', context=context)
     except Exception as e:
         error_message = f"An error occurred: {str(e)}"
         return render(request, 'error.html', {'error_message': error_message})
-
-
-
-
 
 
 
@@ -1278,11 +1294,13 @@ def paymenthandler(request):
 
             if result:
                 pet_id = request.session.get('pet_id')
-
+                quan = request.session.get('quantity', 1)
                 if pet_id:
                     pet = get_object_or_404(Pet, id=pet_id)
-                    pet.status = "inactive"
-                    pet.save()
+                    # pet.quantity = pet.quantity - quan
+                    # if pet.quantity == 0 : 
+                    #     pet.status = "inactive"
+                    # pet.save()
 
                     current_datetime = timezone.now()
                     user_address = UserProfile.objects.get(user=request.user)
@@ -1290,7 +1308,7 @@ def paymenthandler(request):
 
                     user_payment_instance = Userpayment.objects.create(
                         user=request.user,
-                        cart=1,
+                        cart=quan ,
                         amount=amount,
                         datetime=current_datetime,
                         order_id_data=razorpay_order_id,
@@ -3226,6 +3244,7 @@ def ship_order(request):
         if user_profile:
             addresseswitall.append({
                 'assignment': assignment,
+                'type' : "Pet",
                 'user_profile': user_profile,
             })
 
@@ -3234,6 +3253,7 @@ def ship_order(request):
         if user_profile:
             addresseswitall.append({
                 'assignment': assignment1,
+                'type' : "aquarium",
                 'user_profile': user_profile,
             })
 
@@ -3297,6 +3317,20 @@ def mark_as_shipped(request, assignment_id):
         # If not found in DeliveryAssignment, try DeliveryAssignment1
         if not assignment:
             assignment = DeliveryAssignment1.objects.filter(id=assignment_id).first()
+
+        # If assignment is found, mark it as shipped and redirect
+        if assignment:
+            assignment.status = 'SHIPPED'
+            assignment.save()
+            return redirect('ship_order')
+
+    # If assignment is not found in any model or request is not POST, return a 404 error
+    return redirect('ship_order')  # You can handle this according to your requirements
+
+def mark_as_shipped1(request, assignment_id):
+    if request.method == 'POST':
+        # Try to get the assignment from DeliveryAssignment
+        assignment = DeliveryAssignment1.objects.filter(id=assignment_id).first()
 
         # If assignment is found, mark it as shipped and redirect
         if assignment:
@@ -3494,7 +3528,7 @@ def new_orders(request):
         # user_profiles_delivery.append(user_profile)
 
     for assignment in orders_aquarium:
-        user_profile = assignment.user_profile
+        user_profile = assignment.user
         user_profiles_aquarium.append(user_profile) 
 
     print(user_profiles_delivery)

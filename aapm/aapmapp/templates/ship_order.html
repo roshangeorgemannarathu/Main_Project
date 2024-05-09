@@ -100,7 +100,7 @@
                                 </tr>
                                 <tr>
                                     <th>Product Name:</th>
-                                    <td>{{ assignment_data.assignment.product }}</td>
+                                    <td>{{ assignment_data.assignment.product }}({{assignment_data.type}})</td>
                                 </tr>
                                 <tr>
                                     <th>Customer Name:</th>
@@ -129,6 +129,8 @@
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
+
+                                {%if assignment_data.type == 'Pet'%}
                                 <form method="post" action="{% url 'mark_as_shipped' assignment_data.assignment.id %}">
                                     {% csrf_token %}
                                     <tr>
@@ -137,6 +139,16 @@
                                         </td>
                                     </tr>
                                 </form>
+                                {%else%}
+                                <form method="post" action="{% url 'mark_as_shipped1' assignment_data.assignment.id %}">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="submit" class="btn btn-primary">Mark as Shipped</button>
+                                        </td>
+                                    </tr>
+                                </form>
+                                {%endif%}
                             {% endfor %}
                         </tbody>
                     </table>

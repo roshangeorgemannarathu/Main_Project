@@ -191,7 +191,7 @@ https://templatemo.com/tm-571-hexashop
                             <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
                             {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
                             <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li> {% endcomment %}
                             {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li> {% endcomment %}
                             <li class="scroll-to-section"><a href="{% url 'wishlist' %}">Wishlist</a></li>
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
@@ -322,13 +322,13 @@ https://templatemo.com/tm-571-hexashop
                     {% endfor %}
                 </tbody>
             </table>
-            <td colspan="7">
+            {% comment %} <td colspan="7">
     <!-- Assuming you have a form to handle purchasing all items -->
     <form method="post" action="{% url 'purchase_all_items' %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-success">Buy All</button>
     </form>
-</td>
+</td> {% endcomment %}
 
             {% else %}
             <p>Your cart is empty.</p>

@@ -189,15 +189,15 @@
       <input type="text" id="vehicle_no" name="vehicle_no" required>
       <p id="vehicleNoError" class="error"></p>
       
-      <input type="submit" value="Add Delivery Man">
+      <input type="submit" id="adddel" value="Add Delivery Man">
     </form>
-  
+
     <form id="csvForm" method="post" enctype="multipart/form-data" action="{% url 'add_delivery_man' %}">
       {% csrf_token %}
       <label for="csvFile">Import CSV File:</label>
       <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
       <input type="submit" value="Import">
-  </form>
+  </form> 
   </div>
   
   <script>
@@ -306,7 +306,7 @@
         var pincodes = ["688001", "688524", "690502", "690101", "689121", "688561", "690514"];
     } else if (district === "Kottayam") {
         var cities = ["Kottayam", "Changanassery", "Pala", "Vaikom", "Ettumanoor", "Kanjirappally", "Mundakayam"];
-        var pincodes = ["686001", "686101", "686575", "686141", "686631", "686507", "686513"];
+        var pincodes = ["686001", "686101", "686575", "686141", "686631", "686507", "686513", "686520"];
     } else if (district === "Idukki") {
         var cities = ["Thodupuzha", "Munnar", "Adimali", "Kumily", "Peerumedu", "Rajakkad", "Nedumkandam"];
         var pincodes = ["685584", "685612", "685561", "685509", "685531", "685566", "685553"];

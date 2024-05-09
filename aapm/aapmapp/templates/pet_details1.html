@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+    <title>Aquarium and Petshop Management system HTML CSS Template</title>
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        h1, h4 {
+            color: #212529;
+        }
+
+        header {
+            background-color: #F6F2E3;
+            margin-bottom: 20px;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-nav a {
+            color: #212529;
+            text-decoration: none;
+        }
+
+        .main-nav img {
+            max-width: 100px;
+        }
+
+        .product-details {
+            margin: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-primary,
+        .btn-pay {
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: black;
+            color: white;
+        }
+
+        .btn-pay {
+            background-color: #dc3545; /* Red color for Pay button */
+            color: #fff;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+            color: #212529;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <nav class="main-nav">
+                <!-- ***** Logo Start ***** -->
+                <a href="" class="logo">
+                    <img src="{% static 'aapmapp/images/logo1.png' %}" alt="">
+                </a>
+                <!-- ***** Logo End ***** -->
+                <!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                    <!-- Remove the 'Home' and 'Logout' links -->
+                    <h3>Pet Paradise Cart </h3>
+                            <li class="scroll-to-section"><a href="{% url 'customer_account' %}" class="active">Home</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="#Aquarium">Aquarium</a></li>
+                            <li class="scroll-to-section"><a href="#Pets">Pets</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'profile' %}">Profile</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'mycart' %}">Add to Cart</a></li> {% endcomment %}
+                            <li class="scroll-to-section"><a href="{% url 'order' %}">Your Orders</a></li>
+                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fish Identification And Grouping</a></li>
+                            <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+                <!-- ***** Menu End ***** -->
+            </nav>
+        </div>
+    </header><br><br><br><br>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 product-details">
+                <h1>{{ pet.name }}</h1>
+                <h4> Confirm Payment Information</h4>
+                <p>Amount: {{ payment.amount }}</p>
+                <!-- <p>Currency: {{ payment.currency }}</p> -->
+
+                <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="product-img">
+                <p>Category: {{ pet.get_category_display }}</p>
+                <p>Breed: {{ pet.pet_breed }}</p>
+                {% comment %} <p>Age: {{ pet.pet_age }}</p> {% endcomment %}
+                <p>Description: {{ pet.pet_description }}</p>
+                <p>Location: {{ pet.location }}</p>
+                <p>Total Price: Rs{{ pet.price }}</p>
+                <p>Quantity: {{quan}}</p>
+                <p>Total Price: {{ pet.price }} X  {{quan}} = {{total}} </p>
+                {% comment %} <button id="showMapBtn" class="btn btn-primary" {% if pet.location %} onclick="showMap()" {% else %} disabled {% endif %}>Show Location on Map</button> {% endcomment %}
+
+
+
+
+                <div class="btn-container">
+                  
+                    <button id="razorpay-btn" class="btn btn-pay">Confirm</button>
+
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script>
+                      var options = {
+                         
+                        // Enter the Key ID generated from the Dashboard
+                        key: "{{ razorpay_merchant_key }}", 
+                         
+                        // Amount is in currency subunits.
+                        // Default currency is INR. Hence, 
+                        // 50000 refers to 50000 paise
+                        amount: "{{ razorpay_amount }}", 
+                        currency: "{{ currency }}",
+                         
+                        // Your/store name.
+                        name: "Roshan", 
+                         
+                        // Pass the `id` obtained in the response of Step 1
+                        order_id: "{{ razorpay_order_id }}", 
+                        callback_url: "{{ callback_url }}",
+                      };
+                       
+                      // initialise razorpay with the options.
+                      var rzp1 = new Razorpay(options);
+                       
+                      // add event listener to the payment button.
+                      document.getElementById("razorpay-btn").onclick = function (e) {
+                        rzp1.open();
+                        e.preventDefault();
+                      };
+                    </script>
+
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p>Copyright © Pet Paradise Cart., Ltd. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Additional JS Files -->
+    <!-- Add JavaScript for handling redirection -->
+    <script src="{% static 'aapmapp/js/jquery-3.2.1.min.js' %}"></script>
+    <script>
+        // JavaScript for handling redirection
+        $(document).ready(function () {
+            $('#goBackHome').click(function (e) {
+                e.preventDefault();
+                window.history.back();
+            });
+        });
+
+
+        function showMap() {
+            var location = "{{ pet.location }}"; // Get the location from your Django template
+            console.log("Location:", location); // Log the location variable
+            
+            // Encode the location for URL
+            var encodedLocation = encodeURIComponent(location);
+            console.log("Encoded Location:", encodedLocation); // Log the encoded location
+            
+            // Construct the URL for Google Maps
+            var mapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedLocation;
+            console.log("Map URL:", mapUrl); // Log the constructed map URL
+            
+            // Open the map in a new tab
+            window.open(mapUrl, '_blank');
+        }
+        
+    </script>
+</body>
+
+</html>

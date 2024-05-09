@@ -108,7 +108,7 @@
                 <tr>
                     <th>Pet Category</th>
                     <th>Breed</th>
-                    <th>Pet Age</th>
+                    {% comment %} <th>Pet Age</th> {% endcomment %}
                     <th>Price</th>
                     <th>Pet Description</th>
                     <th>Location</th>
@@ -120,7 +120,7 @@
                 <tr>
                     <td>{{ pet.category }}</td>
                     <td>{{ pet.pet_breed }}</td>
-                    <td>{{ pet.pet_age }}</td>
+                    {% comment %} <td>{{ pet.pet_age }}</td> {% endcomment %}
                     <td>Rs {{ pet.price }}</td>
                     <td>{{ pet.pet_description }}</td>
                     <td>{{ pet.location }}</td>

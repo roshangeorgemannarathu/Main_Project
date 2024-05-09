@@ -100,7 +100,7 @@
                             <li class="scroll-to-section"><a href="{% url 'mycart' %}">Cart</a></li>
                             <li class="scroll-to-section"><a href="{% url 'wishlist' %}">Wishlist</a></li>
                             <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li> {% endcomment %}
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a>
                             </li>
                         </ul>
@@ -118,7 +118,7 @@
                 href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
             <div class="orders padding-bottom-3x mb-1 ">
 
-                <h2>Delivery Assignment</h2>
+                <h2>Delivery Assignment For Pets</h2>
                 <table>
                     <tr>
                         <th>User</th>
@@ -136,7 +136,7 @@
                     {% endfor %}
                 </table>
 
-                <h2>Delivery Assignment 1</h2>
+                <h2>Delivery Assignment For Aquarium</h2>
                 <table>
                     <tr>
                         <th>User</th>

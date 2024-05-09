@@ -50,6 +50,7 @@ https://templatemo.com/tm-571-hexashop
             height: 300px;
             /* Set the desired height for the product container */
             overflow: hidden;
+            margin-bottom: 20px;
             /* Hide overflowing content */
         }
 
@@ -65,6 +66,13 @@ https://templatemo.com/tm-571-hexashop
         }
 
         .search-bar {}
+
+        .purchase-now{
+            width: 100%;
+            color: white;
+            margin-bottom: 100px;
+            background-color: blue;
+        }
 
     </style>
 </head>
@@ -99,7 +107,7 @@ https://templatemo.com/tm-571-hexashop
                             <li class="scroll-to-section"><a href="{% url 'mycart' %}">Cart</a></li>
                             <li class="scroll-to-section"><a href="{% url 'wishlist' %}">Wishlist</a></li>
                             <li class="scroll-to-section"><a href="{% url 'order' %}">Your Purchase</a></li>
-                            <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li>
+                            {% comment %} <li class="scroll-to-section"><a href="{% url 'home' %}">Fig</a></li> {% endcomment %}
                             <li class="scroll-to-section"><a href="{% url 'trackmyorder' %}">Track My Order</a></li>
                             <li class="scroll-to-section"><a id='logout-link' href="{% url 'logout' %}">Logout</a></li>
                         </ul>
@@ -261,7 +269,7 @@ https://templatemo.com/tm-571-hexashop
                                 <input type="hidden" name="item_id" value="{{ pet.id }}">
                                 <input type="hidden" name="item_type" value="pet">
                                 {% comment %} <button type="submit" class="purchase-now" style="background-color: blue;">Purchase Now</button> {% endcomment %}
-                                <button type="submit" class="purchase-now" style="background-color: #ff0000;">Purchase Now</button>
+                                <button type="submit" class="purchase-now" >Purchase Now</button>
 
                             </form>
                         </div>

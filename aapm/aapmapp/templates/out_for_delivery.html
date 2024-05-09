@@ -164,32 +164,7 @@
                 {% endfor %}
             </div>
             
-            <!-- Section for Pets (right side) -->
-            <div class="col-md-6 mb-4">
-                {% comment %} <h2>Pets</h2> {% endcomment %}
-                {% for assignment in pending_assignments %}
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Display DeliveryAssignment (Pet) details -->
-                        <h5 class="card-title">Order ID: {{ assignment.order_id }}</h5>
-                        <p class="card-text">Product Name: {{ assignment.product }}</p>
-                        <p class="card-text">Customer Name: {{ assignment.user }}</p>
-                        <!-- Display address information -->
-                        <p class="card-text">Address: {{ assignment.user_profile.housename }}, {{ assignment.user_profile.district }}, {{ assignment.user_profile.pincode }}</p>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary delivered-btn" data-toggle="modal" data-target="#otpModal{{ assignment.pk }}">
-                            Delivered
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="otpModal{{ assignment.pk }}" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
-                            <!-- Modal content remains the same -->
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+          
     {% comment %} <script>
         function submitOTP(assignmentId) {
             var otp = $('#otpInput' + assignmentId).val();
