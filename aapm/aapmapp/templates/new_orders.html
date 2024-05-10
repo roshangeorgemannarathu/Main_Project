@@ -102,11 +102,18 @@
                         <p class="card-text">Assigned At: {{ assignment.assigned_at }}</p>
                         <p class="card-text">Status: {{ assignment.status }}</p>
                         <p class="card-text">Address: {{ assignment.user.fullname }}, {{ assignment.user.housename }}, {{ assignment.user.district }}</p>
-                        <p class="card-text">Address: {{ assignment.user.housename }}, {{ user_profile.district }}</p>
-                        <p class="card-text">Pincode: {{ assignment.user.pincode }}</p>
-                        <p class="card-text">Locality: {{ assignment.user.district }}</p>
-                        <p class="card-text">Phone No: {{ assignment.user.phone }}</p>
                         
+                        {% for p in  user_profiles%}
+                            {% if assignment.user ==  p.user%}
+                            <p class="card-text">Address: {{ assignment.user }}, {{ p.district }}</p>
+
+                            <p class="card-text">Pincode: {{ p.pincode }}</p>
+                            <p class="card-text">Locality: {{ p.district }}</p>
+                            <p class="card-text">Phone No: {{ p.phone }}</p>
+                            {%endif%}
+                        {%endfor%}
+                        {{user_profiles.user}}
+                    
                         <form action="{% url 'out_for_delivery' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="delivery_assignment_id" value="{{ assignment.pk }}">

@@ -3507,14 +3507,12 @@ def new_orders(request):
 
     # Fetch the related UserProfile objects for all assignments in one go
     user_profiles = UserProfile.objects.filter(user__in=[assignment.user for assignment in orders_delivery])
-
     # Now iterate through the orders_delivery queryset and assign the userprofile attribute to each assignment
+    order_delivery = []
     for assignment in orders_delivery:
         # Find the corresponding UserProfile object for the current assignment
         user_profile = user_profiles.get(user=assignment.user)
-        
         # Assign the userprofile attribute to the current assignment
-        assignment.userprofile = user_profile
 
     print()
     # # Iterate through each delivery assignment to get the related user profile
@@ -3535,6 +3533,7 @@ def new_orders(request):
     context = {
         'pending_assignments_delivery': orders_delivery,
         'pending_assignments_aquarium': orders_aquarium,
+        'user_profiles' :user_profiles,
         'user_profiles_delivery': user_profiles_delivery,
         'user_profiles_aquarium': user_profiles_aquarium,
     }
